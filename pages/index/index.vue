@@ -1,41 +1,60 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view>
+		<header class="seacher">
+		</header>
+		<section class="map-content">
+			<map class="map" :longitude="longitude" :latitude="latitude"></map>
+		</section>
 	</view>
 </template>
 
 <script setup>
-	import { ref } from 'vue'
-	const title = ref('--Hlleo Word--111')
+	import { ref, onMounted } from 'vue'
+	const longitude = ref(0)
+	const latitude = ref(0)
+
+	onMounted(() => {
+		uni.getLocation({
+			type: 'wgs84',
+			success: res => {
+				longitude.value = res.longitude
+				latitude.value = res.latitude
+			},
+			fail: () => {},
+			complete: () => {}
+		})
+	})
 </script>
 
-<style>
+<style scoped lang="scss">
 	.content {
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-	}
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
+		.seacher {
+			height: 60rpx;
+			width: 100%;
+		}
 
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
+		.map-content {
+			height: calc(100% - 60rpx);
+			width: 100%;
 
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+			.map {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+</style>
+
+<style>
+	page {
+		height: 100%;
 	}
 </style>

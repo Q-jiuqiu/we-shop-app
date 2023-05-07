@@ -9,5 +9,9 @@
     "backgroundColor": "#F8F8F8"
   },
   "permission": {},
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
   "usingComponents": {}
 }

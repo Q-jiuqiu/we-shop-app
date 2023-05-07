@@ -1,1 +1,1 @@
-<view class="content"><image class="logo" src="/static/logo.png"></image><view class="text-area"><text class="title">{{a}}</text></view></view>
+<view class="content data-v-1cf27b2a"><view class="seacher data-v-1cf27b2a"></view><view class="map-content data-v-1cf27b2a"><map class="map data-v-1cf27b2a" longitude="{{a}}" latitude="{{b}}"></map></view></view>
