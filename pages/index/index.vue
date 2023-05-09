@@ -1,6 +1,7 @@
 <template>
 	<view class="content">
 		<header class="seacher">
+			<u-button type="primary" text="确定"></u-button>
 		</header>
 		<section class="map-content">
 			<map class="map" :longitude="longitude" :latitude="latitude"></map>
@@ -12,6 +13,7 @@
 	import { ref, onMounted } from 'vue'
 	const longitude = ref(0)
 	const latitude = ref(0)
+	const value = ref('11')
 
 	onMounted(() => {
 		uni.getLocation({
@@ -26,7 +28,7 @@
 	})
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	.content {
 		height: 100%;
 		width: 100%;
@@ -35,25 +37,27 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+	}
 
-		.seacher {
-			height: 60rpx;
-			width: 100%;
-		}
+	.seacher {
+		height: 200rpx;
+		// color: $uni-color-primary;
+		width: 100%;
+	}
 
-		.map-content {
-			height: calc(100% - 60rpx);
-			width: 100%;
+	.map-content {
+		height: calc(100% - 200rpx);
+		width: 100%;
 
-			.map {
-				width: 100%;
-				height: 100%;
-			}
-		}
+	}
+
+	.map {
+		width: 100%;
+		height: 100%;
 	}
 </style>
 
-<style>
+<style lang="scss">
 	page {
 		height: 100%;
 	}

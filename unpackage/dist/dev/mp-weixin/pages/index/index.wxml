@@ -1,1 +1,1 @@
-<view class="content data-v-1cf27b2a"><view class="seacher data-v-1cf27b2a"></view><view class="map-content data-v-1cf27b2a"><map class="map data-v-1cf27b2a" longitude="{{a}}" latitude="{{b}}"></map></view></view>
+<view class="content"><view class="seacher"><u-button wx:if="{{a}}" u-i="77096c38-0" bind:__l="__l" u-p="{{a}}"></u-button></view><view class="map-content"><map class="map" longitude="{{b}}" latitude="{{c}}"></map></view></view>
