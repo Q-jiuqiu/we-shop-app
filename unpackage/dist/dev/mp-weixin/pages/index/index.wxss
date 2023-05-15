@@ -68,6 +68,9 @@
   bottom: 10rpx;
   left: 0;
 }
+.data-v-1cf27b2a .u-scroll-list__scroll-view__content {
+  justify-content: center;
+}
 .scroll-list.data-v-1cf27b2a {
   display: flex;
   flex-direction: column;
@@ -89,7 +92,7 @@
   width: 100%;
   border-radius: 20rpx 20rpx 0 0;
 }
-.scroll-list__shops_item__des.data-v-1cf27b2a {
+.scroll-list__shops_item__title.data-v-1cf27b2a {
   text-align: center;
   font-size: 16rpx;
   font-weight: bold;
