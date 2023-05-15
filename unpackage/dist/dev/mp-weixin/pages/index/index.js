@@ -31,12 +31,14 @@ const _sfc_main = {
       longitude: 22,
       latitude: 111
     }]);
+    const isLocate = common_vendor.ref(false);
     return {
       longitude,
       latitude,
       locateCity,
       covers,
-      swiperData
+      swiperData,
+      isLocate
     };
   },
   async mounted() {
@@ -44,8 +46,9 @@ const _sfc_main = {
     this.longitude = location2.longitude;
     this.latitude = location2.latitude;
     this.locateCity = location2.city;
-    this.setCovers([location2]);
-    所有数据;
+    if (this.isLocate) {
+      this.setCovers([location2]);
+    }
     allData = await this.getData();
     const regionData = await this.getData({ data: { region: location2.district } });
     this.swiperData = this.handleDataSort(regionData);
@@ -53,7 +56,7 @@ const _sfc_main = {
   methods: {
     //获取位置信息
     getLocationInfo() {
-      console.log("QQMapWX", static_qqmapWxJssdk.QQMapWX);
+      const this_ = this;
       return new Promise((resolve) => {
         common_vendor.index.getLocation({
           type: "gcj02",
@@ -61,6 +64,7 @@ const _sfc_main = {
             console.log(res, "==");
             location.longitude = res.longitude;
             location.latitude = res.latitude;
+            this_.isLocate = true;
             const qqmapsdk = new static_qqmapWxJssdk.QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
             qqmapsdk.reverseGeocoder({
               location,
@@ -77,6 +81,8 @@ const _sfc_main = {
             });
           },
           fail(err) {
+            this_.isLocate = false;
+            this_.locateCity = "未授权";
             console.log(err);
             resolve(location);
           }
@@ -134,21 +140,19 @@ const _sfc_main = {
     },
     // 打开地图导航app
     openMapApp(item) {
-      if (mapContext === null) {
-        mapContext = common_vendor.wx$1.createMapContext("map", this);
-        console.log(mapContext);
+      try {
+        if (mapContext === null) {
+          mapContext = common_vendor.wx$1.createMapContext("map", this);
+          console.log(mapContext);
+        }
+        mapContext.openMapApp({
+          longitude: Number(item.longitude),
+          latitude: Number(item.latitude),
+          destination: item.name
+        });
+      } catch (e) {
+        console.log(e);
       }
-      mapContext.openMapApp({
-        longitude: item.longitude,
-        latitude: item.latitude,
-        destination: item.name
-      });
-    },
-    left() {
-      console.log("left");
-    },
-    right() {
-      console.log("right");
     }
   }
 };
@@ -196,9 +200,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         e: common_vendor.n(index === $setup.swiperData.length && "scroll-list__shops--no-margin-right")
       };
     }),
-    k: common_vendor.o($options.right),
-    l: common_vendor.o($options.left),
-    m: common_vendor.p({
+    k: common_vendor.p({
       indicatorWidth: 0
     })
   };

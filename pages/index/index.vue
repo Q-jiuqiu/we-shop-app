@@ -14,7 +14,7 @@
 			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"
 				@bindupdated="handleMapRender"></map>
 			<view class="scroll">
-				<u-scroll-list @right="right" @left="left" :indicatorWidth="0">
+				<u-scroll-list :indicatorWidth="0">
 					<view class="scroll-list" style="flex-direction: row;">
 						<view class="scroll-list__shops" v-for="(item, index) in swiperData" :key="index"
 							:class="[(index === swiperData.length) && 'scroll-list__shops--no-margin-right']">
@@ -29,6 +29,7 @@
 				</u-scroll-list>
 			</view>
 		</section>
+
 	</view>
 </template>
 
@@ -64,6 +65,7 @@
 				longitude: 22,
 				latitude: 111
 			}]) // 滑块数据
+			const isLocate = ref(false) // 是否授权位置
 
 			return {
 				longitude,
@@ -71,6 +73,7 @@
 				locateCity,
 				covers,
 				swiperData,
+				isLocate
 			}
 		},
 
@@ -80,19 +83,21 @@
 			this.longitude = location.longitude
 			this.latitude = location.latitude
 			this.locateCity = location.city
-			this.setCovers([location])
+			if (this.isLocate) {
+				this.setCovers([location])
+			}
 
-			所有数据
+			// 所有数据
 			allData = await this.getData()
 			// 当前区域数据
-			const regionData = await this.getData({ data: {region:location.district} })
+			const regionData = await this.getData({ data: { region: location.district } })
 			this.swiperData = this.handleDataSort(regionData)
 		},
 
 		methods: {
 			//获取位置信息
 			getLocationInfo() {
-				console.log('QQMapWX', QQMapWX)
+				const this_ = this
 				return new Promise(resolve => {
 					//位置信息默认数据
 					uni.getLocation({
@@ -101,6 +106,7 @@
 							console.log(res, '==')
 							location.longitude = res.longitude
 							location.latitude = res.latitude
+							this_.isLocate = true
 							// 腾讯地图Api
 							const qqmapsdk =
 								new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
@@ -119,6 +125,8 @@
 							})
 						},
 						fail(err) {
+							this_.isLocate = false
+							this_.locateCity = '未授权'
 							console.log(err)
 							resolve(location)
 						},
@@ -185,23 +193,20 @@
 
 			// 打开地图导航app
 			openMapApp(item) {
-				if (mapContext === null) {
-					mapContext = wx.createMapContext('map', this)
-					console.log(mapContext)
+				try {
+					if (mapContext === null) {
+						mapContext = wx.createMapContext('map', this)
+						console.log(mapContext)
+					}
+					mapContext.openMapApp({
+						longitude: Number(item.longitude),
+						latitude: Number(item.latitude),
+						destination: item.name
+					})
+				} catch (e) {
+					console.log(e)
 				}
-				mapContext.openMapApp({
-					longitude: item.longitude,
-					latitude: item.latitude,
-					destination: item.name
-				})
-			},
 
-
-			left() {
-				console.log('left')
-			},
-			right() {
-				console.log('right')
 			}
 		}
 
