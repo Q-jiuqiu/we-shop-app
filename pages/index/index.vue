@@ -59,12 +59,7 @@
 			const latitude = ref(0) // 当前纬度
 			const locateCity = ref('定位中…') // 当前城市名
 			const covers = ref([])
-			const swiperData = ref([{
-				name: '门店1',
-				thumb: 'https://cdn.uviewui.com/uview/goods/1.jpg',
-				longitude: 22,
-				latitude: 111
-			}]) // 滑块数据
+			const swiperData = ref([{}]) // 滑块数据
 			const isLocate = ref(false) // 是否授权位置
 
 			return {
