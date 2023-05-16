@@ -7,12 +7,11 @@
 			</view>
 			<view class="input-content">
 				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入内容" border="surround"
-					@change="$u.debounce(handleInputChange, 500)" v-model="key" clearable shape="circle"></u-input>
+					@change="$u.debounce(handleInputChange, 500)" v-model="keyWord" clearable shape="circle"></u-input>
 			</view>
 		</header>
 		<section class="map-content">
-			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"
-				@bindupdated="handleMapRender"></map>
+			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"></map>
 			<view class="scroll">
 				<u-scroll-list :indicatorWidth="0">
 					<view class="scroll-list" style="flex-direction: row;">
@@ -34,16 +33,15 @@
 </template>
 
 <script>
-	import QQMapWX from '../../static/qqmap-wx-jssdk.js'
-	import { ref, onMounted } from 'vue'
+	import { ref } from 'vue'
 
-	const key = ref('')
+	const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
 	let mapContext = null
 
 	// 位置信息
 	const location = {
-		longitude: 0,
-		latitude: 0,
+		longitude: 104,
+		latitude: 40,
 		province: '', // 省份
 		city: '', // 城市
 		district: '', // 地区
@@ -61,6 +59,7 @@
 			const covers = ref([])
 			const swiperData = ref([{}]) // 滑块数据
 			const isLocate = ref(false) // 是否授权位置
+			const keyWord = ref('')
 
 			return {
 				longitude,
@@ -68,25 +67,26 @@
 				locateCity,
 				covers,
 				swiperData,
-				isLocate
+				isLocate,
+				keyWord
 			}
 		},
 
 		async mounted() {
-
 			const location = await this.getLocationInfo()
 			this.longitude = location.longitude
 			this.latitude = location.latitude
-			this.locateCity = location.city
-			if (this.isLocate) {
-				this.setCovers([location])
-			}
-
+			this.locateCity = location.city || '未授权'
 			// 所有数据
 			allData = await this.getData()
-			// 当前区域数据
-			const regionData = await this.getData({ data: { region: location.district } })
-			this.swiperData = this.handleDataSort(regionData)
+			if (location.district) {
+				// 当前区域数据
+				const regionData = await this.getData({ region: location.district })
+				this.setCovers(regionData)
+				this.swiperData = this.handleDataSort(regionData)
+			} else {
+				this.swiperData = allData
+			}
 		},
 
 		methods: {
@@ -121,7 +121,6 @@
 						},
 						fail(err) {
 							this_.isLocate = false
-							this_.locateCity = '未授权'
 							console.log(err)
 							resolve(location)
 						},
@@ -131,15 +130,13 @@
 
 			// 获取筛选数据
 			getData(params = {}) {
-				const this_ = this
 				return new Promise(resolve => {
-					wx.request({
+					uni.request({
 						url: 'http://8.137.19.141/pro/rest/dbs/find',
 						data: params,
 						method: 'GET',
 						success: function(res) {
 							const data = res.data.data
-							this_.setCovers(data)
 							resolve(data)
 						},
 						fail: function(err) {
@@ -160,6 +157,14 @@
 						iconPath: '../../static/location.png',
 					}
 				})
+				if (this.isLocate) {
+					this.covers.unshift({
+						id: this.covers.lengt + 1,
+						latitude: Number(location.latitude),
+						longitude: Number(location.longitude),
+						iconPath: '../../static/location.png',
+					})
+				}
 			},
 
 			// 数据排序-优先展示当前区域数据
@@ -175,15 +180,11 @@
 
 			},
 
-			// 地图渲染完成
-			handleMapRender() {
-				console.log('handleMapRender', arguments)
-			},
-
 			// 输入改变
-			async handleInputChange(value) {
-				const regionData = await this.getData({ data: { name: value } })
-				this.swiperData = this.handleDataSort(regionData)
+			async handleInputChange() {
+				const regionData = await this.getData({ name: this.keyWord })
+				this.setCovers(regionData)
+				this.swiperData = regionData
 			},
 
 			// 打开地图导航app

@@ -1,11 +1,10 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const static_qqmapWxJssdk = require("../../static/qqmap-wx-jssdk.js");
-common_vendor.ref("");
+const QQMapWX = require("../../static/qqmap-wx-jssdk.min.js");
 let mapContext = null;
 const location = {
-  longitude: 0,
-  latitude: 0,
+  longitude: 104,
+  latitude: 40,
   province: "",
   // 省份
   city: "",
@@ -25,33 +24,32 @@ const _sfc_main = {
     const latitude = common_vendor.ref(0);
     const locateCity = common_vendor.ref("定位中…");
     const covers = common_vendor.ref([]);
-    const swiperData = common_vendor.ref([{
-      name: "门店1",
-      thumb: "https://cdn.uviewui.com/uview/goods/1.jpg",
-      longitude: 22,
-      latitude: 111
-    }]);
+    const swiperData = common_vendor.ref([{}]);
     const isLocate = common_vendor.ref(false);
+    const keyWord = common_vendor.ref("");
     return {
       longitude,
       latitude,
       locateCity,
       covers,
       swiperData,
-      isLocate
+      isLocate,
+      keyWord
     };
   },
   async mounted() {
     const location2 = await this.getLocationInfo();
     this.longitude = location2.longitude;
     this.latitude = location2.latitude;
-    this.locateCity = location2.city;
-    if (this.isLocate) {
-      this.setCovers([location2]);
-    }
+    this.locateCity = location2.city || "未授权";
     allData = await this.getData();
-    const regionData = await this.getData({ data: { region: location2.district } });
-    this.swiperData = this.handleDataSort(regionData);
+    if (location2.district) {
+      const regionData = await this.getData({ region: location2.district });
+      this.setCovers(regionData);
+      this.swiperData = this.handleDataSort(regionData);
+    } else {
+      this.swiperData = allData;
+    }
   },
   methods: {
     //获取位置信息
@@ -65,7 +63,7 @@ const _sfc_main = {
             location.longitude = res.longitude;
             location.latitude = res.latitude;
             this_.isLocate = true;
-            const qqmapsdk = new static_qqmapWxJssdk.QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
+            const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
             qqmapsdk.reverseGeocoder({
               location,
               success(response) {
@@ -82,7 +80,6 @@ const _sfc_main = {
           },
           fail(err) {
             this_.isLocate = false;
-            this_.locateCity = "未授权";
             console.log(err);
             resolve(location);
           }
@@ -91,15 +88,13 @@ const _sfc_main = {
     },
     // 获取筛选数据
     getData(params = {}) {
-      const this_ = this;
       return new Promise((resolve) => {
-        common_vendor.wx$1.request({
+        common_vendor.index.request({
           url: "http://8.137.19.141/pro/rest/dbs/find",
           data: params,
           method: "GET",
           success: function(res) {
             const data = res.data.data;
-            this_.setCovers(data);
             resolve(data);
           },
           fail: function(err) {
@@ -119,6 +114,14 @@ const _sfc_main = {
           iconPath: "../../static/location.png"
         };
       });
+      if (this.isLocate) {
+        this.covers.unshift({
+          id: this.covers.lengt + 1,
+          latitude: Number(location.latitude),
+          longitude: Number(location.longitude),
+          iconPath: "../../static/location.png"
+        });
+      }
     },
     // 数据排序-优先展示当前区域数据
     handleDataSort(regionData) {
@@ -129,14 +132,11 @@ const _sfc_main = {
       const res = /* @__PURE__ */ new Map();
       return concatData.filter((item) => !res.has(item.id) && res.set(item.id, 1));
     },
-    // 地图渲染完成
-    handleMapRender() {
-      console.log("handleMapRender", arguments);
-    },
     // 输入改变
-    async handleInputChange(value) {
-      const regionData = await this.getData({ data: { name: value } });
-      this.swiperData = this.handleDataSort(regionData);
+    async handleInputChange() {
+      const regionData = await this.getData({ name: this.keyWord });
+      this.setCovers(regionData);
+      this.swiperData = regionData;
     },
     // 打开地图导航app
     openMapApp(item) {
@@ -177,7 +177,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     b: common_vendor.t($setup.locateCity),
     c: common_vendor.o(($event) => _ctx.$u.debounce($options.handleInputChange, 500)),
-    d: common_vendor.o(($event) => _ctx.key = $event),
+    d: common_vendor.o(($event) => $setup.keyWord = $event),
     e: common_vendor.p({
       prefixIcon: "search",
       prefixIconStyle: "color: #909399",
@@ -185,13 +185,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       border: "surround",
       clearable: true,
       shape: "circle",
-      modelValue: _ctx.key
+      modelValue: $setup.keyWord
     }),
     f: $setup.longitude,
     g: $setup.latitude,
     h: $setup.covers,
-    i: common_vendor.o((...args) => $options.handleMapRender && $options.handleMapRender(...args)),
-    j: common_vendor.f($setup.swiperData, (item, index, i0) => {
+    i: common_vendor.f($setup.swiperData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.name),
         b: common_vendor.t(item.remark),
@@ -200,7 +199,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         e: common_vendor.n(index === $setup.swiperData.length && "scroll-list__shops--no-margin-right")
       };
     }),
-    k: common_vendor.p({
+    j: common_vendor.p({
       indicatorWidth: 0
     })
   };
