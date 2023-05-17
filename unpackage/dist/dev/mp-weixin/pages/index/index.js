@@ -3,8 +3,8 @@ const common_vendor = require("../../common/vendor.js");
 const QQMapWX = require("../../static/qqmap-wx-jssdk.min.js");
 let mapContext = null;
 const location = {
-  longitude: 104,
-  latitude: 40,
+  longitude: 104.065681,
+  latitude: 30.653442,
   province: "",
   // 省份
   city: "",
@@ -38,13 +38,13 @@ const _sfc_main = {
     };
   },
   async mounted() {
-    const location2 = await this.getLocationInfo();
-    this.longitude = location2.longitude;
-    this.latitude = location2.latitude;
-    this.locateCity = location2.city || "未授权";
+    await this.getLocationInfo();
+    this.longitude = location.longitude;
+    this.latitude = location.latitude;
+    this.locateCity = location.city || "未授权";
     allData = await this.getData();
-    if (location2.district) {
-      const regionData = await this.getData({ region: location2.district });
+    if (location.district) {
+      const regionData = await this.getData({ region: location.district });
       this.setCovers(regionData);
       this.swiperData = this.handleDataSort(regionData);
     } else {
@@ -153,6 +153,67 @@ const _sfc_main = {
       } catch (e) {
         console.log(e);
       }
+    },
+    handleMoveTo() {
+      if (mapContext === null) {
+        mapContext = common_vendor.wx$1.createMapContext("map", this);
+        console.log(mapContext);
+      }
+      mapContext.moveToLocation({
+        latitude: Number(location.latitude),
+        longitude: Number(location.longitude),
+        success: (res) => {
+          console.log("success", res);
+        },
+        fail: (res) => {
+          console.log("fail", res);
+        }
+      });
+    },
+    // 获取当前
+    handleLocate() {
+      if (this.isLocate) {
+        this.handleMoveTo();
+      } else {
+        common_vendor.index.showModal({
+          title: "您未开启地理位置授权",
+          content: "为了您更好的体验， 请确认获取您的位置",
+          confirmText: "确认",
+          cancelText: "取消",
+          success: ({ confirm }) => {
+            if (confirm) {
+              common_vendor.wx$1.openSetting({
+                success: async ({ authSetting }) => {
+                  const isLocation = authSetting && authSetting["scope.userLocation"];
+                  if (isLocation) {
+                    this.locateCity = "定位中…";
+                    await this.getLocationInfo();
+                    console.log(location);
+                    this.longitude = location.longitude;
+                    this.latitude = location.latitude;
+                    this.locateCity = location.city;
+                    this.handleMoveTo();
+                    const regionData = await this.getData({
+                      region: location.district
+                    });
+                    this.setCovers(regionData);
+                    this.swiperData = this.handleDataSort(regionData);
+                  }
+                },
+                fail: () => {
+                  common_vendor.index.showToast({
+                    icon: "fail",
+                    title: "弹出设置面板出错"
+                  });
+                }
+              });
+            }
+          },
+          fail: () => {
+            console.log("展示modal框失败");
+          }
+        });
+      }
     }
   }
 };
@@ -176,9 +237,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       size: "19"
     }),
     b: common_vendor.t($setup.locateCity),
-    c: common_vendor.o(($event) => _ctx.$u.debounce($options.handleInputChange, 500)),
-    d: common_vendor.o(($event) => $setup.keyWord = $event),
-    e: common_vendor.p({
+    c: common_vendor.o((...args) => $options.handleLocate && $options.handleLocate(...args)),
+    d: common_vendor.o(($event) => _ctx.$u.debounce($options.handleInputChange, 500)),
+    e: common_vendor.o(($event) => $setup.keyWord = $event),
+    f: common_vendor.p({
       prefixIcon: "search",
       prefixIconStyle: "color: #909399",
       placeholder: "请输入内容",
@@ -187,21 +249,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       shape: "circle",
       modelValue: $setup.keyWord
     }),
-    f: $setup.longitude,
-    g: $setup.latitude,
-    h: $setup.covers,
-    i: common_vendor.f($setup.swiperData, (item, index, i0) => {
+    g: $setup.longitude,
+    h: $setup.latitude,
+    i: $setup.covers,
+    j: common_vendor.f($setup.swiperData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.name),
         b: common_vendor.t(item.remark),
         c: common_vendor.o(($event) => $options.openMapApp(item), index),
-        d: index,
-        e: common_vendor.n(index === $setup.swiperData.length && "scroll-list__shops--no-margin-right")
+        d: index
       };
     }),
-    j: common_vendor.p({
+    k: common_vendor.p({
       indicatorWidth: 0
-    })
+    }),
+    l: common_vendor.n($setup.swiperData.length === 1 && "scroll_center")
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);

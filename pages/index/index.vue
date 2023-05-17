@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<header class="seacher">
-			<view class="locate">
+			<view class="locate" @click="handleLocate">
 				<u-icon name="map-fill" color="#f3950c" size="19"></u-icon>
 				<view>{{locateCity}}</view>
 			</view>
@@ -11,17 +11,17 @@
 			</view>
 		</header>
 		<section class="map-content">
-			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"></map>
-			<view class="scroll">
+			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"
+				:show-location="true"></map>
+			<view class="scroll" :class="[( swiperData.length === 1) && 'scroll_center']">
 				<u-scroll-list :indicatorWidth="0">
 					<view class="scroll-list" style="flex-direction: row;">
-						<view class="scroll-list__shops" v-for="(item, index) in swiperData" :key="index"
-							:class="[(index === swiperData.length) && 'scroll-list__shops--no-margin-right']">
-							<view class="scroll-list__shops_item" @click="openMapApp(item)">
-								<image class="scroll-list__shops_item__image"
+						<view class="scroll-list_shops" v-for="(item, index) in swiperData" :key="index">
+							<view class="scroll-list_shops_item" @click="openMapApp(item)">
+								<image class="scroll-list_shops_item_image"
 									src="https://cdn.uviewui.com/uview/goods/1.jpg"></image>
-								<view class="scroll-list__shops_item__title">{{ item.name }}</view>
-								<view class="scroll-list__shops_item__des">{{ item.remark }}</view>
+								<view class="scroll-list_shops_item_title">{{ item.name }}</view>
+								<view class="scroll-list_shops_item_des">{{ item.remark }}</view>
 							</view>
 						</view>
 					</view>
@@ -40,8 +40,8 @@
 
 	// 位置信息
 	const location = {
-		longitude: 104,
-		latitude: 40,
+		longitude: 104.065681,
+		latitude: 30.653442,
 		province: '', // 省份
 		city: '', // 城市
 		district: '', // 地区
@@ -73,7 +73,7 @@
 		},
 
 		async mounted() {
-			const location = await this.getLocationInfo()
+			await this.getLocationInfo()
 			this.longitude = location.longitude
 			this.latitude = location.latitude
 			this.locateCity = location.city || '未授权'
@@ -177,7 +177,6 @@
 				// 去重
 				const res = new Map()
 				return concatData.filter(item => !res.has(item.id) && res.set(item.id, 1))
-
 			},
 
 			// 输入改变
@@ -202,7 +201,75 @@
 				} catch (e) {
 					console.log(e)
 				}
+			},
 
+			handleMoveTo() {
+				// 已授权
+				if (mapContext === null) {
+					mapContext = wx.createMapContext('map', this)
+					console.log(mapContext)
+				}
+				mapContext.moveToLocation({
+					latitude: Number(location.latitude),
+					longitude: Number(location.longitude),
+					success: res => {
+						console.log('success', res)
+					},
+					fail: res => {
+						console.log('fail', res)
+					}
+				})
+			},
+
+			// 获取当前
+			handleLocate() {
+				if (this.isLocate) {
+					this.handleMoveTo()
+				} else {
+					// 未授权位置
+					uni.showModal({
+						title: '您未开启地理位置授权',
+						content: '为了您更好的体验， 请确认获取您的位置',
+						confirmText: '确认',
+						cancelText: '取消',
+						success: ({ confirm }) => {
+							// 确认重新获取位置
+							if (confirm) {
+								wx.openSetting({
+									success: async ({ authSetting }) => {
+										const isLocation = authSetting && authSetting[
+											'scope.userLocation']
+										if (isLocation) {
+											this.locateCity = '定位中…'
+											await this.getLocationInfo()
+											console.log(location)
+											this.longitude = location.longitude
+											this.latitude = location.latitude
+											this.locateCity = location.city
+											this.handleMoveTo()
+											// 当前区域数据
+											const regionData = await this.getData({
+												region: location
+													.district
+											})
+											this.setCovers(regionData)
+											this.swiperData = this.handleDataSort(regionData)
+										}
+									},
+									fail: () => {
+										uni.showToast({
+											icon: 'fail',
+											title: '弹出设置面板出错'
+										})
+									}
+								})
+							}
+						},
+						fail: () => {
+							console.log('展示modal框失败')
+						}
+					})
+				}
 			}
 		}
 
@@ -263,19 +330,21 @@
 		}
 	}
 
-	::v-deep .u-scroll-list__scroll-view__content {
-		justify-content: center;
+	.scroll_center {
+		::v-deep .u-scroll-list__scroll-view__content {
+			justify-content: center;
+		}
 	}
 
 	.scroll-list {
 		@include flex(column);
 
 
-		&__shops {
+		&_shops {
 			margin-right: 20rpx;
 			padding: 20rpx 0;
-			width: 300rpx;
-			height: 400rpx;
+			width: 480rpx;
+			min-height: 375rpx;
 
 			&_item {
 				background-color: $uni-bg-color;
@@ -283,17 +352,25 @@
 				box-shadow: 5rpx 5rpx 20rpx $uni-bg-color-mask ;
 				height: 100%;
 
-				&__image {
+				&_image {
 					height: 310rpx;
 					width: 100%;
 					border-radius: 20rpx 20rpx 0 0;
 				}
 
-				&__title {
+				&_title {
 					text-align: center;
 					font-size: $uni-font-size-base;
 					font-weight: bold;
 					border-radius: 20rpx;
+				}
+
+				&_des {
+					padding: 10rpx;
+					font-size: $uni-font-size-sm;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 				}
 			}
 		}

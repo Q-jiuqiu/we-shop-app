@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   margin: 0 20rpx;
-  font-size: 16rpx;
+  font-size: 28rpx;
   white-space: nowrap;
 }
 .content .seacher .input-content.data-v-1cf27b2a {
@@ -68,35 +68,42 @@
   bottom: 10rpx;
   left: 0;
 }
-.data-v-1cf27b2a .u-scroll-list__scroll-view__content {
+.scroll_center.data-v-1cf27b2a .u-scroll-list__scroll-view__content {
   justify-content: center;
 }
 .scroll-list.data-v-1cf27b2a {
   display: flex;
   flex-direction: column;
 }
-.scroll-list__shops.data-v-1cf27b2a {
+.scroll-list_shops.data-v-1cf27b2a {
   margin-right: 20rpx;
   padding: 20rpx 0;
-  width: 300rpx;
-  height: 400rpx;
+  width: 480rpx;
+  min-height: 375rpx;
 }
-.scroll-list__shops_item.data-v-1cf27b2a {
+.scroll-list_shops_item.data-v-1cf27b2a {
   background-color: #ffffff;
   border-radius: 20rpx;
   box-shadow: 5rpx 5rpx 20rpx rgba(0, 0, 0, 0.4);
   height: 100%;
 }
-.scroll-list__shops_item__image.data-v-1cf27b2a {
+.scroll-list_shops_item_image.data-v-1cf27b2a {
   height: 310rpx;
   width: 100%;
   border-radius: 20rpx 20rpx 0 0;
 }
-.scroll-list__shops_item__title.data-v-1cf27b2a {
+.scroll-list_shops_item_title.data-v-1cf27b2a {
   text-align: center;
-  font-size: 18rpx;
+  font-size: 32rpx;
   font-weight: bold;
   border-radius: 20rpx;
+}
+.scroll-list_shops_item_des.data-v-1cf27b2a {
+  padding: 10rpx;
+  font-size: 28rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 /**
  * 这里是uni-app内置的常用样式变量
