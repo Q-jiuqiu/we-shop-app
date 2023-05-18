@@ -10,11 +10,11 @@
 			<div class="address">
 				<div class="ads">
 					<u-icon name="map" color="#333" size="15"></u-icon>
-					<span>{{address}}</span>
+					<span>{{detail.addr}}</span>
 				</div>
 				<view class="iconfont icon-dingwei locate" @click="handleShowMap"></view>
 			</div>
-			<div class="remark">
+			<div class="remark" v-if="detail.remark">
 				<div class="title">说明</div>
 				<div class="content">
 					{{detail.remark}}
@@ -77,7 +77,7 @@
 							},
 							info: {
 								name: this.detail.name,
-								address: this.detail.address,
+								address: this.detail.addr,
 							}
 						})
 					}

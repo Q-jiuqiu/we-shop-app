@@ -88,6 +88,7 @@ const _sfc_main = {
     },
     // 获取筛选数据
     getData(params = {}) {
+      console.log("筛选条件:", params);
       return new Promise((resolve) => {
         common_vendor.index.request({
           url: "http://8.137.19.141/pro/rest/dbs/find",
@@ -95,6 +96,7 @@ const _sfc_main = {
           method: "GET",
           success: function(res) {
             const data = res.data.data;
+            console.log("结果:", data);
             resolve(data);
           },
           fail: function(err) {
@@ -106,13 +108,14 @@ const _sfc_main = {
     },
     // 设置markArray
     setCovers(points) {
+      console.log("marker点", points);
       this.covers = points.map((point, index) => {
         return {
           id: index,
           latitude: Number(point.latitude),
           longitude: Number(point.longitude),
           iconPath: "../../static/location.png",
-          width: 10,
+          width: "15rpx",
           height: 10
         };
       });
@@ -122,18 +125,21 @@ const _sfc_main = {
       if (regionData.length === 0) {
         return allData;
       }
-      const concatData = allData.concat(regionData);
+      const concatData = regionData.concat(allData);
       const res = /* @__PURE__ */ new Map();
       return concatData.filter((item) => !res.has(item.id) && res.set(item.id, 1));
     },
     // 输入改变
     async handleInputChange() {
       const regionData = await this.getData({ name: this.keyWord });
+      if (regionData.length > 0) {
+        this.handleMoveTo(regionData[0]);
+      }
       this.setCovers(regionData);
       this.swiperData = regionData;
     },
     // 打开地图导航app
-    openMapApp(item) {
+    handleDetailShow(item) {
       common_vendor.index.navigateTo({
         url: "/pages/detail/detail",
         success: (res) => {
@@ -146,20 +152,20 @@ const _sfc_main = {
         }
       });
     },
-    handleMoveTo() {
+    handleMoveTo(location2) {
       if (mapContext === null) {
         mapContext = common_vendor.wx$1.createMapContext("map", this);
         console.log(mapContext);
       }
       mapContext.moveToLocation({
-        latitude: Number(location.latitude),
-        longitude: Number(location.longitude)
+        latitude: Number(location2.latitude),
+        longitude: Number(location2.longitude)
       });
     },
     // 获取当前
     handleLocate() {
       if (this.isLocate) {
-        this.handleMoveTo();
+        this.handleMoveTo(location);
       } else {
         common_vendor.index.showModal({
           title: "您未开启地理位置授权",
@@ -233,7 +239,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: common_vendor.p({
       prefixIcon: "search",
       prefixIconStyle: "color: #909399",
-      placeholder: "请输入内容",
+      placeholder: "请输入店铺名称",
       border: "surround",
       clearable: true,
       shape: "circle",
@@ -247,7 +253,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         a: $options.getImageSrc(item),
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.remark),
-        d: common_vendor.o(($event) => $options.openMapApp(item), index),
+        d: common_vendor.o(($event) => $options.handleDetailShow(item), index),
         e: index
       };
     }),

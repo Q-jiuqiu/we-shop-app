@@ -6,7 +6,7 @@
 				<view>{{locateCity}}</view>
 			</view>
 			<view class="input-content">
-				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入内容" border="surround"
+				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入店铺名称" border="surround"
 					@change="$u.debounce(handleInputChange, 500)" v-model="keyWord" clearable shape="circle"></u-input>
 			</view>
 		</header>
@@ -17,7 +17,7 @@
 				<u-scroll-list :indicatorWidth="0">
 					<view class="scroll-list" style="flex-direction: row;">
 						<view class="scroll-list_shops" v-for="(item, index) in swiperData" :key="index">
-							<view class="scroll-list_shops_item" @click="openMapApp(item)">
+							<view class="scroll-list_shops_item" @click="handleDetailShow(item)">
 								<image class="scroll-list_shops_item_image" :src="getImageSrc(item)"></image>
 								<view class="scroll-list_shops_item_title">{{ item.name }}</view>
 								<view class="scroll-list_shops_item_des">{{ item.remark }}</view>
@@ -129,6 +129,7 @@
 
 			// 获取筛选数据
 			getData(params = {}) {
+				console.log('筛选条件:', params)
 				return new Promise(resolve => {
 					uni.request({
 						url: 'http://8.137.19.141/pro/rest/dbs/find',
@@ -136,6 +137,7 @@
 						method: 'GET',
 						success: function(res) {
 							const data = res.data.data
+							console.log('结果:', data)
 							resolve(data)
 						},
 						fail: function(err) {
@@ -148,13 +150,14 @@
 
 			// 设置markArray
 			setCovers(points) {
+				console.log('marker点', points)
 				this.covers = points.map((point, index) => {
 					return {
 						id: index,
 						latitude: Number(point.latitude),
 						longitude: Number(point.longitude),
 						iconPath: '../../static/location.png',
-						width: 10,
+						width: '15rpx',
 						height: 10
 					}
 				})
@@ -165,7 +168,7 @@
 				if (regionData.length === 0) {
 					return allData
 				}
-				const concatData = allData.concat(regionData)
+				const concatData = regionData.concat(allData)
 
 				// 去重
 				const res = new Map()
@@ -175,12 +178,15 @@
 			// 输入改变
 			async handleInputChange() {
 				const regionData = await this.getData({ name: this.keyWord })
+				if (regionData.length > 0) {
+					this.handleMoveTo(regionData[0])
+				}
 				this.setCovers(regionData)
 				this.swiperData = regionData
 			},
 
 			// 打开地图导航app
-			openMapApp(item) {
+			handleDetailShow(item) {
 				// 通过eventChannel向被打开页面传送数据
 				uni.navigateTo({
 					url: '/pages/detail/detail',
@@ -195,7 +201,7 @@
 				})
 			},
 
-			handleMoveTo() {
+			handleMoveTo(location) {
 				// 已授权
 				if (mapContext === null) {
 					mapContext = wx.createMapContext('map', this)
@@ -210,7 +216,7 @@
 			// 获取当前
 			handleLocate() {
 				if (this.isLocate) {
-					this.handleMoveTo()
+					this.handleMoveTo(location)
 				} else {
 					// 未授权位置
 					uni.showModal({

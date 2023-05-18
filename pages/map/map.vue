@@ -1,6 +1,5 @@
 <template>
 	<div class="map-contianer">
-		<!-- <div class="back"></div> -->
 		<map class="map" id="map" :style="{height: height}" :longitude="longitude" :latitude="latitude" :covers="covers"
 			:show-location="true"></map>
 		<div class="info">
@@ -49,7 +48,7 @@
 			this.eventChannel = eventChannel
 			// 监听postMessage事件，获取上一页面通过eventChannel传送到当前页面的数据
 			eventChannel.on('postLocation', ({ from, to, info }) => {
-				console.log(from, to)
+				console.log(from, to, info)
 				this.longitude = from.longitude
 				this.latitude = from.latitude
 				this.name = info.name
@@ -81,16 +80,25 @@
 					}
 
 					console.log(mapContext)
-
+					console.log(this.to)
 					mapContext.openMapApp({
 						longitude: Number(this.to.longitude),
 						latitude: Number(this.to.latitude),
 						destination: this.name,
 						fail: res => {
-							uni.showToast({
-								icon: 'error',
-								title: '经纬度错误'
-							})
+							console.log('失败', res)
+							if (res.indexOf('cancel') > -1) {
+								uni.showToast({
+									icon: 'fail',
+									title: '取消导航'
+								})
+							} else {
+								uni.showToast({
+									icon: 'error',
+									title: '经纬度错误'
+								})
+							}
+							console.log(Number(this.to.longitude), Number(this.to.latitude))
 						}
 					})
 				} catch (e) {
@@ -105,9 +113,11 @@
 	.map-contianer {
 		width: 100%;
 		position: relative;
+		height: 100%;
 
 		.map {
 			width: 100%;
+			height: 100%;
 		}
 
 		.info {
@@ -145,5 +155,11 @@
 				}
 			}
 		}
+	}
+</style>
+
+<style lang="scss">
+	page {
+		height: 100%;
 	}
 </style>
