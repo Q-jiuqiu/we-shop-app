@@ -18,8 +18,7 @@
 					<view class="scroll-list" style="flex-direction: row;">
 						<view class="scroll-list_shops" v-for="(item, index) in swiperData" :key="index">
 							<view class="scroll-list_shops_item" @click="openMapApp(item)">
-								<image class="scroll-list_shops_item_image"
-									src="https://cdn.uviewui.com/uview/goods/1.jpg"></image>
+								<image class="scroll-list_shops_item_image" :src="getImageSrc(item)"></image>
 								<view class="scroll-list_shops_item_title">{{ item.name }}</view>
 								<view class="scroll-list_shops_item_des">{{ item.remark }}</view>
 							</view>
@@ -57,7 +56,7 @@
 			const latitude = ref(0) // 当前纬度
 			const locateCity = ref('定位中…') // 当前城市名
 			const covers = ref([])
-			const swiperData = ref([{}]) // 滑块数据
+			const swiperData = ref([]) // 滑块数据
 			const isLocate = ref(false) // 是否授权位置
 			const keyWord = ref('')
 
@@ -72,7 +71,7 @@
 			}
 		},
 
-		async mounted() {
+		onLoad: async function() {
 			await this.getLocationInfo()
 			this.longitude = location.longitude
 			this.latitude = location.latitude
@@ -155,16 +154,10 @@
 						latitude: Number(point.latitude),
 						longitude: Number(point.longitude),
 						iconPath: '../../static/location.png',
+						width: 10,
+						height: 10
 					}
 				})
-				if (this.isLocate) {
-					this.covers.unshift({
-						id: this.covers.lengt + 1,
-						latitude: Number(location.latitude),
-						longitude: Number(location.longitude),
-						iconPath: '../../static/location.png',
-					})
-				}
 			},
 
 			// 数据排序-优先展示当前区域数据
@@ -188,19 +181,18 @@
 
 			// 打开地图导航app
 			openMapApp(item) {
-				try {
-					if (mapContext === null) {
-						mapContext = wx.createMapContext('map', this)
-						console.log(mapContext)
+				// 通过eventChannel向被打开页面传送数据
+				uni.navigateTo({
+					url: '/pages/detail/detail',
+					success: res => {
+						console.log(res)
+						res.eventChannel.emit('postMessage', {
+							detail: item,
+							longitude: location.longitude,
+							latitude: location.latitude
+						})
 					}
-					mapContext.openMapApp({
-						longitude: Number(item.longitude),
-						latitude: Number(item.latitude),
-						destination: item.name
-					})
-				} catch (e) {
-					console.log(e)
-				}
+				})
 			},
 
 			handleMoveTo() {
@@ -211,13 +203,7 @@
 				}
 				mapContext.moveToLocation({
 					latitude: Number(location.latitude),
-					longitude: Number(location.longitude),
-					success: res => {
-						console.log('success', res)
-					},
-					fail: res => {
-						console.log('fail', res)
-					}
+					longitude: Number(location.longitude)
 				})
 			},
 
@@ -242,7 +228,6 @@
 										if (isLocation) {
 											this.locateCity = '定位中…'
 											await this.getLocationInfo()
-											console.log(location)
 											this.longitude = location.longitude
 											this.latitude = location.latitude
 											this.locateCity = location.city
@@ -253,7 +238,8 @@
 													.district
 											})
 											this.setCovers(regionData)
-											this.swiperData = this.handleDataSort(regionData)
+											this.swiperData = this.handleDataSort(
+												regionData)
 										}
 									},
 									fail: () => {
@@ -270,6 +256,10 @@
 						}
 					})
 				}
+			},
+
+			getImageSrc(item) {
+				return item.image || 'https://cdn.uviewui.com/uview/goods/1.jpg'
 			}
 		}
 

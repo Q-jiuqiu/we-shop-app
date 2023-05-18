@@ -24,7 +24,7 @@ const _sfc_main = {
     const latitude = common_vendor.ref(0);
     const locateCity = common_vendor.ref("定位中…");
     const covers = common_vendor.ref([]);
-    const swiperData = common_vendor.ref([{}]);
+    const swiperData = common_vendor.ref([]);
     const isLocate = common_vendor.ref(false);
     const keyWord = common_vendor.ref("");
     return {
@@ -37,7 +37,7 @@ const _sfc_main = {
       keyWord
     };
   },
-  async mounted() {
+  onLoad: async function() {
     await this.getLocationInfo();
     this.longitude = location.longitude;
     this.latitude = location.latitude;
@@ -111,17 +111,11 @@ const _sfc_main = {
           id: index,
           latitude: Number(point.latitude),
           longitude: Number(point.longitude),
-          iconPath: "../../static/location.png"
+          iconPath: "../../static/location.png",
+          width: 10,
+          height: 10
         };
       });
-      if (this.isLocate) {
-        this.covers.unshift({
-          id: this.covers.lengt + 1,
-          latitude: Number(location.latitude),
-          longitude: Number(location.longitude),
-          iconPath: "../../static/location.png"
-        });
-      }
     },
     // 数据排序-优先展示当前区域数据
     handleDataSort(regionData) {
@@ -140,19 +134,17 @@ const _sfc_main = {
     },
     // 打开地图导航app
     openMapApp(item) {
-      try {
-        if (mapContext === null) {
-          mapContext = common_vendor.wx$1.createMapContext("map", this);
-          console.log(mapContext);
+      common_vendor.index.navigateTo({
+        url: "/pages/detail/detail",
+        success: (res) => {
+          console.log(res);
+          res.eventChannel.emit("postMessage", {
+            detail: item,
+            longitude: location.longitude,
+            latitude: location.latitude
+          });
         }
-        mapContext.openMapApp({
-          longitude: Number(item.longitude),
-          latitude: Number(item.latitude),
-          destination: item.name
-        });
-      } catch (e) {
-        console.log(e);
-      }
+      });
     },
     handleMoveTo() {
       if (mapContext === null) {
@@ -161,13 +153,7 @@ const _sfc_main = {
       }
       mapContext.moveToLocation({
         latitude: Number(location.latitude),
-        longitude: Number(location.longitude),
-        success: (res) => {
-          console.log("success", res);
-        },
-        fail: (res) => {
-          console.log("fail", res);
-        }
+        longitude: Number(location.longitude)
       });
     },
     // 获取当前
@@ -188,7 +174,6 @@ const _sfc_main = {
                   if (isLocation) {
                     this.locateCity = "定位中…";
                     await this.getLocationInfo();
-                    console.log(location);
                     this.longitude = location.longitude;
                     this.latitude = location.latitude;
                     this.locateCity = location.city;
@@ -197,7 +182,9 @@ const _sfc_main = {
                       region: location.district
                     });
                     this.setCovers(regionData);
-                    this.swiperData = this.handleDataSort(regionData);
+                    this.swiperData = this.handleDataSort(
+                      regionData
+                    );
                   }
                 },
                 fail: () => {
@@ -214,6 +201,9 @@ const _sfc_main = {
           }
         });
       }
+    },
+    getImageSrc(item) {
+      return item.image || "https://cdn.uviewui.com/uview/goods/1.jpg";
     }
   }
 };
@@ -254,10 +244,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: $setup.covers,
     j: common_vendor.f($setup.swiperData, (item, index, i0) => {
       return {
-        a: common_vendor.t(item.name),
-        b: common_vendor.t(item.remark),
-        c: common_vendor.o(($event) => $options.openMapApp(item), index),
-        d: index
+        a: $options.getImageSrc(item),
+        b: common_vendor.t(item.name),
+        c: common_vendor.t(item.remark),
+        d: common_vendor.o(($event) => $options.openMapApp(item), index),
+        e: index
       };
     }),
     k: common_vendor.p({
