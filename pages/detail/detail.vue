@@ -113,7 +113,7 @@
 
 				::v-deep .u-transition {
 					display: inline-block;
-					width: 180rpx;
+					min-width: 180rpx;
 					margin-right: 10rpx;
 
 					.u-tag--primary--plain {
