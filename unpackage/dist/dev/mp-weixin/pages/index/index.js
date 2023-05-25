@@ -33,15 +33,8 @@ const _sfc_main = {
       // 滑块数据
       isLocate: false,
       // 是否授权位置
-      keyWord: "",
+      keyWord: ""
       // 搜索关键字
-      navigation: [
-        { name: "美食" },
-        { name: "风景" },
-        { name: "避坑" },
-        { name: "留言" }
-      ],
-      activeNav: 0
     };
   },
   onLoad: async function() {
@@ -49,6 +42,10 @@ const _sfc_main = {
     this.longitude = location.longitude;
     this.latitude = location.latitude;
     this.locateCity = location.city || "未授权";
+    common_vendor.index.setStorage({
+      key: "location",
+      data: location
+    });
   },
   methods: {
     //获取位置信息
@@ -238,16 +235,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     g: $data.longitude,
     h: $data.latitude,
-    i: $data.covers,
-    j: common_vendor.f($data.navigation, (item, index, i0) => {
-      return {
-        a: common_vendor.t(item.name),
-        b: common_vendor.n({
-          active: index === $data.activeNav
-        }),
-        c: index
-      };
-    })
+    i: $data.covers
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);

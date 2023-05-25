@@ -23,7 +23,7 @@
 	.avoid-bad {
 		width: 100%;
 		height: 100%;
-		background-color: #fcf9f0;
+		background-color: $background;
 		font-size: $uni-font-size-base;
 	}
 

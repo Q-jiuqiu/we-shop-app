@@ -21,25 +21,16 @@
 
 	export default {
 		name: 'MapIndex',
-		setup() {
-			const eventChannel = ref(null)
-			const longitude = ref(104.065681) // 经度
-			const latitude = ref(30.653442) // 纬度
-			const height = ref(500)
-			const covers = ref([])
-			const name = ref('')
-			const address = ref('')
-			const to = ref({})
-
+		data() {
 			return {
-				eventChannel,
-				longitude,
-				latitude,
-				height,
-				covers,
-				name,
-				address,
-				to
+				eventChannel: null,
+				longitude: 104.065681, // 经度
+				latitude: 30.653442, // 纬度
+				height: 500,
+				covers: [],
+				name: '',
+				address: '',
+				detail: {} // 详情
 			}
 		},
 		onLoad: function() {
@@ -47,22 +38,30 @@
 			const eventChannel = this.getOpenerEventChannel()
 			this.eventChannel = eventChannel
 			// 监听postMessage事件，获取上一页面通过eventChannel传送到当前页面的数据
-			eventChannel.on('postLocation', ({ from, to, info }) => {
-				console.log(from, to, info)
-				this.longitude = from.longitude
-				this.latitude = from.latitude
-				this.name = info.name
-				this.address = info.address
-				this.to = to
-				console.log(this)
+			eventChannel.on('postMap', ({ detail }) => {
+				console.log(detail)
+				this.name = detail.name
+				this.address = detail.addr
+				this.detail = detail
+
 				this.covers = [{
 					id: 'endPoint',
-					latitude: Number(to.latitude),
-					longitude: Number(to.longitude),
+					latitude: Number(detail.latitude),
+					longitude: Number(detail.longitude),
 					iconPath: '../../static/location.png',
 					width: 10,
 					height: 10
 				}]
+
+				uni.getStorage({
+					key: 'location',
+					success: res => {
+						console.log(res.data)
+						const location = res.data
+						this.longitude = location.longitude
+						this.latitude = location.latitude
+					}
+				})
 			})
 			this.height = uni.getSystemInfoSync().windowHeight + 'px'
 		},
@@ -80,10 +79,9 @@
 					}
 
 					console.log(mapContext)
-					console.log(this.to)
 					mapContext.openMapApp({
-						longitude: Number(this.to.longitude),
-						latitude: Number(this.to.latitude),
+						longitude: Number(this.detail.longitude),
+						latitude: Number(this.detail.latitude),
 						destination: this.name,
 						fail: res => {
 							console.log('失败', res)
@@ -98,7 +96,6 @@
 									title: '经纬度错误'
 								})
 							}
-							console.log(Number(this.to.longitude), Number(this.to.latitude))
 						}
 					})
 				} catch (e) {
