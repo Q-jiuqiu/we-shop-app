@@ -2,7 +2,6 @@
   "navigationBarTitleText": "首页",
   "usingComponents": {
     "u-icon": "../../uni_modules/uview-plus/components/u-icon/u-icon",
-    "u-input": "../../uni_modules/uview-plus/components/u-input/u-input",
-    "u-scroll-list": "../../uni_modules/uview-plus/components/u-scroll-list/u-scroll-list"
+    "u-input": "../../uni_modules/uview-plus/components/u-input/u-input"
   }
 }

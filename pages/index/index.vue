@@ -1,34 +1,40 @@
 <template>
-	<view class="content">
+	<div class="content">
 		<header class="seacher">
-			<view class="locate" @click="handleLocate">
+			<div class="locate" @click="handleLocate">
 				<u-icon name="map-fill" color="#f3950c" size="19"></u-icon>
-				<view>{{locateCity}}</view>
-			</view>
-			<view class="input-content">
+				<div>{{locateCity}}</div>
+			</div>
+			<div class="input-content">
 				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入店铺名称" border="surround"
 					@change="$u.debounce(handleInputChange, 500)" v-model="keyWord" clearable shape="circle"></u-input>
-			</view>
+			</div>
 		</header>
 		<section class="map-content">
 			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"
 				:show-location="true"></map>
-			<view class="scroll" :class="[( swiperData.length === 1) && 'scroll_center']">
+			<!-- <div class="scroll" :class="[( swiperData.length === 1) && 'scroll_center']">
 				<u-scroll-list :indicatorWidth="0">
-					<view class="scroll-list" style="flex-direction: row;">
-						<view class="scroll-list_shops" v-for="(item, index) in swiperData" :key="index">
-							<view class="scroll-list_shops_item" @click="handleDetailShow(item)">
+					<div class="scroll-list" style="flex-direction: row;">
+						<div class="scroll-list_shops" v-for="(item, index) in swiperData" :key="index">
+							<div class="scroll-list_shops_item" @click="handleDetailShow(item)">
 								<image class="scroll-list_shops_item_image" :src="getImageSrc(item)"></image>
-								<view class="scroll-list_shops_item_title">{{ item.name }}</view>
-								<view class="scroll-list_shops_item_des">{{ item.remark }}</view>
-							</view>
-						</view>
-					</view>
+								<div class="scroll-list_shops_item_title">{{ item.name }}</div>
+								<div class="scroll-list_shops_item_des">{{ item.remark }}</div>
+							</div>
+						</div>
+					</div>
 				</u-scroll-list>
-			</view>
+	</div> -->
 		</section>
 
-	</view>
+		<section class="navigation">
+			<div :class="['navigation-item', {active:index === activeNav}]" v-for="(item,index) in navigation"
+				:key="index">{{item.name}}</div>
+		</section>
+
+
+	</div>
 </template>
 
 <script>
@@ -51,25 +57,25 @@
 
 	export default {
 		name: 'IndexPage',
-		setup() {
-			const longitude = ref(0) // 当前经度
-			const latitude = ref(0) // 当前纬度
-			const locateCity = ref('定位中…') // 当前城市名
-			const covers = ref([])
-			const swiperData = ref([]) // 滑块数据
-			const isLocate = ref(false) // 是否授权位置
-			const keyWord = ref('')
-
+		data() {
 			return {
-				longitude,
-				latitude,
-				locateCity,
-				covers,
-				swiperData,
-				isLocate,
-				keyWord
+				longitude: 0, // 当前经度
+				latitude: 0, // 当前纬度
+				locateCity: '定位中…', // 当前城市名
+				covers: [], // marker点信息
+				swiperData: [], // 滑块数据
+				isLocate: false, // 是否授权位置
+				keyWord: '', // 搜索关键字
+				navigation: [
+					{ name: '美食' },
+					{ name: '风景' },
+					{ name: '避坑' },
+					{ name: '留言' },
+				],
+				activeNav: 0
 			}
 		},
+
 
 		onLoad: async function() {
 			await this.getLocationInfo()
@@ -77,15 +83,15 @@
 			this.latitude = location.latitude
 			this.locateCity = location.city || '未授权'
 			// 所有数据
-			allData = await this.getData()
-			if (location.district) {
-				// 当前区域数据
-				const regionData = await this.getData({ region: location.district })
-				this.setCovers(regionData)
-				this.swiperData = this.handleDataSort(regionData)
-			} else {
-				this.swiperData = allData
-			}
+			// allData = await this.getData()
+			// if (location.district) {
+			// 	// 当前区域数据
+			// 	const regionData = await this.getData({ region: location.district })
+			// 	this.setCovers(regionData)
+			// 	this.swiperData = this.handleDataSort(regionData)
+			// } else {
+			// 	this.swiperData = allData
+			// }
 		},
 
 		methods: {
@@ -177,12 +183,12 @@
 
 			// 输入改变
 			async handleInputChange() {
-				const regionData = await this.getData({ name: this.keyWord })
-				if (regionData.length > 0) {
-					this.handleMoveTo(regionData[0])
-				}
-				this.setCovers(regionData)
-				this.swiperData = regionData
+				// const regionData = await this.getData({ name: this.keyWord })
+				// if (regionData.length > 0) {
+				// 	this.handleMoveTo(regionData[0])
+				// }
+				// this.setCovers(regionData)
+				// this.swiperData = regionData
 			},
 
 			// 打开地图导航app
@@ -265,7 +271,7 @@
 			},
 
 			getImageSrc(item) {
-				return item.image || 'https://cdn.uviewui.com/uview/goods/1.jpg'
+				return item.image || 'https://cdn.udivui.com/udiv/goods/1.jpg'
 			}
 		}
 
@@ -317,60 +323,77 @@
 				height: 100%;
 			}
 
-			.scroll {
-				width: 100%;
-				position: absolute;
-				bottom: 10rpx;
-				left: 0;
+			// .scroll {
+			// 	width: 100%;
+			// 	position: absolute;
+			// 	bottom: 10rpx;
+			// 	left: 0;
+			// }
+		}
+
+		.navigation {
+			position: absolute;
+			bottom: 140rpx;
+			display: flex;
+			justify-content: space-around;
+			width: 100%;
+
+			&-item {
+				min-width: 40rpx;
+				padding: 10rpx 20rpx;
+				border-radius: 10rpx;
+				box-shadow: 5rpx 5rpx 20rpx $uni-bg-color-mask;
+				background-color: #fff;
 			}
 		}
+
 	}
 
-	.scroll_center {
-		::v-deep .u-scroll-list__scroll-view__content {
-			justify-content: center;
-		}
-	}
+	// .scroll_center {
+	// 	::v-deep .u-scroll-list__scroll-div__content {
+	// 		justify-content: center;
+	// 	}
+	// }
 
-	.scroll-list {
-		@include flex(column);
+	// .scroll-list {
+	// 	@include flex(column);
 
 
-		&_shops {
-			margin-right: 20rpx;
-			padding: 20rpx 0;
-			width: 480rpx;
-			min-height: 375rpx;
+	// 	&_shops {
+	// 		margin-right: 20rpx;
+	// 		padding: 20rpx 0;
+	// 		width: 480rpx;
+	// 		min-height: 375rpx;
 
-			&_item {
-				background-color: $uni-bg-color;
-				border-radius: 20rpx;
-				box-shadow: 5rpx 5rpx 20rpx $uni-bg-color-mask ;
-				height: 100%;
+	// 		&_item {
+	// 			background-color: $uni-bg-color;
+	// 			border-radius: 20rpx;
+	// 			box-shadow: 5rpx 5rpx 20rpx $uni-bg-color-mask ;
+	// 			height: 100%;
 
-				&_image {
-					height: 310rpx;
-					width: 100%;
-					border-radius: 20rpx 20rpx 0 0;
-				}
+	// 			&_image {
+	// 				height: 310rpx;
+	// 				width: 100%;
+	// 				border-radius: 20rpx 20rpx 0 0;
+	// 			}
 
-				&_title {
-					text-align: center;
-					font-size: $uni-font-size-base;
-					font-weight: bold;
-					border-radius: 20rpx;
-				}
+	// 			&_title {
+	// 				text-align: center;
+	// 				font-size: $uni-font-size-base;
+	// 				font-weight: bold;
+	// 				border-radius: 20rpx;
+	// 			}
 
-				&_des {
-					padding: 10rpx;
-					font-size: $uni-font-size-sm;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
-			}
-		}
-	}
+	// 			&_des {
+	// 				padding: 10rpx;
+	// 				font-size: $uni-font-size-sm;
+	// 				overflow: hidden;
+	// 				text-overflow: ellipsis;
+	// 				white-space: nowrap;
+	// 			}
+	// 		}
+	// 	}
+	// }
 </style>
 
 <style lang="scss">

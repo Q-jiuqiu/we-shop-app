@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/avoidBad/avoidBad",
     "pages/index/index",
     "pages/detail/detail",
     "pages/map/map"

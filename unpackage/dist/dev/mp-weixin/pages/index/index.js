@@ -19,22 +19,29 @@ const location = {
 let allData = [];
 const _sfc_main = {
   name: "IndexPage",
-  setup() {
-    const longitude = common_vendor.ref(0);
-    const latitude = common_vendor.ref(0);
-    const locateCity = common_vendor.ref("定位中…");
-    const covers = common_vendor.ref([]);
-    const swiperData = common_vendor.ref([]);
-    const isLocate = common_vendor.ref(false);
-    const keyWord = common_vendor.ref("");
+  data() {
     return {
-      longitude,
-      latitude,
-      locateCity,
-      covers,
-      swiperData,
-      isLocate,
-      keyWord
+      longitude: 0,
+      // 当前经度
+      latitude: 0,
+      // 当前纬度
+      locateCity: "定位中…",
+      // 当前城市名
+      covers: [],
+      // marker点信息
+      swiperData: [],
+      // 滑块数据
+      isLocate: false,
+      // 是否授权位置
+      keyWord: "",
+      // 搜索关键字
+      navigation: [
+        { name: "美食" },
+        { name: "风景" },
+        { name: "避坑" },
+        { name: "留言" }
+      ],
+      activeNav: 0
     };
   },
   onLoad: async function() {
@@ -42,14 +49,6 @@ const _sfc_main = {
     this.longitude = location.longitude;
     this.latitude = location.latitude;
     this.locateCity = location.city || "未授权";
-    allData = await this.getData();
-    if (location.district) {
-      const regionData = await this.getData({ region: location.district });
-      this.setCovers(regionData);
-      this.swiperData = this.handleDataSort(regionData);
-    } else {
-      this.swiperData = allData;
-    }
   },
   methods: {
     //获取位置信息
@@ -131,12 +130,6 @@ const _sfc_main = {
     },
     // 输入改变
     async handleInputChange() {
-      const regionData = await this.getData({ name: this.keyWord });
-      if (regionData.length > 0) {
-        this.handleMoveTo(regionData[0]);
-      }
-      this.setCovers(regionData);
-      this.swiperData = regionData;
     },
     // 打开地图导航app
     handleDetailShow(item) {
@@ -209,21 +202,19 @@ const _sfc_main = {
       }
     },
     getImageSrc(item) {
-      return item.image || "https://cdn.uviewui.com/uview/goods/1.jpg";
+      return item.image || "https://cdn.udivui.com/udiv/goods/1.jpg";
     }
   }
 };
 if (!Array) {
   const _easycom_u_icon2 = common_vendor.resolveComponent("u-icon");
   const _easycom_u_input2 = common_vendor.resolveComponent("u-input");
-  const _easycom_u_scroll_list2 = common_vendor.resolveComponent("u-scroll-list");
-  (_easycom_u_icon2 + _easycom_u_input2 + _easycom_u_scroll_list2)();
+  (_easycom_u_icon2 + _easycom_u_input2)();
 }
 const _easycom_u_icon = () => "../../uni_modules/uview-plus/components/u-icon/u-icon.js";
 const _easycom_u_input = () => "../../uni_modules/uview-plus/components/u-input/u-input.js";
-const _easycom_u_scroll_list = () => "../../uni_modules/uview-plus/components/u-scroll-list/u-scroll-list.js";
 if (!Math) {
-  (_easycom_u_icon + _easycom_u_input + _easycom_u_scroll_list)();
+  (_easycom_u_icon + _easycom_u_input)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
@@ -232,10 +223,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       color: "#f3950c",
       size: "19"
     }),
-    b: common_vendor.t($setup.locateCity),
+    b: common_vendor.t($data.locateCity),
     c: common_vendor.o((...args) => $options.handleLocate && $options.handleLocate(...args)),
     d: common_vendor.o(($event) => _ctx.$u.debounce($options.handleInputChange, 500)),
-    e: common_vendor.o(($event) => $setup.keyWord = $event),
+    e: common_vendor.o(($event) => $data.keyWord = $event),
     f: common_vendor.p({
       prefixIcon: "search",
       prefixIconStyle: "color: #909399",
@@ -243,24 +234,20 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       border: "surround",
       clearable: true,
       shape: "circle",
-      modelValue: $setup.keyWord
+      modelValue: $data.keyWord
     }),
-    g: $setup.longitude,
-    h: $setup.latitude,
-    i: $setup.covers,
-    j: common_vendor.f($setup.swiperData, (item, index, i0) => {
+    g: $data.longitude,
+    h: $data.latitude,
+    i: $data.covers,
+    j: common_vendor.f($data.navigation, (item, index, i0) => {
       return {
-        a: $options.getImageSrc(item),
-        b: common_vendor.t(item.name),
-        c: common_vendor.t(item.remark),
-        d: common_vendor.o(($event) => $options.handleDetailShow(item), index),
-        e: index
+        a: common_vendor.t(item.name),
+        b: common_vendor.n({
+          active: index === $data.activeNav
+        }),
+        c: index
       };
-    }),
-    k: common_vendor.p({
-      indicatorWidth: 0
-    }),
-    l: common_vendor.n($setup.swiperData.length === 1 && "scroll_center")
+    })
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);
