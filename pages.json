@@ -60,26 +60,32 @@
 		"backgroundColor": "white",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "./static/location.png",
-				"selectedIconPath": "./static/location.png",
+				"iconPath": "./static/img/index.png",
+				"selectedIconPath": "./static/img/indexAc.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/foods/foods",
+				"iconPath": "./static/img/food.png",
+				"selectedIconPath": "./static/img/foodAc.png",
 				"text": "美食"
 			},
 			{
 				"pagePath": "pages/sense/sense",
+				"iconPath": "./static/img/sense.png",
+				"selectedIconPath": "./static/img/senseAc.png",
 				"text": "风景"
 			},
 			{
 				"pagePath": "pages/avoidBad/avoidBad",
+				"iconPath": "./static/img/avoid.png",
+				"selectedIconPath": "./static/img/avoidAc.png",
 				"text": "避坑"
 			},
 			{
 				"pagePath": "pages/message/message",
-				"iconPath": "./static/location.png",
-				"selectedIconPath": "./static/location.png",
+				"iconPath": "./static/img/mesg.png",
+				"selectedIconPath": "./static/img/mesgAc.png",
 				"text": "留言"
 			}
 		]

@@ -27,7 +27,7 @@ const _sfc_main = {
       // 当前纬度
       locateCity: "定位中…",
       // 当前城市名
-      covers: [],
+      markers: [],
       // marker点信息
       swiperData: [],
       // 滑块数据
@@ -38,13 +38,43 @@ const _sfc_main = {
     };
   },
   onLoad: async function() {
-    await this.getLocationInfo();
-    this.longitude = location.longitude;
-    this.latitude = location.latitude;
-    this.locateCity = location.city || "未授权";
-    common_vendor.index.setStorage({
+    common_vendor.index.getStorage({
       key: "location",
-      data: location
+      success: async ({ data: storage }) => {
+        console.log(storage);
+        if (!storage.longitude || !storage.latitude || !storage.city) {
+          await this.getLocationInfo();
+          this.longitude = location.longitude;
+          this.latitude = location.latitude;
+          this.locateCity = location.city || "未授权";
+          common_vendor.index.setStorage({
+            key: "location",
+            data: location
+          });
+        } else {
+          this.longitude = storage.longitude;
+          this.latitude = storage.latitude;
+          this.locateCity = storage.city || "未授权";
+        }
+      },
+      fail: async ({ errMsg }) => {
+        console.log("fail", errMsg);
+        if (errMsg === "getStorage:fail data not found") {
+          await this.getLocationInfo();
+          this.longitude = location.longitude;
+          this.latitude = location.latitude;
+          this.locateCity = location.city || "未授权";
+          common_vendor.index.setStorage({
+            key: "location",
+            data: location
+          });
+        }
+      },
+      complete: async () => {
+        console.log("all");
+        const cityData = await this.getData({ city: "成都市" });
+        this.setMarkers(cityData);
+      }
     });
   },
   methods: {
@@ -103,18 +133,18 @@ const _sfc_main = {
       });
     },
     // 设置markArray
-    setCovers(points) {
-      console.log("marker点", points);
-      this.covers = points.map((point, index) => {
+    setMarkers(points) {
+      this.markers = points.map((point, index) => {
         return {
           id: index,
           latitude: Number(point.latitude),
           longitude: Number(point.longitude),
           iconPath: "../../static/location.png",
-          width: "15rpx",
-          height: 10
+          width: 35,
+          height: 35
         };
       });
+      console.log(this.markers);
     },
     // 数据排序-优先展示当前区域数据
     handleDataSort(regionData) {
@@ -177,7 +207,7 @@ const _sfc_main = {
                     const regionData = await this.getData({
                       region: location.district
                     });
-                    this.setCovers(regionData);
+                    this.setMarkers(regionData);
                     this.swiperData = this.handleDataSort(
                       regionData
                     );
@@ -198,8 +228,19 @@ const _sfc_main = {
         });
       }
     },
-    getImageSrc(item) {
-      return item.image || "https://cdn.udivui.com/udiv/goods/1.jpg";
+    // marker点击事件
+    handleMarkerClick(event) {
+      console.log(1111);
+      console.log(event);
+    },
+    // marker点击事件
+    handleMapClick(event) {
+      console.log(222);
+      console.log(event);
+    },
+    handleLabeltap(event) {
+      console.log(333);
+      console.log(event);
     }
   }
 };
@@ -235,7 +276,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     g: $data.longitude,
     h: $data.latitude,
-    i: $data.covers
+    i: $data.markers,
+    j: common_vendor.o((...args) => $options.handleMapClick && $options.handleMapClick(...args)),
+    k: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args)),
+    l: common_vendor.o((...args) => $options.handleLabeltap && $options.handleLabeltap(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);

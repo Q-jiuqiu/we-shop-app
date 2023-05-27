@@ -11,8 +11,9 @@
 			</div>
 		</header>
 		<section class="map-content">
-			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :covers="covers"
-				:show-location="true"></map>
+			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :markers="markers"
+				:show-location="true" @tap="handleMapClick" @markertap="handleMarkerClick"
+				@labeltap="handleLabeltap"></map>
 		</section>
 
 
@@ -44,7 +45,7 @@
 				longitude: 0, // 当前经度
 				latitude: 0, // 当前纬度
 				locateCity: '定位中…', // 当前城市名
-				covers: [], // marker点信息
+				markers: [], // marker点信息
 				swiperData: [], // 滑块数据
 				isLocate: false, // 是否授权位置
 				keyWord: '', // 搜索关键字
@@ -53,27 +54,52 @@
 
 
 		onLoad: async function() {
-			await this.getLocationInfo()
-			this.longitude = location.longitude
-			this.latitude = location.latitude
-			this.locateCity = location.city || '未授权'
-
-			// 将当前位置存储至storage中
-			uni.setStorage({
+			uni.getStorage({
 				key: 'location',
-				data: location,
-			})
+				success: async ({ data: storage }) => {
+					console.log(storage)
+					// 需获取坐标及位置信息
+					if (!storage.longitude || !storage.latitude || !storage.city) {
+						await this.getLocationInfo()
+						this.longitude = location.longitude
+						this.latitude = location.latitude
+						this.locateCity = location.city || '未授权'
 
-			// 所有数据
-			// allData = await this.getData()
-			// if (location.district) {
-			// 	// 当前区域数据
-			// 	const regionData = await this.getData({ region: location.district })
-			// 	this.setCovers(regionData)
-			// 	this.swiperData = this.handleDataSort(regionData)
-			// } else {
-			// 	this.swiperData = allData
-			// }
+						// 将当前位置存储至storage中
+						uni.setStorage({
+							key: 'location',
+							data: location,
+						})
+					} else {
+						this.longitude = storage.longitude
+						this.latitude = storage.latitude
+						this.locateCity = storage.city || '未授权'
+					}
+				},
+				fail: async ({ errMsg }) => {
+					console.log('fail', errMsg)
+					// 没有存储location
+					if (errMsg === 'getStorage:fail data not found') {
+						await this.getLocationInfo()
+						this.longitude = location.longitude
+						this.latitude = location.latitude
+						this.locateCity = location.city || '未授权'
+
+						// 将当前位置存储至storage中
+						uni.setStorage({
+							key: 'location',
+							data: location,
+						})
+					}
+				},
+				complete: async () => {
+					console.log('all')
+					// 所有数据
+					// const cityData = await this.getData({ city: this.locateCity })
+					const cityData = await this.getData({ city: '成都市' })
+					this.setMarkers(cityData)
+				}
+			})
 		},
 
 		methods: {
@@ -137,18 +163,18 @@
 			},
 
 			// 设置markArray
-			setCovers(points) {
-				console.log('marker点', points)
-				this.covers = points.map((point, index) => {
+			setMarkers(points) {
+				this.markers = points.map((point, index) => {
 					return {
 						id: index,
 						latitude: Number(point.latitude),
 						longitude: Number(point.longitude),
 						iconPath: '../../static/location.png',
-						width: '15rpx',
-						height: 10
+						width: 35,
+						height: 35
 					}
 				})
+				console.log(this.markers)
 			},
 
 			// 数据排序-优先展示当前区域数据
@@ -169,7 +195,7 @@
 				// if (regionData.length > 0) {
 				// 	this.handleMoveTo(regionData[0])
 				// }
-				// this.setCovers(regionData)
+				// this.setMarkers(regionData)
 				// this.swiperData = regionData
 			},
 
@@ -231,7 +257,7 @@
 												region: location
 													.district
 											})
-											this.setCovers(regionData)
+											this.setMarkers(regionData)
 											this.swiperData = this.handleDataSort(
 												regionData)
 										}
@@ -252,8 +278,21 @@
 				}
 			},
 
-			getImageSrc(item) {
-				return item.image || 'https://cdn.udivui.com/udiv/goods/1.jpg'
+			// marker点击事件
+			handleMarkerClick(event) {
+				console.log(1111)
+				console.log(event)
+			},
+
+			// marker点击事件
+			handleMapClick(event) {
+				console.log(222)
+				console.log(event)
+			},
+
+			handleLabeltap(event) {
+				console.log(333)
+				console.log(event)
 			}
 		}
 
