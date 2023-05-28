@@ -16,7 +16,6 @@ const location = {
   address: ""
   // 地址
 };
-let allData = [];
 const _sfc_main = {
   name: "IndexPage",
   data() {
@@ -74,8 +73,7 @@ const _sfc_main = {
         }
       },
       complete: async () => {
-        console.log("all");
-        this.foodsDatas = await this.getFoodsDatas({ city: "成都市" });
+        this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity });
         this.setMarkers(this.foodsDatas);
       }
     });
@@ -146,17 +144,13 @@ const _sfc_main = {
       });
       console.log(this.markers);
     },
-    // 数据排序-优先展示当前区域数据
-    handleDataSort(regionData) {
-      if (regionData.length === 0) {
-        return allData;
-      }
-      const concatData = regionData.concat(allData);
-      const res = /* @__PURE__ */ new Map();
-      return concatData.filter((item) => !res.has(item.id) && res.set(item.id, 1));
-    },
     // 输入改变
     async handleInputChange() {
+      this.foodsDatas = await this.getFoodsDatas({ name: this.keyWord });
+      if (this.foodsDatas.length > 0) {
+        this.handleMoveTo(this.foodsDatas[0]);
+      }
+      this.setMarkers(this.foodsDatas);
     },
     handleDetailShow(item) {
       common_vendor.index.navigateTo({
@@ -206,10 +200,8 @@ const _sfc_main = {
                     this.latitude = location.latitude;
                     this.locateCity = location.city;
                     this.handleMoveTo(location);
-                    const regionData = await this.getFoodsDatas({
-                      region: location.district
-                    });
-                    this.setMarkers(regionData);
+                    this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity });
+                    this.setMarkers(this.foodsDatas);
                   }
                 },
                 fail: () => {

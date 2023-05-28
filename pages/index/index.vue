@@ -95,10 +95,7 @@
 					}
 				},
 				complete: async () => {
-					console.log('all')
-					// 所有数据
-					// const cityData = await this.getFoodsDatas({ city: this.locateCity })
-					this.foodsDatas = await this.getFoodsDatas({ city: '成都市' })
+					this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity })
 					this.setMarkers(this.foodsDatas)
 				}
 			})
@@ -176,25 +173,13 @@
 				console.log(this.markers)
 			},
 
-			// 数据排序-优先展示当前区域数据
-			handleDataSort(regionData) {
-				if (regionData.length === 0) {
-					return allData
-				}
-				const concatData = regionData.concat(allData)
-
-				// 去重
-				const res = new Map()
-				return concatData.filter(item => !res.has(item.id) && res.set(item.id, 1))
-			},
-
 			// 输入改变
 			async handleInputChange() {
-				// const regionData = await this.getFoodsDatas({ name: this.keyWord })
-				// if (regionData.length > 0) {
-				// 	this.handleMoveTo(regionData[0])
-				// }
-				// this.setMarkers(regionData)
+				this.foodsDatas = await this.getFoodsDatas({ name: this.keyWord })
+				if (this.foodsDatas.length > 0) {
+					this.handleMoveTo(this.foodsDatas[0])
+				}
+				this.setMarkers(this.foodsDatas)
 			},
 
 			handleDetailShow(item) {
@@ -252,12 +237,8 @@
 											this.latitude = location.latitude
 											this.locateCity = location.city
 											this.handleMoveTo(location)
-											// 当前区域数据
-											const regionData = await this.getFoodsDatas({
-												region: location
-													.district
-											})
-											this.setMarkers(regionData)
+											this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity })
+											this.setMarkers(this.foodsDatas)
 										}
 									},
 									fail: () => {
