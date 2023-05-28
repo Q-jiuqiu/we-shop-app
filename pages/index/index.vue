@@ -11,9 +11,8 @@
 			</div>
 		</header>
 		<section class="map-content">
-			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :markers="markers"
-				:show-location="true" @tap="handleMapClick" @markertap="handleMarkerClick"
-				@labeltap="handleLabeltap"></map>
+			<map class="map" id="map" max-scale="10" :longitude="longitude" :latitude="latitude" :markers="markers"
+				:show-location="true" @markertap="handleMarkerClick"></map>
 		</section>
 
 
@@ -46,7 +45,7 @@
 				latitude: 0, // 当前纬度
 				locateCity: '定位中…', // 当前城市名
 				markers: [], // marker点信息
-				swiperData: [], // 滑块数据
+				foodsDatas: [], // 美食数据
 				isLocate: false, // 是否授权位置
 				keyWord: '', // 搜索关键字
 			}
@@ -64,6 +63,7 @@
 						this.longitude = location.longitude
 						this.latitude = location.latitude
 						this.locateCity = location.city || '未授权'
+						this.isLocate = location.city ? true : false
 
 						// 将当前位置存储至storage中
 						uni.setStorage({
@@ -74,10 +74,12 @@
 						this.longitude = storage.longitude
 						this.latitude = storage.latitude
 						this.locateCity = storage.city || '未授权'
+						this.isLocate = storage.city ? true : false
 					}
 				},
 				fail: async ({ errMsg }) => {
 					console.log('fail', errMsg)
+					this.isLocate = location.city ? true : false
 					// 没有存储location
 					if (errMsg === 'getStorage:fail data not found') {
 						await this.getLocationInfo()
@@ -95,17 +97,16 @@
 				complete: async () => {
 					console.log('all')
 					// 所有数据
-					// const cityData = await this.getData({ city: this.locateCity })
-					const cityData = await this.getData({ city: '成都市' })
-					this.setMarkers(cityData)
+					// const cityData = await this.getFoodsDatas({ city: this.locateCity })
+					this.foodsDatas = await this.getFoodsDatas({ city: '成都市' })
+					this.setMarkers(this.foodsDatas)
 				}
 			})
 		},
 
 		methods: {
-			//获取位置信息
+			// 授权获取位置信息
 			getLocationInfo() {
-				const this_ = this
 				return new Promise(resolve => {
 					//位置信息默认数据
 					uni.getLocation({
@@ -114,7 +115,6 @@
 							console.log(res, '==')
 							location.longitude = res.longitude
 							location.latitude = res.latitude
-							this_.isLocate = true
 							// 腾讯地图Api
 							const qqmapsdk =
 								new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
@@ -133,7 +133,6 @@
 							})
 						},
 						fail(err) {
-							this_.isLocate = false
 							console.log(err)
 							resolve(location)
 						},
@@ -141,8 +140,8 @@
 				})
 			},
 
-			// 获取筛选数据
-			getData(params = {}) {
+			// 获取美食筛选数据
+			getFoodsDatas(params = {}) {
 				console.log('筛选条件:', params)
 				return new Promise(resolve => {
 					uni.request({
@@ -191,15 +190,13 @@
 
 			// 输入改变
 			async handleInputChange() {
-				// const regionData = await this.getData({ name: this.keyWord })
+				// const regionData = await this.getFoodsDatas({ name: this.keyWord })
 				// if (regionData.length > 0) {
 				// 	this.handleMoveTo(regionData[0])
 				// }
 				// this.setMarkers(regionData)
-				// this.swiperData = regionData
 			},
 
-			// 打开地图导航app
 			handleDetailShow(item) {
 				// 通过eventChannel向被打开页面传送数据
 				uni.navigateTo({
@@ -215,7 +212,9 @@
 				})
 			},
 
+			// 移动到指定坐标为止
 			handleMoveTo(location) {
+				console.log('location', location)
 				// 已授权
 				if (mapContext === null) {
 					mapContext = wx.createMapContext('map', this)
@@ -227,8 +226,9 @@
 				})
 			},
 
-			// 获取当前
+			// 重新授权已授权的信息
 			handleLocate() {
+				console.log(this.isLocate)
 				if (this.isLocate) {
 					this.handleMoveTo(location)
 				} else {
@@ -251,15 +251,13 @@
 											this.longitude = location.longitude
 											this.latitude = location.latitude
 											this.locateCity = location.city
-											this.handleMoveTo()
+											this.handleMoveTo(location)
 											// 当前区域数据
-											const regionData = await this.getData({
+											const regionData = await this.getFoodsDatas({
 												region: location
 													.district
 											})
 											this.setMarkers(regionData)
-											this.swiperData = this.handleDataSort(
-												regionData)
 										}
 									},
 									fail: () => {
@@ -282,17 +280,18 @@
 			handleMarkerClick(event) {
 				console.log(1111)
 				console.log(event)
-			},
+				const detail = event.detail
+				console.log(detail)
+				if (detail && detail.markerId) {
+					const foodDetail = this.foodsDatas[detail.markerId]
+					uni.navigateTo({
+						url: '/pages/detail/detail',
+						success: res => {
+							res.eventChannel.emit('foodDetail', { detail: foodDetail })
+						}
+					})
+				}
 
-			// marker点击事件
-			handleMapClick(event) {
-				console.log(222)
-				console.log(event)
-			},
-
-			handleLabeltap(event) {
-				console.log(333)
-				console.log(event)
 			}
 		}
 

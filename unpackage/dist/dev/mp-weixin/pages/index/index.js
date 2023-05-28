@@ -29,8 +29,8 @@ const _sfc_main = {
       // 当前城市名
       markers: [],
       // marker点信息
-      swiperData: [],
-      // 滑块数据
+      foodsDatas: [],
+      // 美食数据
       isLocate: false,
       // 是否授权位置
       keyWord: ""
@@ -47,6 +47,7 @@ const _sfc_main = {
           this.longitude = location.longitude;
           this.latitude = location.latitude;
           this.locateCity = location.city || "未授权";
+          this.isLocate = location.city ? true : false;
           common_vendor.index.setStorage({
             key: "location",
             data: location
@@ -55,10 +56,12 @@ const _sfc_main = {
           this.longitude = storage.longitude;
           this.latitude = storage.latitude;
           this.locateCity = storage.city || "未授权";
+          this.isLocate = storage.city ? true : false;
         }
       },
       fail: async ({ errMsg }) => {
         console.log("fail", errMsg);
+        this.isLocate = location.city ? true : false;
         if (errMsg === "getStorage:fail data not found") {
           await this.getLocationInfo();
           this.longitude = location.longitude;
@@ -72,15 +75,14 @@ const _sfc_main = {
       },
       complete: async () => {
         console.log("all");
-        const cityData = await this.getData({ city: "成都市" });
-        this.setMarkers(cityData);
+        this.foodsDatas = await this.getFoodsDatas({ city: "成都市" });
+        this.setMarkers(this.foodsDatas);
       }
     });
   },
   methods: {
-    //获取位置信息
+    // 授权获取位置信息
     getLocationInfo() {
-      const this_ = this;
       return new Promise((resolve) => {
         common_vendor.index.getLocation({
           type: "gcj02",
@@ -88,7 +90,6 @@ const _sfc_main = {
             console.log(res, "==");
             location.longitude = res.longitude;
             location.latitude = res.latitude;
-            this_.isLocate = true;
             const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
             qqmapsdk.reverseGeocoder({
               location,
@@ -105,15 +106,14 @@ const _sfc_main = {
             });
           },
           fail(err) {
-            this_.isLocate = false;
             console.log(err);
             resolve(location);
           }
         });
       });
     },
-    // 获取筛选数据
-    getData(params = {}) {
+    // 获取美食筛选数据
+    getFoodsDatas(params = {}) {
       console.log("筛选条件:", params);
       return new Promise((resolve) => {
         common_vendor.index.request({
@@ -158,7 +158,6 @@ const _sfc_main = {
     // 输入改变
     async handleInputChange() {
     },
-    // 打开地图导航app
     handleDetailShow(item) {
       common_vendor.index.navigateTo({
         url: "/pages/detail/detail",
@@ -172,7 +171,9 @@ const _sfc_main = {
         }
       });
     },
+    // 移动到指定坐标为止
     handleMoveTo(location2) {
+      console.log("location", location2);
       if (mapContext === null) {
         mapContext = common_vendor.wx$1.createMapContext("map", this);
         console.log(mapContext);
@@ -182,8 +183,9 @@ const _sfc_main = {
         longitude: Number(location2.longitude)
       });
     },
-    // 获取当前
+    // 重新授权已授权的信息
     handleLocate() {
+      console.log(this.isLocate);
       if (this.isLocate) {
         this.handleMoveTo(location);
       } else {
@@ -203,14 +205,11 @@ const _sfc_main = {
                     this.longitude = location.longitude;
                     this.latitude = location.latitude;
                     this.locateCity = location.city;
-                    this.handleMoveTo();
-                    const regionData = await this.getData({
+                    this.handleMoveTo(location);
+                    const regionData = await this.getFoodsDatas({
                       region: location.district
                     });
                     this.setMarkers(regionData);
-                    this.swiperData = this.handleDataSort(
-                      regionData
-                    );
                   }
                 },
                 fail: () => {
@@ -232,15 +231,17 @@ const _sfc_main = {
     handleMarkerClick(event) {
       console.log(1111);
       console.log(event);
-    },
-    // marker点击事件
-    handleMapClick(event) {
-      console.log(222);
-      console.log(event);
-    },
-    handleLabeltap(event) {
-      console.log(333);
-      console.log(event);
+      const detail = event.detail;
+      console.log(detail);
+      if (detail && detail.markerId) {
+        const foodDetail = this.foodsDatas[detail.markerId];
+        common_vendor.index.navigateTo({
+          url: "/pages/detail/detail",
+          success: (res) => {
+            res.eventChannel.emit("foodDetail", { detail: foodDetail });
+          }
+        });
+      }
     }
   }
 };
@@ -277,9 +278,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     g: $data.longitude,
     h: $data.latitude,
     i: $data.markers,
-    j: common_vendor.o((...args) => $options.handleMapClick && $options.handleMapClick(...args)),
-    k: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args)),
-    l: common_vendor.o((...args) => $options.handleLabeltap && $options.handleLabeltap(...args))
+    j: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);

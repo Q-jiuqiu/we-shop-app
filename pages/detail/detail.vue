@@ -26,7 +26,7 @@
 	export default {
 		name: 'DetailPage',
 		data() {
-			return { detail: null }
+			return { detail: {} }
 		},
 		onLoad: function() {
 			console.log('onload')
@@ -37,6 +37,14 @@
 				this.detail = detail
 				uni.setNavigationBarTitle({ title: detail.name })
 			})
+		},
+		computed: {
+			// getImage() {
+			// 	if (this.detail && this.detail.image) {
+			// 		return this.detail.image
+			// 	}
+			// 	return ''
+			// }
 		},
 		methods: {
 			// 跳转至map
