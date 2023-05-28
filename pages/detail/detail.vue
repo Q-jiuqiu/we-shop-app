@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="container content">
+		<div class="container content" v-if="detail.remark">
 			{{detail.remark}}
 		</div>
 	</div>
