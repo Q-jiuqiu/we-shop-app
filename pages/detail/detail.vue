@@ -35,6 +35,7 @@
 			eventChannel.on('foodDetail', ({ detail }) => {
 				console.log(detail)
 				this.detail = detail
+				uni.setNavigationBarTitle({ title: detail.name })
 			})
 		},
 		methods: {
@@ -82,6 +83,10 @@
 				justify-content: space-between;
 			}
 
+		}
+
+		.content {
+			color: $uni-text-color-grey;
 		}
 	}
 </style>

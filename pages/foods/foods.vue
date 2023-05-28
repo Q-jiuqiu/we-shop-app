@@ -1,5 +1,5 @@
 <template>
-	<div class="foods">
+	<div class="foods" v-if="contentList.length > 0">
 		<div class="image-list">
 			<u-swiper :list="imageList"></u-swiper>
 		</div>
@@ -21,11 +21,15 @@
 			</div>
 		</div>
 	</div>
+	<NoData v-else></NoData>
 </template>
 
 <script>
+	import NoData from '@/compnnents/noData/noData.vue'
+
 	export default {
 		name: 'FoodsIndex',
+		components: { NoData },
 		data() {
 			return {
 				imageList: [
@@ -54,6 +58,24 @@
 				]
 			}
 		},
+		onReady: () => {
+			let title = '美食'
+
+			uni.getStorage({
+				key: 'location',
+				success: async ({ data: storage }) => {
+					title = storage.city + title
+				},
+				fail: async ({ errMsg }) => {
+					console.log(errMsg)
+				},
+				complete: async () => {
+					console.log('complete', title)
+					uni.setNavigationBarTitle({ title })
+				}
+			})
+
+		},
 		methods: {
 			// 详情
 			handleDetailShow(detail) {
@@ -79,7 +101,7 @@
 			&-item {
 				display: flex;
 				align-items: center;
-				padding: $uni-spacing-row-base 0;
+				padding: 20rpx 0;
 				@include defaultContainer();
 
 				.image {

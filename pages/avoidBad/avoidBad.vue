@@ -3,15 +3,21 @@
 		<div class="header">
 			<u-subsection :list="list" :current="curNow" @change="sectionChange"></u-subsection>
 		</div>
-		<div class="content-item" v-for="(item,index) in data" :key="index">
-			{{item.content}}
+		<div class="content" v-if="data.length > 0">
+			<div class="content-item" v-for="(item,index) in data" :key="index">
+				{{item.content}}
+			</div>
 		</div>
+		<NoData v-else></NoData>
 	</div>
 </template>
 
 <script>
+	import NoData from '@/compnnents/noData/noData.vue'
+
 	export default {
 		name: 'avoidBad',
+		components: { NoData },
 		data() {
 			return {
 				data: [
@@ -21,6 +27,23 @@
 				list: ['美食', '风景'],
 				curNow: 0
 			}
+		},
+		onReady: () => {
+			let title = '避坑指南'
+
+			uni.getStorage({
+				key: 'location',
+				success: async ({ data: storage }) => {
+					title = storage.city + title
+				},
+				fail: async ({ errMsg }) => {
+					console.log(errMsg)
+				},
+				complete: async () => {
+					console.log('complete', title)
+					uni.setNavigationBarTitle({ title })
+				}
+			})
 		},
 		methods: {
 			sectionChange(index) {
@@ -45,6 +68,6 @@
 	.content-item {
 		margin-bottom: 15rpx;
 		background-color: white;
-		padding: 0 $uni-spacing-row-base;
+		padding: 0 20rpx;
 	}
 </style>

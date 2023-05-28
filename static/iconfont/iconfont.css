@@ -12,6 +12,10 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-wushuju:before {
+	content: "\e642";
+}
+
 .icon-daohang:before {
 	content: "\e684";
 }
