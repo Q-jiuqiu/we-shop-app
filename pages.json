@@ -8,7 +8,43 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/avoidBad/avoidBad",
+			"style": {
+				"navigationBarTitleText": "避坑指南"
+			}
+		},
+		{
+			"path": "pages/foods/foods",
+			"style": {
+				"navigationBarTitleText": "美食"
+			}
+		},
+		{
+			"path": "pages/sense/sense",
+			"style": {
+				"navigationBarTitleText": "风景"
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationBarTitleText": "留言"
+			}
+		},
+		{
+			"path": "pages/detail/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/map/map",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
 	],
@@ -17,6 +53,42 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#333333",
+		"selectedColor": "#3c9cff",
+		"backgroundColor": "white",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "./static/img/index.png",
+				"selectedIconPath": "./static/img/indexAc.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/foods/foods",
+				"iconPath": "./static/img/food.png",
+				"selectedIconPath": "./static/img/foodAc.png",
+				"text": "美食"
+			},
+			{
+				"pagePath": "pages/sense/sense",
+				"iconPath": "./static/img/sense.png",
+				"selectedIconPath": "./static/img/senseAc.png",
+				"text": "风景"
+			},
+			{
+				"pagePath": "pages/avoidBad/avoidBad",
+				"iconPath": "./static/img/avoid.png",
+				"selectedIconPath": "./static/img/avoidAc.png",
+				"text": "避坑"
+			},
+			{
+				"pagePath": "pages/message/message",
+				"iconPath": "./static/img/mesg.png",
+				"selectedIconPath": "./static/img/mesgAc.png",
+				"text": "留言"
+			}
+		]
 	},
 	"uniIdRouter": {}
 }
