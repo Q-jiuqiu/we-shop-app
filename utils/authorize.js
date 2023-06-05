@@ -1,3 +1,5 @@
+// const QQMapWX = require('@/static/qqmap-wx-jssdk.min.js')
+
 function authorize(callBack) {
 	wx.getSetting({ //先查看授权情况
 		success: function(res) {
@@ -44,6 +46,51 @@ function authorize(callBack) {
 				})
 			}
 		}
+	})
+}
+
+// 授权获取位置信息
+function getLocationInfo(callBack) {
+	const location = {
+		longitude: 104.065681,
+		latitude: 30.653442,
+		province: '', // 省份
+		city: '', // 城市
+		district: '', // 地区
+		street: '', // 街道
+		address: '', // 地址
+	}
+
+	return new Promise(resolve => {
+		//位置信息默认数据
+		uni.getLocation({
+			type: 'gcj02',
+			success(res) {
+				console.log(res, '==')
+				location.longitude = res.longitude
+				location.latitude = res.latitude
+				// 腾讯地图Api
+				// const qqmapsdk =
+				// 	new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
+				// qqmapsdk.reverseGeocoder({
+				// 	location,
+				// 	success(response) {
+				// 		let info = response.result
+				// 		console.log(info)
+				// 		location.province = info.address_component.province
+				// 		location.city = info.address_component.city
+				// 		location.district = info.address_component.district
+				// 		location.street = info.address_component.street
+				// 		location.address = info.address
+				// 		resolve(location)
+				// 	},
+				// })
+			},
+			fail(err) {
+				console.log(err)
+				resolve(location)
+			},
+		})
 	})
 }
 

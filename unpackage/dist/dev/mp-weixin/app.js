@@ -118,10 +118,10 @@ require("./uni_modules/uview-plus/libs/config/props/upload.js");
 require("./uni_modules/uview-plus/libs/config/zIndex.js");
 require("./uni_modules/uview-plus/libs/function/platform.js");
 if (!Math) {
-  "./pages/index/index.js";
-  "./pages/avoidBad/avoidBad.js";
   "./pages/foods/foods.js";
   "./pages/sense/sense.js";
+  "./pages/index/index.js";
+  "./pages/avoidBad/avoidBad.js";
   "./pages/message/message.js";
   "./pages/detail/detail.js";
   "./pages/map/map.js";

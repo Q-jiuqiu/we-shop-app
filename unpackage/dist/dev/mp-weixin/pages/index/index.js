@@ -36,6 +36,15 @@ const _sfc_main = {
       // 搜索关键字
     };
   },
+  onLoad: function() {
+    console.log("onload");
+    const eventChannel = this.getOpenerEventChannel();
+    this.eventChannel = eventChannel;
+    eventChannel.on("foodMap", ({ data }) => {
+      console.log(data);
+      this.data = data;
+    });
+  },
   onLoad: async function() {
     common_vendor.index.getStorage({
       key: "location",
@@ -200,7 +209,9 @@ const _sfc_main = {
                     this.latitude = location.latitude;
                     this.locateCity = location.city;
                     this.handleMoveTo(location);
-                    this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity });
+                    this.foodsDatas = await this.getFoodsDatas({
+                      city: this.locateCity
+                    });
                     this.setMarkers(this.foodsDatas);
                   }
                 },
@@ -237,40 +248,12 @@ const _sfc_main = {
     }
   }
 };
-if (!Array) {
-  const _easycom_u_icon2 = common_vendor.resolveComponent("u-icon");
-  const _easycom_u_input2 = common_vendor.resolveComponent("u-input");
-  (_easycom_u_icon2 + _easycom_u_input2)();
-}
-const _easycom_u_icon = () => "../../uni_modules/uview-plus/components/u-icon/u-icon.js";
-const _easycom_u_input = () => "../../uni_modules/uview-plus/components/u-input/u-input.js";
-if (!Math) {
-  (_easycom_u_icon + _easycom_u_input)();
-}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: common_vendor.p({
-      name: "map-fill",
-      color: "#f3950c",
-      size: "19"
-    }),
-    b: common_vendor.t($data.locateCity),
-    c: common_vendor.o((...args) => $options.handleLocate && $options.handleLocate(...args)),
-    d: common_vendor.o(($event) => _ctx.$u.debounce($options.handleInputChange, 500)),
-    e: common_vendor.o(($event) => $data.keyWord = $event),
-    f: common_vendor.p({
-      prefixIcon: "search",
-      prefixIconStyle: "color: #909399",
-      placeholder: "请输入店铺名称",
-      border: "surround",
-      clearable: true,
-      shape: "circle",
-      modelValue: $data.keyWord
-    }),
-    g: $data.longitude,
-    h: $data.latitude,
-    i: $data.markers,
-    j: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
+    a: $data.longitude,
+    b: $data.latitude,
+    c: $data.markers,
+    d: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/学习/小程序/small-project/pages/index/index.vue"]]);

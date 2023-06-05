@@ -12,6 +12,10 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-dingwei1:before {
+	content: "\e8ae";
+}
+
 .icon-wushuju:before {
 	content: "\e642";
 }

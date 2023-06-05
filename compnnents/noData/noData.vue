@@ -15,7 +15,7 @@
 
 <style lang="scss" scoped>
 	.content {
-		padding: 350rpx 60rpx 0;
+		padding: 50rpx 60rpx 0;
 		background: white;
 		@include flex(column);
 		align-items: center;

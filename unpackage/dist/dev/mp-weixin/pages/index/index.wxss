@@ -20,6 +20,7 @@
 /* 图片尺寸 */
 /* Border Radius */
 /* 水平间距 */
+/* 文字间距 */
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
@@ -32,29 +33,8 @@
   align-items: center;
   justify-content: center;
 }
-.content .seacher.data-v-1cf27b2a {
-  height: 60rpx;
-  padding: 10px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-.content .seacher .locate.data-v-1cf27b2a {
-  display: flex;
-  align-items: center;
-  margin: 0 20rpx;
-  font-size: 28rpx;
-  white-space: nowrap;
-}
-.content .seacher .input-content.data-v-1cf27b2a {
-  flex: 1;
-  margin-right: 30rpx;
-}
-.content .seacher .input-content.data-v-1cf27b2a .u-input {
-  height: 30rpx;
-}
 .content .map-content.data-v-1cf27b2a {
-  height: calc(100% - 80rpx);
+  height: 100%;
   width: 100%;
   position: relative;
 }
@@ -84,6 +64,7 @@
 /* 图片尺寸 */
 /* Border Radius */
 /* 水平间距 */
+/* 文字间距 */
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */

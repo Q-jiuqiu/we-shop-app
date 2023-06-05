@@ -1,20 +1,30 @@
 <template>
 	<div class="foods" v-if="contentList.length > 0">
-		<div class="image-list">
-			<u-swiper :list="imageList"></u-swiper>
+		<div class="image-container">
+			<div class="image-list">
+				<u-swiper :list="imageList"></u-swiper>
+			</div>
+			<div class="describe">
+				成都，又名芙蓉城、锦官城，四川省省会，联合国教科文组织授予“世界美食之都”称号，中国人民解放军西部战区机关驻地，中国超大城市，国家中心城市。
+			</div>
 		</div>
 
-		<div class="content">
-			<div class="content-item" v-for="(item,index) in contentList" :key="index">
-				<img class="image" :src="item.image" mode="widthFix">
+		<div class="option">
+			<div class="map-button">进入地图模式</div>
+		</div>
+
+		<div class="type-content"></div>
+
+		<div class="detail-content">
+			<div class="detail-content-item" v-for="(item,index) in contentList" :key="index"
+				@click="handleDetailShow(item)">
+				<img class="image" :src="item.image">
 				<div class="text">
 					<div class="text-item name">
-						<div class="label">名称：</div>
 						<div class="value">{{item.name}}</div>
-
+						<div class="location"></div>
 					</div>
-					<div class="text-item">
-						<div class="label">简介：</div>
+					<div class="text-item dis">
 						<div class="value">{{item.remark}}</div>
 					</div>
 				</div>
@@ -28,7 +38,7 @@
 	import NoData from '@/compnnents/noData/noData.vue'
 
 	export default {
-		name: 'SenseIndex',
+		name: 'FoodsIndex',
 		components: { NoData },
 		data() {
 			return {
@@ -59,7 +69,7 @@
 			}
 		},
 		onReady: () => {
-			let title = '风景'
+			let title = '美食'
 
 			uni.getStorage({
 				key: 'location',
@@ -74,45 +84,105 @@
 					uni.setNavigationBarTitle({ title })
 				}
 			})
-		}
+
+		},
+		methods: {
+			// 详情
+			handleDetailShow(detail) {
+				console.log(detail)
+				uni.navigateTo({
+					url: '/pages/detail/detail',
+					success: res => {
+						res.eventChannel.emit('foodDetail', { detail })
+					}
+				})
+			}
+		},
 	}
 </script>
 
 <style lang="scss" scoped>
+	page {
+		height: 100%;
+	}
+
 	.foods {
+		height: 100%;
 		background: $background;
 
-		.content {
+		.image-container {
+			background-color: white;
+
+			.describe {
+				letter-spacing: 10rpx;
+				line-height: 55rpx;
+				padding: 20rpx;
+				text-indent: 80rpx;
+			}
+		}
+
+		.option {
+			padding: 25rpx 20rpx $uni-spacing-row-base 20rpx;
+			display: flex;
+			justify-content: flex-end;
+
+			.map-button {
+				background-color: white;
+				padding: 8rpx;
+				border-radius: 10rpx;
+			}
+		}
+
+		.detail-content {
 			padding: 0 $uni-spacing-row-base;
 
 			&-item {
 				display: flex;
 				align-items: center;
-				padding: 20rpx 0;
+				border-radius: 30rpx;
 				@include defaultContainer();
+				margin: 20rpx;
+				padding: 20rpx;
+				height: 200rpx;
+				letter-spacing: $letter-spacing-base;
 
 				.image {
-					flex: 1;
-					margin-right: $uni-spacing-row-base;
+					width: 200rpx;
+					height: 200rpx;
+					border-radius: 20rpx;
 				}
 
 				.text {
-					width: 500rpx;
+					width: calc(100% - 200rpx);
+					padding-left: $uni-spacing-row-base;
+					height: 100%;
 
 					&-item {
 						display: flex;
 						margin-bottom: $uni-spacing-row-base;
+					}
 
-						.label {
-							margin-right: $uni-spacing-row-base;
-							white-space: nowrap;
-						}
-
+					.dis {
 						.value {
-							@include ellipsis();
+							display: -webkit-box;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							word-wrap: break-word;
+							white-space: normal !important;
+							-webkit-line-clamp: 4;
+							-webkit-box-orient: vertical;
 						}
 					}
 
+					.name {
+						font-size: 40rpx;
+						color: #b50a0e;
+						font-weight: bold;
+
+						.value {
+							@include ellipsis()
+						}
+					}
 				}
 			}
 		}

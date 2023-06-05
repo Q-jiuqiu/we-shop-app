@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<header class="seacher">
+		<!-- <header class="seacher">
 			<div class="locate" @click="handleLocate">
 				<u-icon name="map-fill" color="#f3950c" size="19"></u-icon>
 				<div>{{locateCity}}</div>
@@ -9,7 +9,7 @@
 				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入店铺名称" border="surround"
 					@change="$u.debounce(handleInputChange, 500)" v-model="keyWord" clearable shape="circle"></u-input>
 			</div>
-		</header>
+		</header> -->
 		<section class="map-content">
 			<map class="map" id="map" max-scale="10" :longitude="longitude" :latitude="latitude" :markers="markers"
 				:show-location="true" @markertap="handleMarkerClick"></map>
@@ -20,8 +20,6 @@
 </template>
 
 <script>
-	import { ref } from 'vue'
-
 	const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
 	let mapContext = null
 
@@ -51,8 +49,18 @@
 			}
 		},
 
+		onLoad: function() {
+			console.log('onload')
+			const eventChannel = this.getOpenerEventChannel()
+			this.eventChannel = eventChannel
+			eventChannel.on('foodMap', ({ data }) => {
+				console.log(data)
+				this.data = data
+			})
+		},
 
 		onLoad: async function() {
+
 			uni.getStorage({
 				key: 'location',
 				success: async ({ data: storage }) => {
@@ -237,7 +245,10 @@
 											this.latitude = location.latitude
 											this.locateCity = location.city
 											this.handleMoveTo(location)
-											this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity })
+											this.foodsDatas = await this.getFoodsDatas({
+												city: this
+													.locateCity
+											})
 											this.setMarkers(this.foodsDatas)
 										}
 									},
@@ -275,7 +286,6 @@
 
 			}
 		}
-
 	}
 </script>
 
@@ -289,33 +299,34 @@
 		align-items: center;
 		justify-content: center;
 
-		.seacher {
-			height: 60rpx;
-			padding: 10px 0;
-			width: 100%;
-			display: flex;
-			align-items: center;
+		// .seacher {
+		// 	height: 60rpx;
+		// 	padding: 10px 0;
+		// 	width: 100%;
+		// 	display: flex;
+		// 	align-items: center;
 
-			.locate {
-				display: flex;
-				align-items: center;
-				margin: 0 20rpx;
-				font-size: $uni-font-size-sm;
-				white-space: nowrap;
-			}
+		// 	.locate {
+		// 		display: flex;
+		// 		align-items: center;
+		// 		margin: 0 20rpx;
+		// 		font-size: $uni-font-size-sm;
+		// 		white-space: nowrap;
+		// 	}
 
-			.input-content {
-				flex: 1;
-				margin-right: 30rpx;
+		// 	.input-content {
+		// 		flex: 1;
+		// 		margin-right: 30rpx;
 
-				::v-deep .u-input {
-					height: 30rpx;
-				}
-			}
-		}
+		// 		::v-deep .u-input {
+		// 			height: 30rpx;
+		// 		}
+		// 	}
+		// }
 
 		.map-content {
-			height: calc(100% - 80rpx);
+			// height: calc(100% - 80rpx);
+			height: 100%;
 			width: 100%;
 			position: relative;
 
