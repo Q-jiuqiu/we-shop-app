@@ -12,14 +12,30 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-fanhui1:before {
+	content: "\e600";
+}
+
+.icon-fanhui:before {
+	content: "\e6ff";
+}
+
+.icon-xiangshang:before {
+	content: "\e636";
+}
+
+.icon-xiangxia:before {
+	content: "\e626";
+}
+
+.icon-dingwei1:before {
+	content: "\e8ae";
+}
+
 .icon-wushuju:before {
 	content: "\e642";
 }
 
 .icon-daohang:before {
 	content: "\e684";
-}
-
-.icon-dingwei:before {
-	content: "\e602";
 }

@@ -1,6 +1,5 @@
 <template>
 	<div class="detail">
-		<CustomNavBack></CustomNavBack>
 		<header class="header">
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image">
@@ -20,6 +19,10 @@
 		<!-- 占位 -->
 		<div class="box"></div>
 		<section class="container">
+			<div class="back" @click='handleBack' :style="{top:backTop}">
+				<span class="iconfont icon-fanhui"></span>
+				<div class="text">返回</div>
+			</div>
 			<!-- 使tabs滑动浮动在最顶部 -->
 			<u-sticky bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
 				<div class="tabs">
@@ -60,11 +63,16 @@
 
 <script>
 	import NoData from '@/compnnents/noData/noData.vue'
-	import CustomNavBack from '@/compnnents/customNavBack/customNavBack.vue'
 
 	export default {
 		name: 'detailCom',
-		components: { NoData, CustomNavBack },
+		components: { NoData },
+		props: {
+			detailInfo: {
+				type: Object,
+				default: () => {}
+			}
+		},
 		data() {
 			return {
 				tabList: [
@@ -75,8 +83,7 @@
 				activeTab: 0,
 				recommendData: [],
 				commitData: [],
-				isOpen: true,
-				detailInfo: {}
+				isOpen: true
 			}
 		},
 		computed: {
@@ -91,21 +98,18 @@
 				// 44为自定义顶部导航栏高度
 				return height + 44 + 'px'
 			},
+			backTop() {
+				const menuInfo = uni.getStorageSync('menuInfo')
+				const screenHeight = parseInt(menuInfo.screenHeight)
+				const windowHeight = parseInt(menuInfo.windowHeight)
+				const statusBarHeight = parseInt(menuInfo.statusBarHeight)
+				console.log(screenHeight, windowHeight, statusBarHeight)
+				return windowHeight - 50 + 'px'
+			}
 		},
-		onLoad: function() {
-			console.log('onload')
-			const eventChannel = this.getOpenerEventChannel()
-			this.eventChannel = eventChannel
-			eventChannel.on('detailPage', ({ detail }) => {
-				console.log(detail)
-				this.detailInfo = detail
-			})
-		},
-
 		created() {
 			this.isOpen = this.judgeOpen(this.detailInfo.workTime)
 		},
-
 		methods: {
 			// 判断是否在营业中 统一换算成24小时制
 			judgeOpen(openingHours) {
@@ -134,6 +138,7 @@
 				} catch (e) {
 					return false
 				}
+
 			},
 			// 点击tab
 			handleTabClick(index) {
@@ -162,6 +167,9 @@
 						console.log(err)
 					}
 				})
+			},
+			handleBack() {
+				this.$emit('back')
 			},
 			// 打开地图
 			navigatorToMap() {
@@ -194,7 +202,7 @@
 
 <style lang="scss" scoped>
 	.detail {
-		min-height: 100vh;
+		height: 100vh;
 		font-size: $uni-font-size-base;
 		background-color: white;
 
@@ -273,6 +281,24 @@
 		}
 
 		.container {
+
+			.back {
+				background-color: white;
+				position: fixed;
+				// top: 1200rpx;
+				right: 10px;
+				text-align: center;
+				border-radius: 50%;
+				width: 100rpx;
+				height: 100rpx;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				.text {
+					font-size: $uni-font-size-sm;
+				}
+			}
 
 			.tabs {
 				display: flex;

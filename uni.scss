@@ -13,7 +13,7 @@
  */
 
 /* 颜色变量 */
-$background: #fcf9f0;
+$background: #f4f4f4;
 
 /* 行为相关颜色 */
 $uni-color-theme: #f3950c;
@@ -49,6 +49,7 @@ $uni-font-size-lg:36rpx;
 $uni-img-size-sm:40rpx;
 $uni-img-size-base:52rpx;
 $uni-img-size-lg:80rpx;
+$uni-img-size-height-base: 400rpx;
 
 /* Border Radius */
 $uni-border-radius-sm: 2rpx;
@@ -60,6 +61,9 @@ $uni-border-radius-circle: 50%;
 $uni-spacing-row-sm: 5rpx;
 $uni-spacing-row-base: 10rpx;
 $uni-spacing-row-lg: 15rpx;
+
+/* 文字间距 */
+$letter-spacing-base: 4rpx;
 
 /* 垂直间距 */
 $uni-spacing-col-sm: 4rpx;

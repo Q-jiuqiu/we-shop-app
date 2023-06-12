@@ -1,30 +1,25 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/avoidBad/avoidBad",
     "pages/foods/foods",
     "pages/sense/sense",
+    "pages/index/index",
+    "pages/avoidBad/avoidBad",
     "pages/message/message",
     "pages/detail/detail",
     "pages/map/map"
   ],
   "window": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#fdc307",
+    "backgroundColor": "#fdc307"
   },
   "tabBar": {
     "color": "#333333",
     "selectedColor": "#3c9cff",
-    "backgroundColor": "white",
+    "backgroundColor": "#fdc307",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "iconPath": "./static/img/index.png",
-        "selectedIconPath": "./static/img/indexAc.png",
-        "text": "首页"
-      },
       {
         "pagePath": "pages/foods/foods",
         "iconPath": "./static/img/food.png",

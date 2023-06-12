@@ -118,23 +118,61 @@ require("./uni_modules/uview-plus/libs/config/props/upload.js");
 require("./uni_modules/uview-plus/libs/config/zIndex.js");
 require("./uni_modules/uview-plus/libs/function/platform.js");
 if (!Math) {
-  "./pages/index/index.js";
-  "./pages/avoidBad/avoidBad.js";
   "./pages/foods/foods.js";
   "./pages/sense/sense.js";
+  "./pages/index/index.js";
+  "./pages/avoidBad/avoidBad.js";
   "./pages/message/message.js";
   "./pages/detail/detail.js";
   "./pages/map/map.js";
 }
 const _sfc_main = {
-  onLaunch: function() {
-    console.log("App Launch");
-  },
   onShow: function() {
-    console.log("App Show");
-  },
-  onHide: function() {
-    console.log("App Hide");
+    common_vendor.index.getSystemInfo({
+      success: (result) => {
+        console.log("result", result);
+        let statusBarHeight = result.statusBarHeight + "px";
+        let safeAreaBottom = result.safeArea.bottom + "px";
+        const menuButtonInfo = common_vendor.index.getMenuButtonBoundingClientRect();
+        let menuWidth = menuButtonInfo.width + "px";
+        let menuHeight = menuButtonInfo.height + "px";
+        let menuBorderRadius = menuButtonInfo.height / 2 + "px";
+        let menuRight = result.screenWidth - menuButtonInfo.right + "px";
+        let menuTop = menuButtonInfo.top + "px";
+        let contentTop = result.statusBarHeight + 44 + "px";
+        let surplusWidth = menuButtonInfo.left + "px";
+        let menuInfo = {
+          statusBarHeight,
+          //状态栏高度----用来给自定义导航条页面的顶部导航条设计padding-top使用：目的留出系统的状态栏区域
+          menuWidth,
+          //右侧的胶囊宽度--用来给自定义导航条页面的左侧胶囊设置使用
+          menuHeight,
+          //右侧的胶囊高度--用来给自定义导航条页面的左侧胶囊设置使用
+          menuBorderRadius,
+          //一半的圆角--用来给自定义导航条页面的左侧胶囊设置使用
+          menuRight,
+          //右侧的胶囊距离右侧屏幕距离--用来给自定义导航条页面的左侧胶囊设置使用
+          menuTop,
+          //右侧的胶囊顶部距离屏幕顶部的距离--用来给自定义导航条页面的左侧胶囊设置使用
+          contentTop,
+          //内容区距离页面最上方的高度--用来给自定义导航条页面的内容区定位距离使用
+          surplusWidth,
+          // 剩余宽度
+          safeAreaBottom,
+          model: result.model,
+          screenHeight: result.screenHeight,
+          // 屏幕高度
+          windowHeight: result.windowHeight,
+          // 窗口高度
+          pixelRatio: result.pixelRatio
+          // 设备像素比
+        };
+        common_vendor.index.setStorageSync("menuInfo", menuInfo);
+      },
+      fail: (error) => {
+        console.log(error);
+      }
+    });
   }
 };
 const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/学习/小程序/small-project/App.vue"]]);

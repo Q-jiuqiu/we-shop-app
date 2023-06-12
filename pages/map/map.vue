@@ -1,5 +1,6 @@
 <template>
 	<div class="map-contianer">
+		<CustomNavBack></CustomNavBack>
 		<map class="map" id="map" :style="{height: height}" :longitude="longitude" :latitude="latitude" :covers="covers"
 			:show-location="true"></map>
 		<div class="info">
@@ -15,12 +16,12 @@
 </template>
 
 <script>
-	import { ref } from 'vue'
-
+	import CustomNavBack from '@/compnnents/customNavBack/customNavBack.vue'
 	let mapContext = null
 
 	export default {
 		name: 'MapIndex',
+		components: { CustomNavBack },
 		data() {
 			return {
 				eventChannel: null,
@@ -85,7 +86,7 @@
 						destination: this.name,
 						fail: res => {
 							console.log('失败', res)
-							if (res.indexOf('cancel') > -1) {
+							if (res.errMsg.indexOf('cancel') > -1) {
 								uni.showToast({
 									icon: 'fail',
 									title: '取消导航'
@@ -108,9 +109,9 @@
 
 <style scoped lang="scss">
 	.map-contianer {
+		height: 100vh;
 		width: 100%;
 		position: relative;
-		height: 100%;
 
 		.map {
 			width: 100%;
@@ -126,19 +127,22 @@
 			min-height: 250rpx;
 			width: 100%;
 			padding: 30rpx 15rpx 0 15rpx;
+			box-sizing: border-box;
 
 			.left {
-				flex: 1;
+				width: calc(100% - 150rpx);
 
 				.name {
 					font-size: 60rpx;
 					color: $uni-text-color;
 					margin-bottom: 10rpx;
+					@include ellipsis();
 				}
 
 				.address {
 					color: $uni-text-color-grey;
 					font: 40rpx;
+					@include ellipsis();
 				}
 			}
 
@@ -152,11 +156,5 @@
 				}
 			}
 		}
-	}
-</style>
-
-<style lang="scss">
-	page {
-		height: 100%;
 	}
 </style>
