@@ -1,6 +1,6 @@
 <template>
 	<div class="message">
-		<u-notify ref="uNotify"></u-notify>
+		<CustomNav :showInput="false"></CustomNav>
 		<u-textarea v-model="value" placeholder="请输入留言内容" :maxlength="-1"></u-textarea>
 		<div class="buttons">
 			<u-button class="button1" type="primary" :plain="true" text="镂空" @click="handleInputClear">取消</u-button>
@@ -11,8 +11,11 @@
 </template>
 
 <script>
+	import CustomNav from '@/compnnents/customNav/customNav.vue'
+
 	export default {
 		name: 'MessageIndex',
+		components: { CustomNav },
 		data() {
 			return {
 				value: '',
@@ -34,11 +37,9 @@
 						data: { leaveWord: this.value },
 						success: res => {
 
-							this.$refs.uNotify.show({
-								type: 'success',
-								message: '留言成功',
-								duration: 1000,
-								safeAreaInsetTop: true
+							uni.showToast({
+								icon: 'success',
+								title: '留言成功'
 							})
 
 							this.handleInputClear()

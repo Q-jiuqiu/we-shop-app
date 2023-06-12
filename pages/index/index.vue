@@ -1,18 +1,9 @@
 <template>
 	<div class="content">
-		<!-- <header class="seacher">
-			<div class="locate" @click="handleLocate">
-				<u-icon name="map-fill" color="#f3950c" size="19"></u-icon>
-				<div>{{locateCity}}</div>
-			</div>
-			<div class="input-content">
-				<u-input prefixIcon="search" prefixIconStyle="color: #909399" placeholder="请输入店铺名称" border="surround"
-					@change="$u.debounce(handleInputChange, 500)" v-model="keyWord" clearable shape="circle"></u-input>
-			</div>
-		</header> -->
+		<CustomNavBack></CustomNavBack>
 		<section class="map-content">
-			<map class="map" id="map" max-scale="10" :longitude="longitude" :latitude="latitude" :markers="markers"
-				:show-location="true" @markertap="handleMarkerClick"></map>
+			<map class="map" id="map" :longitude="longitude" :latitude="latitude" :markers="markers"
+				show-location="true" @markertap="handleMarkerClick"></map>
 		</section>
 
 
@@ -21,129 +12,37 @@
 
 <script>
 	const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
+	import CustomNavBack from '@/compnnents/customNavBack/customNavBack.vue'
 	let mapContext = null
 
-	// 位置信息
-	const location = {
-		longitude: 104.065681,
-		latitude: 30.653442,
-		province: '', // 省份
-		city: '', // 城市
-		district: '', // 地区
-		street: '', // 街道
-		address: '', // 地址
-	}
-	let allData = []
 
 	export default {
 		name: 'IndexPage',
+		components: { CustomNavBack },
 		data() {
 			return {
-				longitude: 0, // 当前经度
-				latitude: 0, // 当前纬度
+				longitude: uni.getStorageSync('location').longitude, // 当前经度
+				latitude: uni.getStorageSync('location').latitude, // 当前纬度
 				locateCity: '定位中…', // 当前城市名
 				markers: [], // marker点信息
 				foodsDatas: [], // 美食数据
 				isLocate: false, // 是否授权位置
 				keyWord: '', // 搜索关键字
+				dataList: []
 			}
 		},
 
 		onLoad: function() {
-			console.log('onload')
 			const eventChannel = this.getOpenerEventChannel()
 			this.eventChannel = eventChannel
 			eventChannel.on('foodMap', ({ data }) => {
 				console.log(data)
-				this.data = data
-			})
-		},
-
-		onLoad: async function() {
-
-			uni.getStorage({
-				key: 'location',
-				success: async ({ data: storage }) => {
-					console.log(storage)
-					// 需获取坐标及位置信息
-					if (!storage.longitude || !storage.latitude || !storage.city) {
-						await this.getLocationInfo()
-						this.longitude = location.longitude
-						this.latitude = location.latitude
-						this.locateCity = location.city || '未授权'
-						this.isLocate = location.city ? true : false
-
-						// 将当前位置存储至storage中
-						uni.setStorage({
-							key: 'location',
-							data: location,
-						})
-					} else {
-						this.longitude = storage.longitude
-						this.latitude = storage.latitude
-						this.locateCity = storage.city || '未授权'
-						this.isLocate = storage.city ? true : false
-					}
-				},
-				fail: async ({ errMsg }) => {
-					console.log('fail', errMsg)
-					this.isLocate = location.city ? true : false
-					// 没有存储location
-					if (errMsg === 'getStorage:fail data not found') {
-						await this.getLocationInfo()
-						this.longitude = location.longitude
-						this.latitude = location.latitude
-						this.locateCity = location.city || '未授权'
-
-						// 将当前位置存储至storage中
-						uni.setStorage({
-							key: 'location',
-							data: location,
-						})
-					}
-				},
-				complete: async () => {
-					this.foodsDatas = await this.getFoodsDatas({ city: this.locateCity })
-					this.setMarkers(this.foodsDatas)
-				}
+				this.dataList = data
+				this.setMarkers(data)
 			})
 		},
 
 		methods: {
-			// 授权获取位置信息
-			getLocationInfo() {
-				return new Promise(resolve => {
-					//位置信息默认数据
-					uni.getLocation({
-						type: 'gcj02',
-						success(res) {
-							console.log(res, '==')
-							location.longitude = res.longitude
-							location.latitude = res.latitude
-							// 腾讯地图Api
-							const qqmapsdk =
-								new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
-							qqmapsdk.reverseGeocoder({
-								location,
-								success(response) {
-									let info = response.result
-									console.log(info)
-									location.province = info.address_component.province
-									location.city = info.address_component.city
-									location.district = info.address_component.district
-									location.street = info.address_component.street
-									location.address = info.address
-									resolve(location)
-								},
-							})
-						},
-						fail(err) {
-							console.log(err)
-							resolve(location)
-						},
-					})
-				})
-			},
 
 			// 获取美食筛选数据
 			getFoodsDatas(params = {}) {
@@ -181,15 +80,6 @@
 				console.log(this.markers)
 			},
 
-			// 输入改变
-			async handleInputChange() {
-				this.foodsDatas = await this.getFoodsDatas({ name: this.keyWord })
-				if (this.foodsDatas.length > 0) {
-					this.handleMoveTo(this.foodsDatas[0])
-				}
-				this.setMarkers(this.foodsDatas)
-			},
-
 			handleDetailShow(item) {
 				// 通过eventChannel向被打开页面传送数据
 				uni.navigateTo({
@@ -218,68 +108,18 @@
 					longitude: Number(location.longitude)
 				})
 			},
-
-			// 重新授权已授权的信息
-			handleLocate() {
-				console.log(this.isLocate)
-				if (this.isLocate) {
-					this.handleMoveTo(location)
-				} else {
-					// 未授权位置
-					uni.showModal({
-						title: '您未开启地理位置授权',
-						content: '为了您更好的体验， 请确认获取您的位置',
-						confirmText: '确认',
-						cancelText: '取消',
-						success: ({ confirm }) => {
-							// 确认重新获取位置
-							if (confirm) {
-								wx.openSetting({
-									success: async ({ authSetting }) => {
-										const isLocation = authSetting && authSetting[
-											'scope.userLocation']
-										if (isLocation) {
-											this.locateCity = '定位中…'
-											await this.getLocationInfo()
-											this.longitude = location.longitude
-											this.latitude = location.latitude
-											this.locateCity = location.city
-											this.handleMoveTo(location)
-											this.foodsDatas = await this.getFoodsDatas({
-												city: this
-													.locateCity
-											})
-											this.setMarkers(this.foodsDatas)
-										}
-									},
-									fail: () => {
-										uni.showToast({
-											icon: 'fail',
-											title: '弹出设置面板出错'
-										})
-									}
-								})
-							}
-						},
-						fail: () => {
-							console.log('展示modal框失败')
-						}
-					})
-				}
-			},
-
 			// marker点击事件
 			handleMarkerClick(event) {
 				console.log(1111)
 				console.log(event)
 				const detail = event.detail
 				console.log(detail)
-				if (detail && detail.markerId) {
-					const foodDetail = this.foodsDatas[detail.markerId]
+				if (detail && !isNaN(detail.markerId)) {
+					const detailInfo = this.dataList[detail.markerId]
 					uni.navigateTo({
 						url: '/pages/detail/detail',
 						success: res => {
-							res.eventChannel.emit('foodDetail', { detail: foodDetail })
+							res.eventChannel.emit('detailPage', { detail: detailInfo })
 						}
 					})
 				}
@@ -291,41 +131,10 @@
 
 <style lang="scss" scoped>
 	.content {
-		height: 100%;
+		height: 100vh;
 		width: 100%;
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		// .seacher {
-		// 	height: 60rpx;
-		// 	padding: 10px 0;
-		// 	width: 100%;
-		// 	display: flex;
-		// 	align-items: center;
-
-		// 	.locate {
-		// 		display: flex;
-		// 		align-items: center;
-		// 		margin: 0 20rpx;
-		// 		font-size: $uni-font-size-sm;
-		// 		white-space: nowrap;
-		// 	}
-
-		// 	.input-content {
-		// 		flex: 1;
-		// 		margin-right: 30rpx;
-
-		// 		::v-deep .u-input {
-		// 			height: 30rpx;
-		// 		}
-		// 	}
-		// }
 
 		.map-content {
-			// height: calc(100% - 80rpx);
 			height: 100%;
 			width: 100%;
 			position: relative;
@@ -336,11 +145,5 @@
 			}
 		}
 
-	}
-</style>
-
-<style lang="scss">
-	page {
-		height: 100%;
 	}
 </style>
