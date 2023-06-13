@@ -60,7 +60,7 @@
 						</div>
 					</div>
 				</div>
-				<NoData v-if="threeContent.length === 0"></NoData>
+				<NoData v-if="threeContent.length === 0" tips="当前城市暂无数据"></NoData>
 				<div class="more" v-if="!isThreeLastPage">上拉获取更多数据</div>
 			</div>
 		</div>
@@ -81,9 +81,7 @@
 		data() {
 			return {
 				imageList: [
-					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+					'https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF'
 				],
 				cityDes: '',
 				contentList: [],
@@ -200,16 +198,17 @@
 					url: `http://8.137.19.141/pro/rest/dbs/city/dict/find/${this.city}`,
 					method: 'GET',
 					success: ({ data }) => {
-						this.imageList = []
 						const info = data.data
-						const keys = Object.keys(info)
-						for (let key of keys) {
-
-							if (key.indexOf('image') >= 0 && info[key]) {
-								this.imageList.push(info[key])
+						if (info) {
+							this.imageList = []
+							const keys = Object.keys(info)
+							for (let key of keys) {
+								if (key.indexOf('image') >= 0 && info[key]) {
+									this.imageList.push(info[key])
+								}
 							}
+							this.cityDes = info.remark
 						}
-						this.cityDes = info.remark
 					},
 					fail: err => {
 						console.log(err)

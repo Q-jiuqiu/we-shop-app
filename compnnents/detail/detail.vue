@@ -24,7 +24,7 @@
 				<div class="text">返回</div>
 			</div>
 			<!-- 使tabs滑动浮动在最顶部 -->
-			<u-sticky bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
+			<u-sticky ref="sticky" bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
 				<div class="tabs">
 					<div :class="['tabs-item',{active: activeTab === index}]" v-for="(item,index) in tabList"
 						:key="index" @click="handleTabClick(index)">
@@ -83,7 +83,8 @@
 				activeTab: 0,
 				recommendData: [],
 				commitData: [],
-				isOpen: true
+				isOpen: true,
+				backTop: uni.getStorageSync('menuInfo').windowHeight
 			}
 		},
 		computed: {
@@ -94,21 +95,20 @@
 				if (statusBarHeight) {
 					height = parseInt(statusBarHeight)
 				}
-
 				// 44为自定义顶部导航栏高度
 				return height + 44 + 'px'
-			},
-			backTop() {
-				const menuInfo = uni.getStorageSync('menuInfo')
-				const screenHeight = parseInt(menuInfo.screenHeight)
-				const windowHeight = parseInt(menuInfo.windowHeight)
-				const statusBarHeight = parseInt(menuInfo.statusBarHeight)
-				console.log(screenHeight, windowHeight, statusBarHeight)
-				return windowHeight - 50 + 'px'
 			}
 		},
 		created() {
 			this.isOpen = this.judgeOpen(this.detailInfo.workTime)
+			const menuInfo = uni.getStorageSync('menuInfo')
+			const windowHeight = parseInt(menuInfo.windowHeight)
+			const query = uni.createSelectorQuery().in(this)
+			query.select('.back').boundingClientRect(rect => {
+				console.log('backTop:', rect)
+				const height = rect.height + 2
+				this.backTop = windowHeight - height + 'px'
+			}).exec()
 		},
 		methods: {
 			// 判断是否在营业中 统一换算成24小时制
@@ -283,7 +283,7 @@
 		.container {
 
 			.back {
-				background-color: white;
+				background-color: rgba(255, 255, 255, 0.7);
 				position: fixed;
 				// top: 1200rpx;
 				right: 10px;
