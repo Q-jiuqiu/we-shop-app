@@ -125,6 +125,7 @@ if (!Math) {
   "./pages/message/message.js";
   "./pages/detail/detail.js";
   "./pages/map/map.js";
+  "./pages/cityInfo/cityInfo.js";
 }
 const _sfc_main = {
   onShow: function() {

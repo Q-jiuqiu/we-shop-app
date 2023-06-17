@@ -10,8 +10,9 @@
 				</div>
 				<div class="input-container">
 					<u-input v-if="showInput" prefixIcon="search" prefixIconStyle="color: #909399"
-						placeholder="请输入搜索关键词" border="surround" @change="$u.debounce(handleInputChange, 500)"
-						v-model="keyWord"></u-input>
+						placeholder="请输入搜索关键词" border="surround" v-model="keyWord"
+						@confirm="handleInputChange"></u-input>
+					<!-- @change="$u.debounce(handleInputChange, 500)" -->
 				</div>
 			</div>
 		</div>
@@ -43,6 +44,7 @@
 		},
 		created() {
 			uni.$on('locationSave', this.setCity)
+			uni.$on('locationChange', this.handleCityChange)
 			const cityList = uni.getStorageSync('cityList')
 			console.log('cityList:', cityList)
 			if (cityList) {
@@ -65,8 +67,18 @@
 		},
 		beforeDestroy() {
 			uni.$off('locationSave', this.setCity)
+			uni.$off('locationChange', this.handleCityChange)
 		},
 		methods: {
+			// 城市改变
+			async handleCityChange({ city }) {
+				if (this.city === city) {
+					return
+				}
+				// 清空胶囊处输入框
+				this.handleInputClear()
+				this.city = city
+			},
 			// 设置城市名称
 			setCity() {
 				this.city = uni.getStorageSync('location').city

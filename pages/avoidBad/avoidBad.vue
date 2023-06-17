@@ -2,7 +2,7 @@
 	<div class="avoid-bad">
 		<CustomNav :showInput="false"></CustomNav>
 		<div class="header">
-			<u-subsection :list="list" :current="curNow" @change="sectionChange"></u-subsection>
+			<u-subsection activeColor="#f9ae3d" :list="list" :current="curNow" @change="sectionChange"></u-subsection>
 		</div>
 		<div class="food" v-if="curNow===0">
 			<div class="content" v-if="foodData.length > 0">
@@ -40,7 +40,7 @@
 				senseData: [],
 				senseCur: 1, // 风景数据的当前页
 				senseLast: true,
-				list: ['美食', '风景'],
+				list: ['美食', '景点'],
 				curNow: 0,
 				city: uni.getStorageSync('location').city
 			}
@@ -74,14 +74,17 @@
 				}
 			}
 		},
-		created() {
-			uni.$on('locationChange', this.handleCityChange)
-			uni.$on('locationSave', this.setCity)
-		},
-		beforeDestroy() {
+
+		onHide: function() {
 			uni.$off('locationChange', this.handleCityChange)
 			uni.$off('locationSave', this.setCity)
 		},
+
+		onShow: function() {
+			uni.$on('locationChange', this.handleCityChange)
+			uni.$on('locationSave', this.setCity)
+		},
+
 		methods: {
 			// 设置城市名称
 			setCity() {
@@ -92,17 +95,18 @@
 				if (this.city === city) {
 					return
 				}
+				this.city = city
 				this.foodCur = 1
 				this.foodData = []
 				this.senseCur = 1
 				this.senseData = []
-				this.getData()
+				this.getData({ type: this.list[this.curNow] })
 			},
 			/**
 			 * @description 获取美食或者风景的避坑数据
 			 * @param {Object} params 筛选条件
 			 */
-			getData(params) {
+			getData(params = {}) {
 				params.city = this.city
 				let curPage = this.foodCur
 				if (params.type === '风景') {

@@ -6,7 +6,8 @@
     "pages/avoidBad/avoidBad",
     "pages/message/message",
     "pages/detail/detail",
-    "pages/map/map"
+    "pages/map/map",
+    "pages/cityInfo/cityInfo"
   ],
   "window": {
     "navigationStyle": "custom",
@@ -17,7 +18,7 @@
   },
   "tabBar": {
     "color": "#333333",
-    "selectedColor": "#3c9cff",
+    "selectedColor": "#ffffff",
     "backgroundColor": "#fdc307",
     "list": [
       {
@@ -30,7 +31,7 @@
         "pagePath": "pages/sense/sense",
         "iconPath": "./static/img/sense.png",
         "selectedIconPath": "./static/img/senseAc.png",
-        "text": "风景"
+        "text": "景点"
       },
       {
         "pagePath": "pages/avoidBad/avoidBad",

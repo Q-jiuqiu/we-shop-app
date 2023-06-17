@@ -1,49 +1,32 @@
 <template>
-	<div class="foods" @click="handlePageClick">
-		<CustomNav ref="customNav" @search="handleSearch" :showInput="showInput"></CustomNav>
+	<div class="foods" :style="fixedStyle">
+		<customNavBack :custom="true" v-if="showDetail" @customBack="handleDetailBack">
+		</customNavBack>
+		<CustomNav ref="customNav" @search="handleSearch" :showInput="showInput" v-else></CustomNav>
 		<div class="detail" v-if="showDetail">
-			<Detail :detailInfo="detail" @back="hanldeDetialBack"></Detail>
+			<Detail ref="detail" :detailInfo="detail"></Detail>
 		</div>
 		<div v-else>
 			<div class="image-container">
-				<div class="image-list">
-					<u-swiper :list="imageList" style="height: 100%;"></u-swiper>
-				</div>
-				<div class="describe">
-					<div class="text">
-						{{cityDes}}
-					</div>
-				</div>
+				<img class="image" :src="imageList[0]" alt="美食" @click="navigateCityInfo">
 			</div>
 
 			<div class="option">
 				<div class="select">
 					<div class="type">
-						<CusSelect :options="typeList" @select="handleTypeSelect"></CusSelect>
+						<CusSelect selecName='type' :options="typeList" @select="handleTypeSelect"
+							@fixedTo="handleFixStyle">
+						</CusSelect>
 					</div>
 					<div class="sort">
-						<CusSelect :options="sortList" @select="handleSortSelect" v-if="!isShowTwo"></CusSelect>
+						<CusSelect selecName='sort' :options="sortList" @select="handleSortSelect"
+							@fixedTo="handleFixStyle">
+						</CusSelect>
 					</div>
 				</div>
-				<div class="map-button" @click="handleShowMap" v-if="!isShowTwo">进入地图模式</div>
+				<div class="map-button" @click="handleShowMap">进入地图模式</div>
 			</div>
-
-			<div class="content" v-if="isShowTwo">
-				<div class="content-item" v-for="(item,index) in twoContent" :key="index" @click="handleTowData(item)">
-					<img class="image" :src="item.image">
-					<div class="text">
-						<div class="text-item name">
-							<div class="value">{{item.name}}</div>
-						</div>
-						<div class="text-item dis">
-							<div class="value">{{item.remark}}</div>
-						</div>
-					</div>
-				</div>
-				<NoData v-if="twoContent.length === 0"></NoData>
-				<div class="more" v-if="!isTwoLastPage">上拉获取更多数据</div>
-			</div>
-			<div class="content" v-else>
+			<div class="content">
 				<div class="content-item" v-for="(item,index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
 					<img class="image" :src="item.image">
@@ -72,12 +55,13 @@
 	import NoData from '@/compnnents/noData/noData.vue'
 	import CusSelect from '@/compnnents/select/select.vue'
 	import CustomNav from '@/compnnents/customNav/customNav.vue'
+	import customNavBack from '@/compnnents/customNavBack/customNavBack.vue'
 	import Detail from '@/compnnents/detail/detail.vue'
 	import authorize from '@/utils/authorize.js'
 
 	export default {
 		name: 'FoodsIndex',
-		components: { CusSelect, CustomNav, Detail, NoData },
+		components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
 		data() {
 			return {
 				imageList: [
@@ -95,10 +79,10 @@
 					{ name: '距离' }
 				],
 				twoCur: 1, // 二级数据类型的当前页
-				twoContent: [], // 二级数据
-				twoContentCopy: [],
-				isShowTwo: true, // 是否展示二级数据
-				isTwoLastPage: true, // 二级数据是否是最后一页
+				// twoContent: [], // 二级数据
+				// twoContentCopy: [],
+				// isShowTwo: true, // 是否展示二级数据
+				// isTwoLastPage: true, // 二级数据是否是最后一页
 				// 三级数据
 				threeCur: 1,
 				threeContent: [],
@@ -108,7 +92,9 @@
 				detail: {},
 				location: uni.getStorageSync('location'), // 位置信息
 				city: uni.getStorageSync('location').city,
-				showInput: true // 是否展示搜索框
+				showInput: true, // 是否展示搜索框
+				fixedStyle: {},
+				secondType: '' // 二级类型
 			}
 		},
 
@@ -118,39 +104,30 @@
 			// 获取二级数据
 			const { content, last } = await this.getOneDatas()
 			this.typeList.push(...content)
-			this.twoContent = content
-			this.twoContentCopy = JSON.parse(JSON.stringify(this.twoContent))
-			this.isTwoLastPage = last
-			this.isShowTwo = true
-
+			// await this.getThreeData({ city: this.city, type: '美食' })
 			await authorize.getLocationInfo()
+		},
+
+		created() {
+			uni.$on('locationChange', this.handleCityChange)
+			uni.$on('locationSave', this.setCity)
+		},
+
+		beforeDestroy() {
+			uni.$off('locationChange', this.handleCityChange)
+			uni.$off('locationSave', this.setCity)
 		},
 
 		// 页面上拉触底事件
 		onReachBottom: async function() {
 			console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
 			if (this.showDetail) {
-				return
-			}
-			// 二级目录获取更多数据
-			if (this.isShowTwo) {
-				if (!this.isTwoLastPage) {
-					this.twoCur++
-					const { content, last } = await this.getOneDatas()
-					this.typeList.push(...content)
-					this.twoContent = content
-					this.isTwoLastPage = last
-					this.isShowTwo = true
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '没更多数据啦'
-					})
-				}
+				// 获取下一页留言数据
+				this.$refs.detail && this.$refs.detail.getLastComment()
 			} else {
 				if (!this.isThreeLastPage) {
 					this.threeCur++
-					await this.getThreeData({ secondType: item.name, city: this.city })
+					await this.getThreeData({ secondType: this.secondType, city: this.city })
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -158,20 +135,69 @@
 					})
 				}
 			}
+			// 二级目录获取更多数据
+			// if (this.isShowTwo) {
+			// 	if (!this.isTwoLastPage) {
+			// 		this.twoCur++
+			// 		const { content, last } = await this.getOneDatas()
+			// 		this.typeList.push(...content)
+			// 		this.twoContent = content
+			// 		this.isTwoLastPage = last
+			// 		this.isShowTwo = true
+			// 	} else {
+			// 		uni.showToast({
+			// 			icon: 'none',
+			// 			title: '没更多数据啦'
+			// 		})
+			// 	}
+			// } else {
+			// if (!this.isThreeLastPage) {
+			// 	this.threeCur++
+			// 	await this.getThreeData({ secondType: this.secondType, city: this.city })
+			// } else {
+			// 	uni.showToast({
+			// 		icon: 'none',
+			// 		title: '没更多数据啦'
+			// 	})
+			// }
+			// }
 		},
-		created() {
-			uni.$on('locationChange', this.handleCityChange)
-			uni.$on('locationSave', this.setCity)
-		},
-		beforeDestroy() {
-			uni.$off('locationChange', this.handleCityChange)
-			uni.$off('locationSave', this.setCity)
-		},
+
 		methods: {
+			// 调整根节点样式
+			handleFixStyle(style) {
+				this.fixedStyle = style
+			},
+			// 跳转至城市详情页
+			navigateCityInfo() {
+				uni.navigateTo({
+					url: '/pages/cityInfo/cityInfo',
+					success: res => {
+						console.log(res)
+						res.eventChannel.emit('cityInfo', {
+							cityInfo: {
+								imageList: this.imageList,
+								cityDes: this.cityDes
+							}
+						})
+					}
+				})
+			},
 			// 设置城市名称
 			setCity() {
 				this.city = uni.getStorageSync('location').city
 				this.getCityInfo()
+				this.threeContent = []
+				this.threeCur = 1
+				const params = {
+					city: this.city,
+					type: '美食'
+				}
+				if (this.secondType) {
+					params.secondType = this.secondType
+				}
+				console.log(params)
+				this.getThreeData(params)
 			},
 			// 城市改变
 			async handleCityChange({ city }) {
@@ -179,13 +205,21 @@
 					return
 				}
 				// 清空胶囊处输入框
-				this.$refs.customNav.handleInputClear()
+				// this.$refs.customNav.handleInputClear()
 				this.city = city
 				// 正在查看三级数据--需刷新数据
 				if (!this.isShowTwo) {
 					this.threeContent = []
 					this.threeCur = 1
-					await this.getThreeData({ secondType: this.secondType, city: this.city })
+					const params = {
+						city: this.city,
+						type: '美食'
+					}
+					if (this.secondType) {
+						params.secondType = this.secondType
+					}
+					console.log(params)
+					await this.getThreeData(params)
 					this.getCityInfo()
 				}
 			},
@@ -216,7 +250,7 @@
 				})
 			},
 			// 详情返回
-			hanldeDetialBack() {
+			handleDetailBack() {
 				this.showDetail = false
 				this.showInput = true
 			},
@@ -225,6 +259,7 @@
 			 * @param {String} keyWord
 			 */
 			async handleSearch(keyWord) {
+				console.log('搜索关键字:', keyWord)
 				this.threeContent = []
 				this.isShowTwo = false
 				await this.getThreeData({ name: keyWord, city: this.city, type: '美食' })
@@ -235,17 +270,15 @@
 			 */
 			async handleTypeSelect(index) {
 				const { name } = this.typeList[index]
-				console.log('type', index, this.twoContentCopy)
+				console.log('type', index, name)
 				this.isShowTwo = true
-				if (index === 0) {
-					this.twoContent = this.twoContentCopy
-				} else {
-					this.twoContent = this.twoContentCopy.filter(item => {
-						if (item.name === name) {
-							return item
-						}
-					})
+				const params = { city: this.city, type: '美食' }
+				if (index !== 0) {
+					params.secondType = name
 				}
+				this.threeContent = []
+				await this.getThreeData(params)
+
 			},
 			/**
 			 * @description 选中排序
@@ -277,7 +310,7 @@
 			async handleTowData(item) {
 				console.log(item, this.city)
 				if (this.city) {
-					this.isShowTwo = false
+					// this.isShowTwo = false
 					this.threeContent = []
 					this.secondType = item.name
 					console.log('this.city', this.city)
@@ -287,25 +320,27 @@
 				}
 			},
 			// 点击页面监听
-			handlePageClick() {
-				uni.$emit('handleSelectShow', false)
-			},
+			// handlePageClick() {
+			// 	uni.$emit('handleSelectShow', false)
+			// },
+
 			// 获取三级数据
 			async getThreeData(params = {}) {
 				uni.showLoading({ title: '获取数据中' })
 				const res = await this.getFoodsData(params)
 				console.log('res', res)
 				this.threeContent.push(...res.content)
-				console.log('this.threeContent', this.threeContent)
+				// console.log('this.threeContent', this.threeContent)
 				this.isThreeLastPage = res.last
 				this.isShowTwo = false
-				console.log('0000', this.location)
+				// console.log('0000', this.location)
 				await this.getDistance({
 					longitude: this.location.longitude,
 					latitude: this.location.latitude
 				})
 				uni.hideLoading()
 			},
+
 			// 详情
 			handleDetailShow(detail) {
 				console.log(detail)
@@ -313,6 +348,7 @@
 				this.showInput = false
 				this.showDetail = true
 			},
+
 			// 进入地图
 			handleShowMap() {
 				uni.navigateTo({
@@ -322,12 +358,13 @@
 					}
 				})
 			},
+
 			// 获取美食二级分类数据
 			getOneDatas() {
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: `http://8.137.19.141/pro/rest/dbs/find/dict/${this.twoCur}/10?Type=美食`,
+						url: 'http://8.137.19.141/pro/rest/dbs/find/dict/1/99999?Type=美食',
 						method: 'GET',
 						success: res => {
 							const data = res.data.data
@@ -339,8 +376,8 @@
 						}
 					})
 				})
-
 			},
+
 			// 获取美食数据
 			getFoodsData(params = {}) {
 				return new Promise(resolve => {
@@ -359,13 +396,15 @@
 					})
 				})
 			},
+
 			// 获取距离
 			getDistance({ longitude, latitude }) {
 				if (this.threeContent.length > 0) {
 					const toList = []
-					for (let item of this.threeContent) {
-						console.log('item--', item)
-						if (item.longitude && item.latitude) {
+					const start = (this.threeCur - 1) * 10
+					for (let i = start; i < this.threeContent.length; i++) {
+						const item = this.threeContent[i]
+						if (item.longitude && item.latitude && !item.distance) {
 							toList.push({
 								longitude: Number(item.longitude),
 								latitude: Number(item.latitude)
@@ -383,22 +422,18 @@
 							},
 							to: toList,
 							success: ({ result }) => { //成功后的回调
-								console.log('result', result)
 								const distanceInfo = result.elements
-								this.threeContent.forEach((item, index) => {
-									const distance = distanceInfo[index]
-										.distance
+								console.log('result', result, distanceInfo)
+								for (let i = 0; i < distanceInfo.length; i++) {
+									const distance = distanceInfo[i].distance
 									if (distance === -1) {
-										item.distance = '--'
+										this.threeContent[start + i].distance = '--'
 									} else {
-										item.distance = (distanceInfo[index]
-											.distance / 1000).toFixed(
-											1)
+										this.threeContent[start + i].distance = (distance / 1000).toFixed(1)
 									}
-								})
+								}
 								this.threeContentCopy = JSON.parse(JSON.stringify(this
 									.threeContent))
-								console.log('距离', this.threeContent)
 							},
 							fail: function(error) {
 								console.error(error)
@@ -418,42 +453,11 @@
 
 		.image-container {
 			background-color: white;
+			height: 400rpx;
 
-			.image-list {
-				height: 400rpx;
-
-				::v-deep .u-swiper {
-					height: 100% !important;
-
-					.u-swiper__wrapper {
-						height: 100% !important;
-
-						.u-swiper__wrapper__item__wrapper {
-							height: 100% !important;
-						}
-
-						image {
-							height: 100% !important;
-						}
-					}
-				}
-			}
-
-			.describe {
-				padding: 10rpx 5rpx 20rpx 10rpx;
-
-				.text {
-					letter-spacing: 10rpx;
-					line-height: 55rpx;
-					text-indent: 2rem;
-					word-break: break-all; //在恰当的断字点进行换行 
-					overflow: hidden; //文字超出的进行隐藏
-					text-overflow: ellipsis; //超出的文字用省略号表示
-					display: -webkit-box; //将元素设为盒子伸缩模型显示
-					text-overflow: ellipsis; //利用盒子模型 
-					-webkit-box-orient: vertical; //伸缩方向设为垂直方向
-					-webkit-line-clamp: 6;
-				}
+			.image {
+				width: 100%;
+				height: 100%;
 			}
 		}
 
@@ -521,11 +525,11 @@
 					}
 
 					.name {
-						font-size: 40rpx;
 						color: #b50a0e;
 						font-weight: bold;
 
 						.value {
+							font-size: $uni-font-size-lg;
 							@include ellipsis()
 						}
 
@@ -540,10 +544,5 @@
 				}
 			}
 		}
-	}
-
-	.more {
-		text-align: center;
-		color: $uni-text-color-grey;
 	}
 </style>

@@ -20,6 +20,9 @@
 		<!-- 占位 -->
 		<div class="box"></div>
 		<section class="container">
+			<div id="add" class="add" ref="add" @click='addComment' :style="{top:backTop}" v-show="activeTab === 2">
+				<span class="iconfont">+</span>
+			</div>
 			<!-- 使tabs滑动浮动在最顶部 -->
 			<u-sticky bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
 				<div class="tabs">
@@ -30,14 +33,14 @@
 				</div>
 			</u-sticky>
 			<!-- 简介 -->
-			<div class="des tab-container" v-if="activeTab === 0">
+			<div class="des tab-container" v-show="activeTab === 0">
 				{{detailInfo.remark}}
 			</div>
 			<!-- 推荐 -->
-			<div class="recommend tab-container" v-if="activeTab === 1">
+			<div class="recommend tab-container" v-show="activeTab === 1">
 				<div class="recommend-item" v-for="(item,index) in recommendData" :key="index">
 					<div class="left">
-						<img class="image" src="https://cdn.uviewui.com/uview/swiper/swiper1.png">
+						<img class="image" :src="item.image">
 					</div>
 					<div class="right">
 						<div class="title">{{item.foodName}}</div>
@@ -47,14 +50,27 @@
 				<NoData v-if="recommendData.length === 0"></NoData>
 			</div>
 			<!-- 评价 -->
-			<div class="commit tab-container" v-if="activeTab === 2">
-				<div class="commit-item" v-for="(item,index) in commitData" :key="index">
-					<div class="name">阿茹娜</div>
-					<div class="content">海底捞火锅口味不错，菜品种类多。服务热情。环境优雅，适合家庭聚餐</div>
+			<div class="comment tab-container" v-show="activeTab === 2">
+				<div class="comment-item" v-for="(item,index) in commentData" :key="index">
+					<div class="content">{{item.comment}}</div>
 				</div>
-				<NoData v-if="commitData.length === 0"></NoData>
+				<NoData v-if="commentData.length === 0"></NoData>
+				<div class="more" v-if="!commentLast">上拉获取更多数据</div>
 			</div>
 		</section>
+		<u-popup :show="show" @close="close">
+			<div class="textarea">
+				<u-textarea v-model="comment" placeholder="请输入评论内容" :maxlength="-1"></u-textarea>
+			</div>
+			<div class="buttons">
+				<div class="cancel">
+					<u-button type="warning" :plain="true" text="镂空" @click="close">取消</u-button>
+				</div>
+				<div class="confirm">
+					<u-button type="warning" text="确定" @click="handleConfirm">确认</u-button>
+				</div>
+			</div>
+		</u-popup>
 	</div>
 </template>
 
@@ -74,8 +90,13 @@
 				],
 				activeTab: 0,
 				recommendData: [],
-				commitData: [],
+				commentData: [],
 				isOpen: true,
+				backTop: uni.getStorageSync('menuInfo').windowHeight,
+				show: false,
+				comment: '',
+				commentCur: 1,
+				commentLast: true, // 评价数据是否是最后一页
 				detailInfo: {}
 			}
 		},
@@ -106,7 +127,33 @@
 			this.isOpen = this.judgeOpen(this.detailInfo.workTime)
 		},
 
+		watch: {
+			activeTab(newVal) {
+				console.log('newVal', newVal)
+				if (newVal === 2) {
+					this.$nextTick(() => {
+						setTimeout(() => {
+							console.log('this', this)
+							const menuInfo = uni.getStorageSync('menuInfo')
+							const windowHeight = parseInt(menuInfo.windowHeight)
+							const query = uni.createSelectorQuery().in(this)
+							query.select('#add').boundingClientRect(rect => {
+								console.log('backTop:', rect)
+								const height = rect.height + 2
+								this.backTop = `${windowHeight - height}px`
+							}).exec()
+						})
+					})
+				}
+			}
+		},
+
 		methods: {
+			// 关闭新增评论弹框
+			close() {
+				this.show = false
+				console.log('close')
+			},
 			// 判断是否在营业中 统一换算成24小时制
 			judgeOpen(openingHours) {
 				try {
@@ -137,6 +184,7 @@
 			},
 			// 点击tab
 			handleTabClick(index) {
+				this.activeTab = index
 				switch (index) {
 					// 推荐
 					case 1:
@@ -144,10 +192,13 @@
 						break
 						// 评价
 					case 2:
+						this.commentCur = 1
+						this.commentData = []
+						this.getCommentData()
 						break
 				}
-				this.activeTab = index
 			},
+			// 获取推荐数据
 			getRecommendData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
@@ -163,6 +214,40 @@
 					}
 				})
 			},
+			// 增加留言
+			addComment() {
+				console.log('增加留言')
+				this.show = true
+			},
+			// 确认增加
+			handleConfirm() {
+				console.log(this.detailInfo)
+				if (this.comment) {
+					uni.request({
+						url: 'http://8.137.19.141/pro/rest/dbs/add/comment',
+						data: {
+							productId: this.detailInfo.id,
+							comment: this.comment
+						},
+						method: 'POST',
+						success: ({ data }) => {
+							this.close()
+							this.commentCur = 1
+							this.commentData = []
+							this.getCommentData()
+							tis.comment = ''
+						},
+						fail: err => {
+							console.log(err)
+						}
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '评论未空'
+					})
+				}
+			},
 			// 打开地图
 			navigatorToMap() {
 				uni.navigateTo({
@@ -171,23 +256,39 @@
 						res.eventChannel.emit('postMap', { detail: this.detailInfo })
 					}
 				})
+			},
+			// 获取评价数据
+			getCommentData() {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `http://8.137.19.141/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
+					method: 'GET',
+					success: res => {
+						const data = res.data.data
+						console.log(res)
+						this.commentData.push(...data.content)
+						this.commentLast = data.last
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
+			},
+			// 获取下一页评价数据
+			getLastComment() {
+				if (this.activeTab === 2) {
+					if (!this.commentLast) {
+						this.commentCur++
+						this.getCommentData()
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: '没更多数据啦'
+						})
+					}
+				}
 			}
-			// getCommentData() {
-			// 	uni.showLoading({ title: '获取数据中' })
-			// 	uni.request({
-			// 		url: `http://8.137.19.141/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
-			// 		method: 'GET',
-			// 		success: res => {
-			// 			console.log(res)
-			// 			const data = res.data.data
-
-			// 			uni.hideLoading()
-			// 		},
-			// 		fail: err => {
-			// 			console.log(err)
-			// 		}
-			// 	})
-			// },
 		}
 	}
 </script>
@@ -222,6 +323,7 @@
 				border-radius: 40rpx;
 				padding: $uni-spacing-row-base 30rpx;
 				z-index: 1111;
+				font-size: $uni-font-size-base;
 
 				.title {
 					font-weight: bold;
@@ -257,9 +359,12 @@
 
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
+						color: white;
+						font-size: 40rpx;
 					}
 
 					.text {
+						font-size: $uni-font-size-base;
 						flex: 1;
 						@include ellipsis();
 					}
@@ -273,6 +378,24 @@
 		}
 
 		.container {
+
+			.add {
+				background-color: rgba(253, 195, 7, 0.6);
+				position: fixed;
+				right: 10px;
+				text-align: center;
+				border-radius: 50%;
+				width: 100rpx;
+				height: 100rpx;
+
+				.iconfont {
+					color: white;
+					font-size: 60rpx;
+					line-height: 100rpx;
+					font-weight: bold;
+				}
+
+			}
 
 			.tabs {
 				display: flex;

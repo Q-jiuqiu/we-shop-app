@@ -61,4 +61,13 @@
 	@import "@/uni_modules/uview-plus/index.scss";
 
 	@import url("/static/iconfont/iconfont.css");
+
+	view {
+		font-size: $uni-font-size-base;
+	}
+
+	.more {
+		text-align: center;
+		color: $uni-text-color-grey;
+	}
 </style>
