@@ -10,23 +10,38 @@
 			<div class="image-container">
 				<img class="image" :src="imageList[0]" alt="美食" @click="navigateCityInfo">
 			</div>
-
+			<!-- 下拉框操作栏 -->
 			<div class="option">
 				<div class="select">
 					<div class="type">
-						<CusSelect selecName='type' :options="typeList" @select="handleTypeSelect"
-							@fixedTo="handleFixStyle">
+						<CusSelect :options="filterData" @select="handleTypeSelect" @fixedTo="handleFixStyle">
 						</CusSelect>
 					</div>
 					<div class="sort">
-						<CusSelect selecName='sort' :options="sortList" @select="handleSortSelect"
-							@fixedTo="handleFixStyle">
-						</CusSelect>
+						<CusSelect :options="sortList" @select="handleSortSelect" @fixedTo="handleFixStyle"></CusSelect>
 					</div>
 				</div>
-				<div class="map-button" @click="handleShowMap">进入地图模式</div>
+				<div class="map-button" @click="handleShowMap" v-if="!isShowTwo">进入地图模式</div>
 			</div>
-			<div class="content">
+			<!-- 小类数据 -->
+			<div class="content" v-if="isShowTwo">
+				<div class="content-item" v-for="(item,index) in twoContent" :key="index"
+					@click="handleTwoDetails(item)">
+					<img class="image" :src="item.image">
+					<div class="text">
+						<div class="text-item name">
+							<div class="value">{{item.name}}</div>
+						</div>
+						<div class="text-item dis">
+							<div class="value">{{item.remark}}</div>
+						</div>
+					</div>
+				</div>
+				<NoData v-if="twoContent.length === 0"></NoData>
+				<div class="more" v-if="!isTwoLastPage">上拉获取更多数据</div>
+			</div>
+			<!-- 门店数据 -->
+			<div class="content" v-else>
 				<div class="content-item" v-for="(item,index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
 					<img class="image" :src="item.image">
@@ -67,22 +82,20 @@
 				imageList: [
 					'https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF'
 				],
-				cityDes: '',
 				contentList: [],
 				showDetail: false, // 是否展示详情
 				isLastPage: false, // 是否是最后一页
 				curPage: 1, // 当前的页数
-				typeList: [{ name: '全部美食' }], // 类型
+				filterData: [{ name: '全部美食' }], // 类型
 				sortList: [
 					{ name: '智能排序' },
 					{ name: '热度' },
 					{ name: '距离' }
 				],
 				twoCur: 1, // 二级数据类型的当前页
-				// twoContent: [], // 二级数据
-				// twoContentCopy: [],
-				// isShowTwo: true, // 是否展示二级数据
-				// isTwoLastPage: true, // 二级数据是否是最后一页
+				twoContent: [], // 二级数据
+				isShowTwo: true, // 是否展示二级数据
+				isTwoLastPage: true, // 二级数据是否是最后一页
 				// 三级数据
 				threeCur: 1,
 				threeContent: [],
@@ -94,75 +107,64 @@
 				city: uni.getStorageSync('location').city,
 				showInput: true, // 是否展示搜索框
 				fixedStyle: {},
-				secondType: '' // 二级类型
+				secondType: '', // 二级类型
+				threeType: '', // 三级级类型
 			}
 		},
 
 		// 监听页面加载
 		onLoad: async function() {
 			this.getCityInfo()
-			// 获取二级数据
-			const { content, last } = await this.getOneDatas()
-			this.typeList.push(...content)
-			// await this.getThreeData({ city: this.city, type: '美食' })
+			// 获取筛选条件
+			const { content } = await this.getFilterDatas()
+			this.getTwoDatas()
+			this.filterData.push(...content)
+			this.isShowTwo = true
+
 			await authorize.getLocationInfo()
-		},
-
-		created() {
-			uni.$on('locationChange', this.handleCityChange)
-			uni.$on('locationSave', this.setCity)
-		},
-
-		beforeDestroy() {
-			uni.$off('locationChange', this.handleCityChange)
-			uni.$off('locationSave', this.setCity)
 		},
 
 		// 页面上拉触底事件
 		onReachBottom: async function() {
-			console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
 			if (this.showDetail) {
-				// 获取下一页留言数据
-				this.$refs.detail && this.$refs.detail.getLastComment()
-			} else {
-				if (!this.isThreeLastPage) {
-					this.threeCur++
-					await this.getThreeData({ secondType: this.secondType, city: this.city })
-				} else {
+				return
+			}
+			console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
+
+			if (this.isShowTwo) { // 二级目录获取更多数据
+				if (this.isTwoLastPage) {
 					uni.showToast({
 						icon: 'none',
 						title: '没更多数据啦'
 					})
+				} else {
+					this.twoCur++
+					const params = {}
+					if (this.secondType) {
+						params = { parentName: this.secondType }
+					}
+					this.getTwoDatas(params)
+				}
+			} else {
+				if (this.isThreeLastPage) {
+					uni.showToast({
+						icon: 'none',
+						title: '没更多数据啦'
+					})
+				} else {
+					this.threeCur++
+					this.getThreeData({ threeType: this.threeType, city: this.city })
 				}
 			}
-			// 二级目录获取更多数据
-			// if (this.isShowTwo) {
-			// 	if (!this.isTwoLastPage) {
-			// 		this.twoCur++
-			// 		const { content, last } = await this.getOneDatas()
-			// 		this.typeList.push(...content)
-			// 		this.twoContent = content
-			// 		this.isTwoLastPage = last
-			// 		this.isShowTwo = true
-			// 	} else {
-			// 		uni.showToast({
-			// 			icon: 'none',
-			// 			title: '没更多数据啦'
-			// 		})
-			// 	}
-			// } else {
-			// if (!this.isThreeLastPage) {
-			// 	this.threeCur++
-			// 	await this.getThreeData({ secondType: this.secondType, city: this.city })
-			// } else {
-			// 	uni.showToast({
-			// 		icon: 'none',
-			// 		title: '没更多数据啦'
-			// 	})
-			// }
-			// }
 		},
-
+		created() {
+			uni.$on('locationChange', this.handleCityChange)
+			uni.$on('locationSave', this.setCity)
+		},
+		beforeDestroy() {
+			uni.$off('locationChange', this.handleCityChange)
+			uni.$off('locationSave', this.setCity)
+		},
 		methods: {
 			// 调整根节点样式
 			handleFixStyle(style) {
@@ -183,43 +185,33 @@
 					}
 				})
 			},
-			// 设置城市名称
-			setCity() {
+			/**
+			 * @description  设置城市名称
+			 */
+			async setCity() {
 				this.city = uni.getStorageSync('location').city
 				this.getCityInfo()
-				this.threeContent = []
-				this.threeCur = 1
-				const params = {
-					city: this.city,
-					type: '美食'
-				}
-				if (this.secondType) {
-					params.secondType = this.secondType
-				}
-				console.log(params)
-				this.getThreeData(params)
+				this.isShowTwo = true
 			},
-			// 城市改变
-			async handleCityChange({ city }) {
+			/**
+			 * @description 城市改变
+			 */
+			handleCityChange({ city }) {
 				if (this.city === city) {
 					return
 				}
 				// 清空胶囊处输入框
-				// this.$refs.customNav.handleInputClear()
+				this.$refs.customNav.handleInputClear()
 				this.city = city
-				// 正在查看三级数据--需刷新数据
-				if (!this.isShowTwo) {
+				if (this.isShowTwo) {
+					this.twoContent = []
+					this.twoCur = 1
+					this.getTwoDatas()
+				} else {
+					// 正在查看三级数据--需刷新数据
 					this.threeContent = []
 					this.threeCur = 1
-					const params = {
-						city: this.city,
-						type: '美食'
-					}
-					if (this.secondType) {
-						params.secondType = this.secondType
-					}
-					console.log(params)
-					await this.getThreeData(params)
+					this.getThreeData({ threeType: this.threeType, city: this.city })
 					this.getCityInfo()
 				}
 			},
@@ -249,6 +241,7 @@
 					}
 				})
 			},
+
 			// 详情返回
 			handleDetailBack() {
 				this.showDetail = false
@@ -258,27 +251,27 @@
 			 * @description 根据关键字搜索
 			 * @param {String} keyWord
 			 */
-			async handleSearch(keyWord) {
-				console.log('搜索关键字:', keyWord)
+			handleSearch(keyWord) {
 				this.threeContent = []
 				this.isShowTwo = false
-				await this.getThreeData({ name: keyWord, city: this.city, type: '美食' })
+				this.threeType = ''
+				this.getThreeData({ name: keyWord, city: this.city, type: '美食' })
 			},
 			/**
 			 * @description 选中类型
 			 * @param {number} index 选中下标
 			 */
 			async handleTypeSelect(index) {
-				const { name } = this.typeList[index]
-				console.log('type', index, name)
+				const { name } = this.filterData[index]
 				this.isShowTwo = true
-				const params = { city: this.city, type: '美食' }
+				this.twoContent = []
+				let params = {}
+				this.secondType = ''
 				if (index !== 0) {
-					params.secondType = name
+					params = { parentName: name }
+					this.secondType = name
 				}
-				this.threeContent = []
-				await this.getThreeData(params)
-
+				this.getTwoDatas(params)
 			},
 			/**
 			 * @description 选中排序
@@ -304,43 +297,52 @@
 
 			},
 			/**
-			 * @description 获取指定分类数据
+			 * @description 获取指定二级(小类)数据详情
 			 * @param {Object} item
 			 */
-			async handleTowData(item) {
+			handleTwoDetails(item) {
 				console.log(item, this.city)
 				if (this.city) {
-					// this.isShowTwo = false
+					this.isShowTwo = false
 					this.threeContent = []
-					this.secondType = item.name
+					this.threeType = item.name
 					console.log('this.city', this.city)
-					await this.getThreeData({ secondType: item.name, city: this.city })
+					this.getThreeData({ threeType: item.name, city: this.city })
 				} else {
 					authorize.authorizeAgain()
 				}
 			},
-			// 点击页面监听
-			// handlePageClick() {
-			// 	uni.$emit('handleSelectShow', false)
-			// },
-
-			// 获取三级数据
-			async getThreeData(params = {}) {
+			/**
+			 * @description 获取三级数据--二级(小类)详情
+			 * @param {Object} params 请求条件
+			 */
+			getThreeData(params = {}) {
+				console.log('获取三级数据')
 				uni.showLoading({ title: '获取数据中' })
-				const res = await this.getFoodsData(params)
-				console.log('res', res)
-				this.threeContent.push(...res.content)
-				// console.log('this.threeContent', this.threeContent)
-				this.isThreeLastPage = res.last
-				this.isShowTwo = false
-				// console.log('0000', this.location)
-				await this.getDistance({
-					longitude: this.location.longitude,
-					latitude: this.location.latitude
+				uni.request({
+					url: `http://8.137.19.141/pro/rest/dbs/find/${this.threeCur}/10`,
+					data: params,
+					method: 'GET',
+					success: async res => {
+						const data = res.data.data
+						const { content, last } = data
+						this.threeContent.push(...content)
+						console.log('this.threeContent', this.threeContent)
+						this.isThreeLastPage = last
+						this.isShowTwo = false
+						console.log('0000', this.location)
+						await this.getDistance({
+							longitude: this.location.longitude,
+							latitude: this.location.latitude
+						})
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
 				})
-				uni.hideLoading()
-			},
 
+			},
 			// 详情
 			handleDetailShow(detail) {
 				console.log(detail)
@@ -348,7 +350,6 @@
 				this.showInput = false
 				this.showDetail = true
 			},
-
 			// 进入地图
 			handleShowMap() {
 				uni.navigateTo({
@@ -358,15 +359,17 @@
 					}
 				})
 			},
-
-			// 获取美食二级分类数据
-			getOneDatas() {
+			/**
+			 * @description 获取筛选(大类)数据
+			 */
+			getFilterDatas() {
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'http://8.137.19.141/pro/rest/dbs/find/dict/1/99999?Type=美食',
+						url: 'http://8.137.19.141/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
 						method: 'GET',
 						success: res => {
+							console.log('res', res)
 							const data = res.data.data
 							uni.hideLoading()
 							resolve(data)
@@ -375,6 +378,28 @@
 							resolve([])
 						}
 					})
+				})
+			},
+			/**
+			 * @description 获取二级(小类)数据
+			 * @param {Object} params 请求条件
+			 */
+			getTwoDatas(params = {}) {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `http://8.137.19.141/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3`,
+					data: params,
+					method: 'GET',
+					success: res => {
+						console.log('res-', res)
+						const data = res.data.data
+						const { content, last } = data
+						this.twoContent.push(...content)
+						this.isTwoLastPage = last
+						this.isShowTwo = true
+						uni.hideLoading()
+					},
+					fail: err => {}
 				})
 			},
 
@@ -396,15 +421,13 @@
 					})
 				})
 			},
-
 			// 获取距离
 			getDistance({ longitude, latitude }) {
 				if (this.threeContent.length > 0) {
 					const toList = []
-					const start = (this.threeCur - 1) * 10
-					for (let i = start; i < this.threeContent.length; i++) {
-						const item = this.threeContent[i]
-						if (item.longitude && item.latitude && !item.distance) {
+					for (let item of this.threeContent) {
+						console.log('item--', item)
+						if (item.longitude && item.latitude) {
 							toList.push({
 								longitude: Number(item.longitude),
 								latitude: Number(item.latitude)
@@ -422,18 +445,22 @@
 							},
 							to: toList,
 							success: ({ result }) => { //成功后的回调
+								console.log('result', result)
 								const distanceInfo = result.elements
-								console.log('result', result, distanceInfo)
-								for (let i = 0; i < distanceInfo.length; i++) {
-									const distance = distanceInfo[i].distance
+								this.threeContent.forEach((item, index) => {
+									const distance = distanceInfo[index]
+										.distance
 									if (distance === -1) {
-										this.threeContent[start + i].distance = '--'
+										item.distance = '--'
 									} else {
-										this.threeContent[start + i].distance = (distance / 1000).toFixed(1)
+										item.distance = (distanceInfo[index]
+											.distance / 1000).toFixed(
+											1)
 									}
-								}
+								})
 								this.threeContentCopy = JSON.parse(JSON.stringify(this
 									.threeContent))
+								console.log('距离', this.threeContent)
 							},
 							fail: function(error) {
 								console.error(error)
@@ -525,11 +552,11 @@
 					}
 
 					.name {
+						font-size: 40rpx;
 						color: #b50a0e;
 						font-weight: bold;
 
 						.value {
-							font-size: $uni-font-size-lg;
 							@include ellipsis()
 						}
 
@@ -544,5 +571,10 @@
 				}
 			}
 		}
+	}
+
+	.more {
+		text-align: center;
+		color: $uni-text-color-grey;
 	}
 </style>
