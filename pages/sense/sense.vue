@@ -356,9 +356,10 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'http://8.137.19.141/pro/rest/dbs/find/dict/1/99999?Type=风景',
+						url: 'http://8.137.19.141/pro/rest/dbs/find/dict/one/1/999999?type=风景&level=2',
 						method: 'GET',
 						success: res => {
+							console.log('res', res)
 							const data = res.data.data
 							uni.hideLoading()
 							resolve(data)
