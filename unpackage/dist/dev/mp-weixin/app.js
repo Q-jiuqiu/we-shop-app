@@ -176,7 +176,7 @@ const _sfc_main = {
     });
   }
 };
-const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/学习/小程序/small-project/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/微信/WeChat Files/wxid_6284fn1apien22/FileStorage/File/2023-07/small-project(2)/small-project/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(uni_modules_uviewPlus_index.uviewPlus);

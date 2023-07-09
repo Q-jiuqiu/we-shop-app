@@ -89,7 +89,7 @@
 				"pagePath": "pages/avoidBad/avoidBad",
 				"iconPath": "./static/img/avoid.png",
 				"selectedIconPath": "./static/img/avoidAc.png",
-				"text": "避坑"
+				"text": "指南"
 			},
 			{
 				"pagePath": "pages/message/message",

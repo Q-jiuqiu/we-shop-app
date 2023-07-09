@@ -1,23 +1,22 @@
 <template>
-	<div :style="{paddingTop:statusBarHeight,height:'44px'}">
+	<div :style="{ paddingTop: statusBarHeight, height: '44px' }">
 		<u-picker :show="show" :columns="columns" @confirm="handleConfirm" @cancel="handleCancel"
-			:closeOnClickOverlay='true' @close="show = false"></u-picker>
-		<div class="custom-nav" :style="{paddingTop:statusBarHeight,height:'44px'}">
-			<div class="container" :style="{width:surplusWidth}">
+			:closeOnClickOverlay="true" @close="show = false"></u-picker>
+		<div class="custom-nav" :style="{ paddingTop: statusBarHeight, height: '44px' }">
+			<div class="container" :style="{ width: surplusWidth }">
 				<div class="locate" @click="handlePickerShow">
-					<span class="city">{{city}}</span>
+					<span class="city">{{ city }}</span>
 					<span class="iconfont icon-xiangxia"></span>
 				</div>
 				<div class="input-container">
 					<u-input v-if="showInput" prefixIcon="search" prefixIconStyle="color: #909399"
-						placeholder="请输入搜索关键词" border="surround" v-model="keyWord"
+						placeholder="请输入搜索关键词" border="surround" v-model="keyWord" shape="circle"
 						@confirm="handleInputChange"></u-input>
 					<!-- @change="$u.debounce(handleInputChange, 500)" -->
 				</div>
 			</div>
 		</div>
 	</div>
-
 </template>
 
 <script>
@@ -43,27 +42,29 @@
 			}
 		},
 		created() {
-			uni.$on('locationSave', this.setCity)
-			uni.$on('locationChange', this.handleCityChange)
-			const cityList = uni.getStorageSync('cityList')
-			console.log('cityList:', cityList)
-			if (cityList) {
-				this.columns = cityList
-			} else {
-				uni.request({
-					url: 'http://8.137.19.141/pro/rest/dbs/find/type/v2',
-					method: 'GET',
-					success: res => {
-						this.columns = [res.data.data]
-						console.log('this.columns', this.columns)
-						uni.setStorageSync('cityList', this.columns)
-					},
-					fail: err => {
-						console.log(err)
-					}
-				})
-			}
-
+			// uni.$on('locationSave', this.setCity)
+			// uni.$on('locationChange', this.handleCityChange)
+			// const cityList = uni.getStorageSync('cityList')
+			// console.log('cityList:', cityList)
+			// if (cityList) {
+			// 	this.columns = cityList
+			// } else {
+			uni.request({
+				url: 'http://8.137.19.141/pro/rest/dbs/city/dict/find/page/1/1000',
+				method: 'GET',
+				success: res => {
+					console.log('城市', res.data.data.content)
+					const a = res.data.data.content.map(item => {
+						return item.city
+					})
+					this.columns = [a]
+					// uni.setStorageSync('cityList', this.columns)
+				},
+				fail: err => {
+					console.log(err)
+				}
+			})
+			// }
 		},
 		beforeDestroy() {
 			uni.$off('locationSave', this.setCity)
@@ -98,7 +99,6 @@
 				} else {
 					this.showPicker()
 				}
-
 			},
 			showPicker() {
 				console.log(this)
@@ -147,7 +147,7 @@
 			.input-container {
 				flex: 1;
 				background: white;
-				border-radius: 10px;
+				border-radius: 25px;
 			}
 		}
 	}

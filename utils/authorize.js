@@ -83,7 +83,12 @@ function getLocationInfo(callBack) {
 						let info = response.result
 						console.log(info)
 						location.province = info.address_component.province
-						location.city = info.address_component.city
+						if (info.address_component.district.includes('区')) {
+							location.city = info.address_component.city
+						} else {
+							location.city = info.address_component.district
+
+						}
 						location.district = info.address_component.district
 						location.street = info.address_component.street
 						location.address = info.address
@@ -106,4 +111,7 @@ function getLocationInfo(callBack) {
 	})
 }
 
-export default { authorizeAgain, getLocationInfo }
+export default {
+	authorizeAgain,
+	getLocationInfo
+}
