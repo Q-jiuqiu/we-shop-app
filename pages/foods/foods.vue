@@ -1,6 +1,7 @@
 <template>
 	<div class="foods" :style="fixedStyle">
 		<customNavBack :custom="true" v-if="showDetail || !isShowTwo" @customBack="handleDetailBack"></customNavBack>
+		<customNavBack :custom="true" v-if="showDetail || !isShowTwo" @customBack="handleDetailBack"></customNavBack>
 		<CustomNav ref="customNav" @search="handleSearch" :showInput="showInput" v-else></CustomNav>
 		<div class="detail" v-if="showDetail">
 			<Detail ref="detail" :detailInfo="detail"></Detail>
@@ -13,8 +14,7 @@
 			<div class="option">
 				<div class="select">
 					<div class="type">
-						<CusSelect :options="filterData" @select="handleTypeSelect" @fixedTo="handleFixStyle">
-						</CusSelect>
+						<CusSelect :options="filterData" @select="handleTypeSelect" @fixedTo="handleFixStyle"></CusSelect>
 					</div>
 					<div class="sort" v-if="!isShowTwo">
 						<CusSelect :options="sortList" @select="handleSortSelect" @fixedTo="handleFixStyle"></CusSelect>
@@ -65,13 +65,13 @@
 </template>
 
 <script>
-	const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
-	import NoData from '@/compnnents/noData/noData.vue'
-	import CusSelect from '@/compnnents/select/select.vue'
-	import CustomNav from '@/compnnents/customNav/customNav.vue'
-	import customNavBack from '@/compnnents/customNavBack/customNavBack.vue'
-	import Detail from '@/compnnents/detail/detail.vue'
-	import authorize from '@/utils/authorize.js'
+const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
+import NoData from '@/compnnents/noData/noData.vue'
+import CusSelect from '@/compnnents/select/select.vue'
+import CustomNav from '@/compnnents/customNav/customNav.vue'
+import customNavBack from '@/compnnents/customNavBack/customNavBack.vue'
+import Detail from '@/compnnents/detail/detail.vue'
+import authorize from '@/utils/authorize.js'
 
 	export default {
 		name: 'FoodsIndex',
@@ -107,29 +107,24 @@
 
 		// 监听页面加载
 		onLoad: async function() {
-			await authorize.getLocationInfo()
 			this.getCityInfo()
 			// 获取筛选条件
 			const { content } = await this.getFilterDatas()
-			console.log('监听页面加载', content)
 			this.getTwoDatas()
-			if (content.length) {
-				this.filterData.push(...content)
-			} else {
-				this.filterData = [{ name: '全部美食' }]
-			}
+			this.filterData.push(...content)
 			this.isShowTwo = true
+
+			await authorize.getLocationInfo()
 		},
 
-		// 页面上拉触底事件
-		onReachBottom: async function() {
-			if (this.showDetail) {
-				return
-			}
-			console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
+	// 页面上拉触底事件
+	onReachBottom: async function () {
+		if (this.showDetail) {
+			return
+		}
+		console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
 
-			if (this.isShowTwo) {
-				// 二级目录获取更多数据
+			if (this.isShowTwo) { // 二级目录获取更多数据
 				if (this.isTwoLastPage) {
 					uni.showToast({
 						icon: 'none',
@@ -138,7 +133,6 @@
 				} else {
 					this.twoCur++
 					const params = {}
-					console.log('测试下拉', this.secondeType)
 					if (this.secondType) {
 						params = { parentName: this.secondType }
 					}
@@ -196,10 +190,11 @@
 			 * @description 城市改变
 			 */
 			handleCityChange({ city }) {
-				console.log('城市改变', city)
 				if (this.city === city) {
 					return
 				}
+				// 清空胶囊处输入框
+				this.$refs.customNav.handleInputClear()
 				this.city = city
 				if (this.isShowTwo) {
 					this.twoContent = []
@@ -212,15 +207,12 @@
 					this.getThreeData({ threeType: this.threeType, city: this.city })
 					this.getCityInfo()
 				}
-				// 清空胶囊处输入框
-				this.$refs.customNav.handleInputClear()
 			},
 			/**
 			 * @description 根据城市名称获取城市详细数据
 			 * @param {string} city
 			 */
-			getCityInfo() {
-				console.log('根据城市名称获取城市详细数据', this.city)
+			getCityInfo(city) {
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
 					method: 'GET',
@@ -245,14 +237,8 @@
 
 			// 详情返回
 			handleDetailBack() {
-				this.twoCur = 1
-				this.twoContent = []
+				this.showDetail = false
 				this.showInput = true
-				if (!this.isShowTwo && !this.showDetail) {
-					this.getTwoDatas()
-				} else if (!this.isShowTwo && this.showDetail) {
-					this.showDetail = false
-				}
 			},
 			/**
 			 * @description 根据关键字搜索
@@ -301,6 +287,7 @@
 				} else {
 					this.threeContent = this.threeContentCopy
 				}
+
 			},
 			/**
 			 * @description 获取指定二级(小类)数据详情
@@ -326,7 +313,7 @@
 				console.log('获取三级数据')
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+					url: `https://www.aomue.cn//pro/rest/dbs/find/${this.threeCur}/10`,
 					data: params,
 					method: 'GET',
 					success: async res => {
@@ -347,6 +334,7 @@
 						console.log(err)
 					}
 				})
+
 			},
 			// 详情
 			handleDetailShow(detail) {
@@ -371,7 +359,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
+						url: 'https://www.aomue.cn//pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
 						method: 'GET',
 						success: res => {
 							console.log('res', res)
@@ -392,7 +380,7 @@
 			getTwoDatas(params = {}) {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3&city=${this.city}`,
+					url: `https://www.aomue.cn//pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3`,
 					data: params,
 					method: 'GET',
 					success: res => {
@@ -477,43 +465,43 @@
 </script>
 
 <style lang="scss" scoped>
-	.foods {
-		min-height: 100vh;
-		background: $background;
+.foods {
+	min-height: 100vh;
+	background: $background;
 
-		.image-container {
-			background-color: white;
-			height: 400rpx;
+	.image-container {
+		background-color: white;
+		height: 400rpx;
 
-			.image {
-				width: 100%;
-				height: 100%;
-			}
+		.image {
+			width: 100%;
+			height: 100%;
 		}
+	}
 
-		.option {
-			padding: 25rpx 20rpx $uni-spacing-row-base 20rpx;
+	.option {
+		padding: 25rpx 20rpx $uni-spacing-row-base 20rpx;
+		display: flex;
+		justify-content: space-between;
+
+		.select {
 			display: flex;
-			justify-content: space-between;
+			align-items: center;
 
-			.select {
-				display: flex;
-				align-items: center;
-
-				.type {
-					margin-right: 40rpx;
-				}
-			}
-
-			.map-button {
-				background-color: white;
-				padding: 8rpx;
-				border-radius: 10rpx;
+			.type {
+				margin-right: 40rpx;
 			}
 		}
 
-		.content {
-			padding: 0 $uni-spacing-row-base;
+		.map-button {
+			background-color: white;
+			padding: 8rpx;
+			border-radius: 10rpx;
+		}
+	}
+
+	.content {
+		padding: 0 $uni-spacing-row-base;
 
 			&-item {
 				display: flex;
@@ -542,42 +530,42 @@
 						// margin-bottom: $uni-spacing-row-base;
 					}
 
-					.dis {
-						.value {
-							display: -webkit-box;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							word-wrap: break-word;
-							white-space: normal !important;
-							-webkit-line-clamp: 4;
-							-webkit-box-orient: vertical;
-						}
+				.dis {
+					.value {
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-line-clamp: 4;
+						-webkit-box-orient: vertical;
 					}
+				}
 
-					.name {
-						font-size: 40rpx;
-						color: #b50a0e;
-						font-weight: bold;
+				.name {
+					font-size: 40rpx;
+					color: #b50a0e;
+					font-weight: bold;
 
 						.value {
 							@include ellipsis();
 						}
 
-						.location {
-							display: flex;
-							color: $uni-text-color-grey;
-							font-size: $uni-font-size-sm;
-							font-weight: normal;
-							align-items: center;
-						}
+					.location {
+						display: flex;
+						color: $uni-text-color-grey;
+						font-size: $uni-font-size-sm;
+						font-weight: normal;
+						align-items: center;
 					}
 				}
 			}
 		}
 	}
+}
 
-	.more {
-		text-align: center;
-		color: $uni-text-color-grey;
-	}
+.more {
+	text-align: center;
+	color: $uni-text-color-grey;
+}
 </style>

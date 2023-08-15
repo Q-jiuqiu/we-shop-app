@@ -4,12 +4,14 @@
 		<header class="header">
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image" />
+				<img class="image" :src="detailInfo.image" />
 			</div>
 			<div class="info">
 				<div class="title">{{ detailInfo.name }}</div>
+				<div class="title">{{ detailInfo.name }}</div>
 				<div class="open-time" v-if="detailInfo.workTime">
-					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中' : '歇业中' }}</div>
-					<div class="time">{{ detailInfo.workTime }}</div>
+					<div :class="['open',{close: !isOpen}]">{{isOpen?'营业中':'歇业中'}}</div>
+					<div class="time">{{detailInfo.workTime}}</div>
 				</div>
 				<div class="adds" @click="navigatorToMap">
 					<span class="iconfont icon-dingwei1"></span>
@@ -169,11 +171,11 @@ export default {
 				const start = date.setHours(startTimes[0], startTimes[1])
 				const end = date.setHours(endTimes[0], endTimes[1])
 
-				if (startTimes[0] * 1 > endTimes[0] * 1) {
-					// 说明是到第二天
-					console.log('第二天')
-					return !this.judgeOpen(endTime + '-' + startTime)
-				}
+					if (startTimes[0] * 1 > endTimes[0] * 1) {
+						// 说明是到第二天
+						console.log('第二天')
+						return !this.judgeOpen(endTime + '-' + startTime)
+					}
 
 				return start < dqdq && dqdq < end
 			} catch (e) {

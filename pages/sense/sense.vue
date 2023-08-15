@@ -1,6 +1,7 @@
 <template>
 	<div class="sense" :style="fixedStyle">
 		<customNavBack :custom="true" v-if="showDetail" @customBack="handleDetailBack"></customNavBack>
+		<customNavBack :custom="true" v-if="showDetail" @customBack="handleDetailBack"></customNavBack>
 		<CustomNav ref="customNav" @search="handleSearch" :showInput="showInput" v-else></CustomNav>
 		<div class="detail" v-if="showDetail">
 			<Detail :detailInfo="detail" @back="hanldeDetialBack"></Detail>

@@ -3,6 +3,7 @@
 		<CustomNavBack></CustomNavBack>
 		<section class="map-content">
 			<map class="map" id="map" scale="12" :longitude="longitude" :latitude="latitude" :markers="markers" show-location="true" @markertap="handleMarkerClick"></map>
+			<map class="map" id="map" scale="12" :longitude="longitude" :latitude="latitude" :markers="markers" show-location="true" @markertap="handleMarkerClick"></map>
 		</section>
 	</div>
 </template>
