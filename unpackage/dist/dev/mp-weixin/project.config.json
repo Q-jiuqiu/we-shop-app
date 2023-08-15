@@ -16,12 +16,11 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "condition": false,
-    "ignoreUploadUnusedFiles": false
+    "condition": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.25.3",
-  "appid": "wxaf146906051c071b",
+  "libVersion": "3.0.0",
+  "appid": "wx7ad1020c275cd58d",
   "projectname": "small-project",
   "condition": {},
   "editorSetting": {

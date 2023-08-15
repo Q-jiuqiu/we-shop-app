@@ -35,7 +35,7 @@
 				if (this.value) {
 					this.btnLoading = true
 					uni.request({
-						url: 'http://8.137.19.141/pro/rest/dbs/add/leave/word',
+						url: 'https://www.aomue.cn/pro/rest/dbs/add/leave/word',
 						method: 'POST',
 						data: { leaveWord: this.value },
 						success: res => {
