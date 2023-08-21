@@ -122,12 +122,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: $data.longitude,
     b: $data.latitude,
     c: $data.markers,
-    d: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args)),
-    e: $data.longitude,
-    f: $data.latitude,
-    g: $data.markers,
-    h: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
+    d: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/微信/WeChat Files/wxid_6284fn1apien22/FileStorage/File/2023-08/small-project/small-project/pages/index/index.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "/Users/heyuanpeng/Desktop/small-project/pages/index/index.vue"]]);
 wx.createPage(MiniProgramPage);

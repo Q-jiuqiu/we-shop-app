@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "地图",
+  "usingComponents": {
+    "custom-nav-back": "../../compnnents/customNavBack/customNavBack"
+  }
+}

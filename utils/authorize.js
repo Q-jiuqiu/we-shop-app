@@ -1,3 +1,9 @@
+/*
+ * @Author: 何元鹏
+ * @Date: 2023-08-21 18:14:53
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-08-21 18:21:38
+ */
 const QQMapWX = require('../static/qqmap-wx-jssdk.min.js')
 
 /**
@@ -79,8 +85,9 @@ function getLocationInfo(callBack) {
 					new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
 				qqmapsdk.reverseGeocoder({
 					location,
-					success: function(response) {
+					success(response) {
 						let info = response.result
+						console.log(info)
 						location.province = info.address_component.province
 						if (info.address_component.district.includes('区')) {
 							location.city = info.address_component.city
@@ -95,9 +102,6 @@ function getLocationInfo(callBack) {
 						uni.$emit('locationSave')
 						uni.hideLoading()
 						resolve(location)
-					},
-					fail: function(error) {
-						uni.showLoading({ title: '解析位置信息失败' })
 					},
 				})
 			},

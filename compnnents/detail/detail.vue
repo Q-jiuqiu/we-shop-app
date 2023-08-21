@@ -137,34 +137,35 @@ export default {
 								console.log('backTop:', rect)
 								const height = rect.height + 2
 								this.backTop = `${windowHeight - height}px`
-							}).exec()
-						})
+							})
+							.exec()
 					})
-				}
+				})
 			}
+		}
+	},
+	methods: {
+		// 关闭新增评论弹框
+		close() {
+			this.show = false
+			console.log('close')
 		},
-		methods: {
-			// 关闭新增评论弹框
-			close() {
-				this.show = false
-				console.log('close')
-			},
-			// 判断是否在营业中 统一换算成24小时制
-			judgeOpen(openingHours) {
-				try {
-					const date = new Date()
-					const startTime = openingHours.split('-')[0]
-					const endTime = openingHours.split('-')[1]
-					// 二十四小时制
-					const now = date.toLocaleTimeString('chinese', { hour12: false })
+		// 判断是否在营业中 统一换算成24小时制
+		judgeOpen(openingHours) {
+			try {
+				const date = new Date()
+				const startTime = openingHours.split('-')[0]
+				const endTime = openingHours.split('-')[1]
+				// 二十四小时制
+				const now = date.toLocaleTimeString('chinese', { hour12: false })
 
 				const nowTimes = now.split(':')
 				const startTimes = startTime.split(':')
 				const endTimes = endTime.split(':')
 
-					const dqdq = date.setHours(nowTimes[0], nowTimes[1])
-					const start = date.setHours(startTimes[0], startTimes[1])
-					const end = date.setHours(endTimes[0], endTimes[1])
+				const dqdq = date.setHours(nowTimes[0], nowTimes[1])
+				const start = date.setHours(startTimes[0], startTimes[1])
+				const end = date.setHours(endTimes[0], endTimes[1])
 
 				if (startTimes[0] * 1 > endTimes[0] * 1) {
 					// 说明是到第二天

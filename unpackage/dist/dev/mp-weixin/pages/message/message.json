@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "留言",
+  "usingComponents": {
+    "custom-nav": "../../compnnents/customNav/customNav",
+    "u-textarea": "../../uni_modules/uview-plus/components/u-textarea/u-textarea",
+    "u-button": "../../uni_modules/uview-plus/components/u-button/u-button"
+  }
+}
