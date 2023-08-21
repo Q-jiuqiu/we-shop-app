@@ -1,3 +1,9 @@
+/*
+ * @Author: 何元鹏
+ * @Date: 2023-08-21 18:14:53
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-08-21 18:21:38
+ */
 const QQMapWX = require('../static/qqmap-wx-jssdk.min.js')
 
 /**
@@ -87,12 +93,10 @@ function getLocationInfo(callBack) {
 							location.city = info.address_component.city
 						} else {
 							location.city = info.address_component.district
-
 						}
 						location.district = info.address_component.district
 						location.street = info.address_component.street
 						location.address = info.address
-
 						// 将当前位置存储至storage中
 						uni.setStorageSync('location', location)
 						uni.$emit('locationSave')

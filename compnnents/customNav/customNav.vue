@@ -230,6 +230,7 @@ export default {
 			margin-right: 20rpx;
 		}
 
+<<<<<<< HEAD
 		.input-container {
 			flex: 1;
 			background: white;
@@ -237,4 +238,13 @@ export default {
 		}
 	}
 }
+=======
+			.input-container {
+				flex: 1;
+				background: white;
+				border-radius: 10px;
+			}
+		}
+	}
+>>>>>>> e752d84a3422a7df2115accfc178154d71ded7c0
 </style>
