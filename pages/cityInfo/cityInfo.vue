@@ -74,7 +74,7 @@
 				padding: 10rpx 5rpx 20rpx 10rpx;
 
 				.text {
-					letter-spacing: 10rpx;
+					letter-spacing: 3rpx;
 					line-height: 55rpx;
 					text-indent: 2rem;
 					padding: 10rpx;

@@ -34,12 +34,6 @@
         "text": "景点"
       },
       {
-        "pagePath": "pages/avoidBad/avoidBad",
-        "iconPath": "./static/img/avoid.png",
-        "selectedIconPath": "./static/img/avoidAc.png",
-        "text": "指南"
-      },
-      {
         "pagePath": "pages/message/message",
         "iconPath": "./static/img/mesg.png",
         "selectedIconPath": "./static/img/mesgAc.png",

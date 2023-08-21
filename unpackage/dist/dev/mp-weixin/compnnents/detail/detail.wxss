@@ -26,7 +26,6 @@
 /* 文章场景相关 */
 .detail.data-v-a6d5e4bb {
   height: 100vh;
-  background-color: white;
 }
 .detail .header.data-v-a6d5e4bb {
   position: relative;
@@ -36,6 +35,8 @@
   display: table;
   vertical-align: middle;
   margin: auto;
+  width: 100%;
+  background-color: white;
 }
 .detail .header .image-container .image.data-v-a6d5e4bb {
   max-width: 100%;
@@ -46,10 +47,7 @@
 }
 .detail .header .info.data-v-a6d5e4bb {
   width: 95%;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 50%);
+  margin: 5px auto 20rpx;
   box-sizing: border-box;
   background-color: white;
   border-radius: 40rpx;
@@ -99,10 +97,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.detail .box.data-v-a6d5e4bb {
-  height: 170rpx;
-  background-color: #f4f4f4;
-}
 .detail .container .add.data-v-a6d5e4bb {
   background-color: rgba(253, 195, 7, 0.6);
   position: fixed;
@@ -133,6 +127,7 @@
   letter-spacing: 10rpx;
 }
 .detail .container .des.data-v-a6d5e4bb {
+  background-color: white;
   text-indent: 2rem;
   padding: 10rpx 25rpx;
   line-height: 50rpx;

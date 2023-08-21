@@ -66,8 +66,7 @@
 		"color": "#333333",
 		"selectedColor": "#ffffff",
 		"backgroundColor": "#fdc307",
-		"list": [ 
-			{
+		"list": [{
 				"pagePath": "pages/foods/foods",
 				"iconPath": "./static/img/food.png",
 				"selectedIconPath": "./static/img/foodAc.png",
@@ -79,12 +78,12 @@
 				"selectedIconPath": "./static/img/senseAc.png",
 				"text": "景点"
 			},
-			{
-				"pagePath": "pages/avoidBad/avoidBad",
-				"iconPath": "./static/img/avoid.png",
-				"selectedIconPath": "./static/img/avoidAc.png",
-				"text": "指南"
-			},
+			// {
+			// 	"pagePath": "pages/avoidBad/avoidBad",
+			// 	"iconPath": "./static/img/avoid.png",
+			// 	"selectedIconPath": "./static/img/avoidAc.png",
+			// 	"text": "指南"
+			// },
 			{
 				"pagePath": "pages/message/message",
 				"iconPath": "./static/img/mesg.png",

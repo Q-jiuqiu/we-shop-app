@@ -141,5 +141,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   } : {});
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-7b7c7ea6"], ["__file", "/Users/heyuanpeng/Desktop/small-project/uni_modules/uview-plus/components/u-swiper-indicator/u-swiper-indicator.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-7b7c7ea6"], ["__file", "D:/学习/小程序/we-shop-app/uni_modules/uview-plus/components/u-swiper-indicator/u-swiper-indicator.vue"]]);
 wx.createComponent(Component);

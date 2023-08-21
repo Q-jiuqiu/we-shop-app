@@ -210,5 +210,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.s($options.wrapperStyle)
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-b5ccb67e"], ["__file", "/Users/heyuanpeng/Desktop/small-project/uni_modules/uview-plus/components/u-subsection/u-subsection.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-b5ccb67e"], ["__file", "D:/学习/小程序/we-shop-app/uni_modules/uview-plus/components/u-subsection/u-subsection.vue"]]);
 wx.createComponent(Component);

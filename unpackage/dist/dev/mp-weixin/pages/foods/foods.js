@@ -131,18 +131,19 @@ const _sfc_main = {
      */
     async setCity() {
       this.city = common_vendor.index.getStorageSync("location").city;
-      this.getCityInfo(city);
+      this.getCityInfo();
       this.isShowTwo = true;
     },
     /**
      * @description 城市改变
      */
-    handleCityChange({ city: city2 }) {
-      console.log("城市改变", city2);
-      if (this.city === city2) {
+    handleCityChange({ city }) {
+      console.log("城市改变", city);
+      if (this.city === city) {
         return;
       }
-      this.city = city2;
+      this.city = city;
+      this.getCityInfo();
       if (this.isShowTwo) {
         this.twoContent = [];
         this.twoCur = 1;
@@ -151,7 +152,6 @@ const _sfc_main = {
         this.threeContent = [];
         this.threeCur = 1;
         this.getThreeData({ threeType: this.threeType, city: this.city });
-        this.getCityInfo(city2);
       }
       this.$refs.customNav.handleInputClear();
     },
@@ -159,7 +159,7 @@ const _sfc_main = {
      * @description 根据城市名称获取城市详细数据
      * @param {string} city
      */
-    getCityInfo(city2) {
+    getCityInfo() {
       console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
@@ -396,7 +396,9 @@ const _sfc_main = {
                 if (distance === -1) {
                   item.distance = "--";
                 } else {
-                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(1);
+                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(
+                    1
+                  );
                 }
               });
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
@@ -496,5 +498,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     D: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/Desktop/small-project/pages/foods/foods.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "D:/学习/小程序/we-shop-app/pages/foods/foods.vue"]]);
 wx.createPage(MiniProgramPage);

@@ -1,30 +1,30 @@
 {
-    "description": "项目配置文件。",
-    "packOptions": {
-        "ignore": [],
-        "include": []
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": false,
+    "newFeature": true,
+    "bigPackageSizeSupport": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
     },
-    "setting": {
-        "urlCheck": false,
-        "es6": true,
-        "postcss": true,
-        "minified": false,
-        "newFeature": true,
-        "bigPackageSizeSupport": true,
-        "babelSetting": {
-            "ignore": [],
-            "disablePlugins": [],
-            "outputPath": ""
-        },
-        "condition": false
-    },
-    "compileType": "miniprogram",
-    "libVersion": "3.0.0",
-    "appid": "wxaf146906051c071b",
-    "projectname": "small-project",
-    "condition": {},
-    "editorSetting": {
-        "tabIndent": "insertSpaces",
-        "tabSize": 4
-    }
+    "condition": false
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.0.0",
+  "appid": "wx7ad1020c275cd58d",
+  "projectname": "small-project",
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
 }

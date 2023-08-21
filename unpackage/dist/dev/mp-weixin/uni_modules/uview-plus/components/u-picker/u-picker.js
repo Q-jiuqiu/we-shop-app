@@ -291,5 +291,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-91b05052"], ["__file", "/Users/heyuanpeng/Desktop/small-project/uni_modules/uview-plus/components/u-picker/u-picker.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-91b05052"], ["__file", "D:/学习/小程序/we-shop-app/uni_modules/uview-plus/components/u-picker/u-picker.vue"]]);
 wx.createComponent(Component);
