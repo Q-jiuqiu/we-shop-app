@@ -5,22 +5,22 @@
 		<div class="custom-nav" :style="{paddingTop:statusBarHeight,height:'44px'}">
 			<div class="container" :style="{width:surplusWidth}">
 				<div class="locate" @click="handlePickerShow">
-					<span class="city">{{city}}</span>
+					<span class="city">{{  city  }}</span>
 					<span class="iconfont icon-xiangxia"></span>
 				</div>
 				<div class="input-container">
 					<u-input v-if="showInput" prefixIcon="search" prefixIconStyle="color: #909399"
-						placeholder="请输入搜索关键词" border="surround" @change="$u.debounce(handleInputChange, 500)"
-						v-model="keyWord"></u-input>
+						placeholder="请输入搜索关键词" border="surround" v-model="keyWord"
+						@confirm="handleInputChange"></u-input>
+					<!-- @change="$u.debounce(handleInputChange, 500)" -->
 				</div>
 			</div>
 		</div>
 	</div>
-
 </template>
 
 <script>
-	import authorize from '@/utils/authorize.js'
+import authorize from '@/utils/authorize.js'
 
 	export default {
 		name: 'customNav',
@@ -43,13 +43,14 @@
 		},
 		created() {
 			uni.$on('locationSave', this.setCity)
+			uni.$on('locationChange', this.handleCityChange)
 			const cityList = uni.getStorageSync('cityList')
 			console.log('cityList:', cityList)
 			if (cityList) {
 				this.columns = cityList
 			} else {
 				uni.request({
-					url: 'http://8.137.19.141/pro/rest/dbs/find/type/v2',
+					url: 'https://www.aomue.cn//pro/rest/dbs/find/type/v2',
 					method: 'GET',
 					success: res => {
 						this.columns = [res.data.data]
@@ -65,8 +66,18 @@
 		},
 		beforeDestroy() {
 			uni.$off('locationSave', this.setCity)
+			uni.$off('locationChange', this.handleCityChange)
 		},
 		methods: {
+			// 城市改变
+			async handleCityChange({ city }) {
+				if (this.city === city) {
+					return
+				}
+				// 清空胶囊处输入框
+				this.handleInputClear()
+				this.city = city
+			},
 			// 设置城市名称
 			setCity() {
 				this.city = uni.getStorageSync('location').city
@@ -112,25 +123,25 @@
 </script>
 
 <style lang="scss" scoped>
-	.custom-nav {
-		background: #fdc307;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 11111;
-		width: 100%;
+.custom-nav {
+	background: #fdc307;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 11111;
+	width: 100%;
+	display: flex;
+	align-items: center;
+
+	.container {
 		display: flex;
 		align-items: center;
+		padding: 0 7px 0 9px;
+		box-sizing: border-box;
 
-		.container {
-			display: flex;
-			align-items: center;
-			padding: 0 7px 0 9px;
-			box-sizing: border-box;
-
-			.locate {
-				margin-right: 20rpx;
-			}
+		.locate {
+			margin-right: 20rpx;
+		}
 
 			.input-container {
 				flex: 1;

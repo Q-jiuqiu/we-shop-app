@@ -3,9 +3,12 @@
 		<CustomNav :showInput="false"></CustomNav>
 		<u-textarea v-model="value" placeholder="请输入留言内容" :maxlength="-1"></u-textarea>
 		<div class="buttons">
-			<u-button class="button1" type="primary" :plain="true" text="镂空" @click="handleInputClear">取消</u-button>
-			<u-button class="button2" type="primary" text="确定" :loading="btnLoading"
-				@click="handleSaveMessage"></u-button>
+			<div class="cancel button">
+				<u-button type="warning" :plain="true" text="镂空" @click="handleInputClear">取消</u-button>
+			</div>
+			<div class="confirm button">
+				<u-button type="warning" text="确定" :loading="btnLoading" @click="handleSaveMessage"></u-button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -32,7 +35,7 @@
 				if (this.value) {
 					this.btnLoading = true
 					uni.request({
-						url: 'http://8.137.19.141/pro/rest/dbs/add/leave/word',
+						url: 'https://www.aomue.cn/pro/rest/dbs/add/leave/word',
 						method: 'POST',
 						data: { leaveWord: this.value },
 						success: res => {
@@ -74,13 +77,18 @@
 		.buttons {
 			padding: 30rpx $uni-spacing-row-base;
 			display: flex;
+			justify-content: space-around;
 
-			.button1 {
-				margin-right: 5rpx;
+			.cancel {
+				width: 200rpx;
+
+				::v-deep .u-button--plain {
+					color: #f9ae3d;
+				}
 			}
 
-			.button2 {
-				margin-left: 5rpx;
+			.confirm {
+				width: 200rpx;
 			}
 		}
 	}

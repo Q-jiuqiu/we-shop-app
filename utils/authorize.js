@@ -79,20 +79,25 @@ function getLocationInfo(callBack) {
 					new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
 				qqmapsdk.reverseGeocoder({
 					location,
-					success(response) {
+					success: function(response) {
 						let info = response.result
-						console.log(info)
 						location.province = info.address_component.province
-						location.city = info.address_component.city
+						if (info.address_component.district.includes('区')) {
+							location.city = info.address_component.city
+						} else {
+							location.city = info.address_component.district
+						}
 						location.district = info.address_component.district
 						location.street = info.address_component.street
 						location.address = info.address
-
 						// 将当前位置存储至storage中
 						uni.setStorageSync('location', location)
 						uni.$emit('locationSave')
 						uni.hideLoading()
 						resolve(location)
+					},
+					fail: function(error) {
+						uni.showLoading({ title: '解析位置信息失败' })
 					},
 				})
 			},
@@ -106,4 +111,7 @@ function getLocationInfo(callBack) {
 	})
 }
 
-export default { authorizeAgain, getLocationInfo }
+export default {
+	authorizeAgain,
+	getLocationInfo
+}

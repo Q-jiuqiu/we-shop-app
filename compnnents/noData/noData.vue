@@ -4,13 +4,21 @@
 			<div class="content-icon">
 				<span class="iconfont icon-wushuju"></span>
 			</div>
-			<text class="content-tips">暂无数据</text>
+			<text class="content-tips">{{tips}}</text>
 		</div>
 	</div>
 </template>
 
 <script>
-	export default { name: 'NoData', }
+	export default {
+		name: 'NoData',
+		props: {
+			tips: {
+				type: String,
+				default: () => '暂无数据'
+			}
+		}
+	}
 </script>
 
 <style lang="scss" scoped>

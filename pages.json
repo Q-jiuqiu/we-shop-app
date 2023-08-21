@@ -45,7 +45,13 @@
 		{
 			"path": "pages/map/map",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "地图"
+			}
+		},
+		{
+			"path": "pages/cityInfo/cityInfo",
+			"style": {
+				"navigationBarTitleText": "城市信息"
 			}
 		}
 	],
@@ -58,16 +64,9 @@
 	},
 	"tabBar": {
 		"color": "#333333",
-		"selectedColor": "#3c9cff",
+		"selectedColor": "#ffffff",
 		"backgroundColor": "#fdc307",
-		"list": [
-			// {
-			// 	"pagePath": "pages/index/index",
-			// 	"iconPath": "./static/img/index.png",
-			// 	"selectedIconPath": "./static/img/indexAc.png",
-			// 	"text": "首页"
-			// },
-			{
+		"list": [{
 				"pagePath": "pages/foods/foods",
 				"iconPath": "./static/img/food.png",
 				"selectedIconPath": "./static/img/foodAc.png",
@@ -77,13 +76,13 @@
 				"pagePath": "pages/sense/sense",
 				"iconPath": "./static/img/sense.png",
 				"selectedIconPath": "./static/img/senseAc.png",
-				"text": "风景"
+				"text": "景点"
 			},
 			{
 				"pagePath": "pages/avoidBad/avoidBad",
 				"iconPath": "./static/img/avoid.png",
 				"selectedIconPath": "./static/img/avoidAc.png",
-				"text": "避坑"
+				"text": "指南"
 			},
 			{
 				"pagePath": "pages/message/message",
