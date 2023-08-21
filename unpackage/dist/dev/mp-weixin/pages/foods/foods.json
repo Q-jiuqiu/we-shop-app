@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "美食",
+  "usingComponents": {
+    "no-data": "../../compnnents/noData/noData",
+    "cus-select": "../../compnnents/select/select",
+    "custom-nav": "../../compnnents/customNav/customNav",
+    "custom-nav-back": "../../compnnents/customNavBack/customNavBack",
+    "detail": "../../compnnents/detail/detail"
+  }
+}

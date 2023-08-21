@@ -1,4 +1,6 @@
 {
-  "navigationBarTitleText": "uni-app",
-  "usingComponents": {}
+  "navigationBarTitleText": "",
+  "usingComponents": {
+    "custom-nav-back": "../../compnnents/customNavBack/customNavBack"
+  }
 }

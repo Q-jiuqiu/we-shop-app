@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "usingComponents": {
+    "no-data": "../noData/noData",
+    "u-sticky": "../../uni_modules/uview-plus/components/u-sticky/u-sticky",
+    "u-textarea": "../../uni_modules/uview-plus/components/u-textarea/u-textarea",
+    "u-button": "../../uni_modules/uview-plus/components/u-button/u-button",
+    "u-popup": "../../uni_modules/uview-plus/components/u-popup/u-popup"
+  }
+}

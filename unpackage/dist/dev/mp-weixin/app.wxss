@@ -1,3 +1,331 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 文字间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+@font-face {
+	font-family: "iconfont";
+	/* Project id 4063334 */
+	src: url('data:font/ttf;base64,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');
+}
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.icon-fanhui1:before {
+	content: "\e600";
+}
+.icon-fanhui:before {
+	content: "\e6ff";
+}
+.icon-xiangshang:before {
+	content: "\e636";
+}
+.icon-xiangxia:before {
+	content: "\e626";
+}
+.icon-dingwei1:before {
+	content: "\e8ae";
+}
+.icon-wushuju:before {
+	content: "\e642";
+}
+.icon-daohang:before {
+	content: "\e684";
+}
+.u-line-1 {
 
-	/*每个页面公共css */
-page{--status-bar-height:25px;--top-window-height:0px;--window-top:0px;--window-bottom:0px;--window-left:0px;--window-right:0px;--window-magin:0px}[data-c-h="true"]{display: none !important;}
+
+
+
+
+
+
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical !important;
+}
+.u-line-2 {
+
+
+
+
+
+
+
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical !important;
+}
+.u-line-3 {
+
+
+
+
+
+
+
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical !important;
+}
+.u-line-4 {
+
+
+
+
+
+
+
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical !important;
+}
+.u-line-5 {
+
+
+
+
+
+
+
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical !important;
+}
+.u-border {
+  border-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-style: solid;
+}
+.u-border-top {
+  border-top-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-top-style: solid;
+}
+.u-border-left {
+  border-left-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-left-style: solid;
+}
+.u-border-right {
+  border-right-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-right-style: solid;
+}
+.u-border-bottom {
+  border-bottom-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-bottom-style: solid;
+}
+.u-border-top-bottom {
+  border-top-width: 0.5px !important;
+  border-bottom-width: 0.5px !important;
+  border-color: #dadbde !important;
+  border-top-style: solid;
+  border-bottom-style: solid;
+}
+.u-reset-button {
+  padding: 0;
+  background-color: transparent;
+
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+.u-reset-button::after {
+  border: none;
+}
+.u-hover-class {
+  opacity: 0.7;
+}
+.u-primary-light {
+  color: #ecf5ff;
+}
+.u-warning-light {
+  color: #fdf6ec;
+}
+.u-success-light {
+  color: #f5fff0;
+}
+.u-error-light {
+  color: #fef0f0;
+}
+.u-info-light {
+  color: #f4f4f5;
+}
+.u-primary-light-bg {
+  background-color: #ecf5ff;
+}
+.u-warning-light-bg {
+  background-color: #fdf6ec;
+}
+.u-success-light-bg {
+  background-color: #f5fff0;
+}
+.u-error-light-bg {
+  background-color: #fef0f0;
+}
+.u-info-light-bg {
+  background-color: #f4f4f5;
+}
+.u-primary-dark {
+  color: #398ade;
+}
+.u-warning-dark {
+  color: #f1a532;
+}
+.u-success-dark {
+  color: #53c21d;
+}
+.u-error-dark {
+  color: #e45656;
+}
+.u-info-dark {
+  color: #767a82;
+}
+.u-primary-dark-bg {
+  background-color: #398ade;
+}
+.u-warning-dark-bg {
+  background-color: #f1a532;
+}
+.u-success-dark-bg {
+  background-color: #53c21d;
+}
+.u-error-dark-bg {
+  background-color: #e45656;
+}
+.u-info-dark-bg {
+  background-color: #767a82;
+}
+.u-primary-disabled {
+  color: #9acafc;
+}
+.u-warning-disabled {
+  color: #f9d39b;
+}
+.u-success-disabled {
+  color: #a9e08f;
+}
+.u-error-disabled {
+  color: #f7b2b2;
+}
+.u-info-disabled {
+  color: #c4c6c9;
+}
+.u-primary {
+  color: #3c9cff;
+}
+.u-warning {
+  color: #f9ae3d;
+}
+.u-success {
+  color: #5ac725;
+}
+.u-error {
+  color: #f56c6c;
+}
+.u-info {
+  color: #909399;
+}
+.u-primary-bg {
+  background-color: #3c9cff;
+}
+.u-warning-bg {
+  background-color: #f9ae3d;
+}
+.u-success-bg {
+  background-color: #5ac725;
+}
+.u-error-bg {
+  background-color: #f56c6c;
+}
+.u-info-bg {
+  background-color: #909399;
+}
+.u-main-color {
+  color: #303133;
+}
+.u-content-color {
+  color: #606266;
+}
+.u-tips-color {
+  color: #909193;
+}
+.u-light-color {
+  color: #c0c4cc;
+}
+.u-safe-area-inset-top {
+  padding-top: 0;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+.u-safe-area-inset-right {
+  padding-right: 0;
+  padding-right: constant(safe-area-inset-right);
+  padding-right: env(safe-area-inset-right);
+}
+.u-safe-area-inset-bottom {
+  padding-bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.u-safe-area-inset-left {
+  padding-left: 0;
+  padding-left: constant(safe-area-inset-left);
+  padding-left: env(safe-area-inset-left);
+}
+::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+  height: 0 !important;
+  -webkit-appearance: none;
+  background: transparent;
+}
+view {
+  font-size: 29rpx;
+}
+.more {
+  text-align: center;
+  color: #999;
+}page{--status-bar-height:25px;--top-window-height:0px;--window-top:0px;--window-bottom:0px;--window-left:0px;--window-right:0px;--window-magin:0px}[data-c-h="true"]{display: none !important;}

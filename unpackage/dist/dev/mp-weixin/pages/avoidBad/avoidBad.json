@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "避坑指南",
+  "usingComponents": {
+    "no-data": "../../compnnents/noData/noData",
+    "custom-nav": "../../compnnents/customNav/customNav",
+    "u-subsection": "../../uni_modules/uview-plus/components/u-subsection/u-subsection"
+  }
+}

@@ -1,13 +1,60 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/foods/foods",
+    "pages/sense/sense",
+    "pages/index/index",
+    "pages/avoidBad/avoidBad",
+    "pages/message/message",
+    "pages/detail/detail",
+    "pages/map/map",
+    "pages/cityInfo/cityInfo"
   ],
   "window": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#fdc307",
+    "backgroundColor": "#fdc307"
   },
-  "permission": {},
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#ffffff",
+    "backgroundColor": "#fdc307",
+    "list": [
+      {
+        "pagePath": "pages/foods/foods",
+        "iconPath": "./static/img/food.png",
+        "selectedIconPath": "./static/img/foodAc.png",
+        "text": "美食"
+      },
+      {
+        "pagePath": "pages/sense/sense",
+        "iconPath": "./static/img/sense.png",
+        "selectedIconPath": "./static/img/senseAc.png",
+        "text": "景点"
+      },
+      {
+        "pagePath": "pages/avoidBad/avoidBad",
+        "iconPath": "./static/img/avoid.png",
+        "selectedIconPath": "./static/img/avoidAc.png",
+        "text": "指南"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "iconPath": "./static/img/mesg.png",
+        "selectedIconPath": "./static/img/mesgAc.png",
+        "text": "留言"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "为了您更好的体验， 请确认获取您的位置"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
   "usingComponents": {}
 }

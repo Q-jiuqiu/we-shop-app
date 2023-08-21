@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "城市信息",
+  "usingComponents": {
+    "custom-nav-back": "../../compnnents/customNavBack/customNavBack",
+    "u-swiper": "../../uni_modules/uview-plus/components/u-swiper/u-swiper"
+  }
+}
