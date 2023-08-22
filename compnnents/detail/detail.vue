@@ -34,8 +34,7 @@
 				</div>
 			</u-sticky>
 			<!-- 简介 -->
-			<div class="des tab-container" v-show="activeTab === 0">
-				{{ detailInfo.remark }}
+			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
 			<!-- 推荐 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
