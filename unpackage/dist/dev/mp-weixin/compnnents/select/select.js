@@ -7,7 +7,7 @@ const _sfc_main = {
       type: Array,
       default: () => []
     },
-    selecName: {
+    selectName: {
       type: String,
       default: () => ""
     }
@@ -21,7 +21,7 @@ const _sfc_main = {
     };
   },
   created() {
-    console.log(this.selecName);
+    console.log(this.selectName);
     const query = common_vendor.index.createSelectorQuery().in(this);
     query.select(".select-item").boundingClientRect((rect) => {
       console.log("backTop:", rect);

@@ -21,7 +21,7 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		selecName: {
+		selectName: {
 			type: String,
 			default: () => ''
 		}
@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.selecName)
+		console.log(this.selectName)
 		// uni.$on('handleSelectShow', this.cancelContainer)
 		const query = uni.createSelectorQuery().in(this)
 		query
@@ -51,7 +51,7 @@ export default {
 	// },
 	methods: {
 		handleSelectClick() {
-			// uni.$emit('handleSelectShow', this.selecName)
+			// uni.$emit('handleSelectShow', this.selectName)
 			this.$emit('fixedTo', { height: '100vh', overflow: 'hidden' })
 			// 页面回到顶部
 			uni.pageScrollTo({
@@ -65,7 +65,7 @@ export default {
 		// cancelContainer(name) {
 		cancelContainer() {
 			// console.log('name', name)
-			// if (!name || this.selecName !== name) {
+			// if (!name || this.selectName !== name) {
 			this.$emit('fixedTo', {})
 			this.showMask = false
 			this.height = '0px'

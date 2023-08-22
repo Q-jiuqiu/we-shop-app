@@ -12,7 +12,9 @@ const _sfc_main = {
   components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
   data() {
     return {
-      imageList: ["https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"],
+      imageList: [
+        "https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"
+      ],
       cityDes: "",
       contentList: [],
       showDetail: false,
@@ -50,9 +52,10 @@ const _sfc_main = {
   },
   // 监听页面加载
   onLoad: async function() {
+    this.getCityInfo();
     const { content, last } = await this.getOneDatas();
     this.typeList.push(...content);
-    await utils_authorize.authorize.getLocationInfo();
+    await this.getThreeData({ city: this.city, type: "风景" });
   },
   created() {
     common_vendor.index.$on("locationChange", this.handleCityChange);
@@ -117,10 +120,11 @@ const _sfc_main = {
     },
     // 城市改变
     async handleCityChange({ city }) {
+      var _a;
       if (this.city === city) {
         return;
       }
-      this.$refs.customNav.handleInputClear();
+      (_a = this.$refs.customNav) == null ? void 0 : _a.handleInputClear();
       this.city = city;
       if (!this.isShowTwo) {
         this.threeContent = [];
@@ -141,7 +145,7 @@ const _sfc_main = {
      * @description 根据城市名称获取城市详细数据
      * @param {string} city
      */
-    getCityInfo(city) {
+    getCityInfo() {
       console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
@@ -373,7 +377,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     g: $data.showDetail
   }, $data.showDetail ? {
-    h: common_vendor.o(_ctx.hanldeDetialBack),
+    h: common_vendor.o($options.handleDetailBack),
     i: common_vendor.p({
       detailInfo: $data.detail
     })
@@ -383,13 +387,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     l: common_vendor.o($options.handleTypeSelect),
     m: common_vendor.o($options.handleFixStyle),
     n: common_vendor.p({
-      selecName: "type",
+      selectName: "type",
       options: $data.typeList
     }),
     o: common_vendor.o($options.handleSortSelect),
     p: common_vendor.o($options.handleFixStyle),
     q: common_vendor.p({
-      selecName: "sort",
+      selectName: "sort",
       options: $data.sortList
     }),
     r: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
