@@ -13,7 +13,7 @@ const _sfc_main = {
   },
   data() {
     return {
-      tabList: ["简介", "推荐", "评价"],
+      tabList: ["简介", "推荐", "主播", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -247,7 +247,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    r: common_vendor.t($props.detailInfo.remark),
+    r: $props.detailInfo.remark,
     s: $data.activeTab === 0,
     t: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
@@ -260,37 +260,38 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: $data.recommendData.length === 0
   }, $data.recommendData.length === 0 ? {} : {}, {
     w: $data.activeTab === 1,
-    x: common_vendor.f($data.commentData, (item, index, i0) => {
+    x: $data.activeTab === 2,
+    y: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    y: $data.commentData.length === 0
+    z: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    z: !$data.commentLast
+    A: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    A: $data.activeTab === 2,
-    B: common_vendor.o(($event) => $data.comment = $event),
-    C: common_vendor.p({
+    B: $data.activeTab === 3,
+    C: common_vendor.o(($event) => $data.comment = $event),
+    D: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    D: common_vendor.o($options.close),
-    E: common_vendor.p({
+    E: common_vendor.o($options.close),
+    F: common_vendor.p({
       type: "warning",
       plain: true,
-      text: "镂空"
+      text: "取消"
     }),
-    F: common_vendor.o($options.handleConfirm),
-    G: common_vendor.p({
+    G: common_vendor.o($options.handleConfirm),
+    H: common_vendor.p({
       type: "warning",
-      text: "确定"
+      text: "确认"
     }),
-    H: common_vendor.o($options.close),
-    I: common_vendor.p({
+    I: common_vendor.o($options.close),
+    J: common_vendor.p({
       show: $data.show
     })
   });

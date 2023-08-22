@@ -1,47 +1,45 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4063334 */
-  src: url('iconfont.woff2?t=1692625939303') format('woff2'),
-       url('iconfont.woff?t=1692625939303') format('woff'),
-       url('iconfont.ttf?t=1692625939303') format('truetype');
+	font-family: "iconfont";
+	/* Project id 4063334 */
+	src: url('~@/static/iconfont/iconfont.ttf');
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .icon-initiate:before {
-  content: "\e893";
+	content: "\e893";
 }
 
 .icon-fanhui1:before {
-  content: "\e600";
+	content: "\e600";
 }
 
 .icon-fanhui:before {
-  content: "\e6ff";
+	content: "\e6ff";
 }
 
 .icon-xiangshang:before {
-  content: "\e636";
+	content: "\e636";
 }
 
 .icon-xiangxia:before {
-  content: "\e626";
+	content: "\e626";
 }
 
 .icon-dingwei1:before {
-  content: "\e8ae";
+	content: "\e8ae";
 }
 
 .icon-wushuju:before {
-  content: "\e642";
+	content: "\e642";
 }
 
 .icon-daohang:before {
-  content: "\e684";
+	content: "\e684";
 }
-

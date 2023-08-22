@@ -280,12 +280,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     A: common_vendor.p({
       type: "warning",
       plain: true,
-      text: "镂空"
+      text: "取消"
     }),
     B: common_vendor.o($options.handleConfirm),
     C: common_vendor.p({
       type: "warning",
-      text: "确定"
+      text: "确认"
     }),
     D: common_vendor.o($options.close),
     E: common_vendor.p({

@@ -5,15 +5,21 @@
 				<img class="image" :src="detailInfo.image" />
 			</div>
 			<div class="info">
+				<!-- 标题 -->
 				<div class="title">{{ detailInfo.name }}</div>
-				<div class="open-time" v-if="detailInfo.workTime">
+				<!-- 营业时间/风景等级 -->
+				<div class="open-time info-item" v-if="detailInfo.workTime">
 					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
 					<div class="time">{{ detailInfo.workTime }}</div>
-
 					<div class="open" v-if="detailInfo.type === '风景'">景区等级：</div>
 					<div class="time" v-if="detailInfo.type === '风景'">{{ detailInfo.threeType }}</div>
 				</div>
-
+				<!-- 人均消费 -->
+				<div class="info-item consume">
+					<span class="label">人均消费：</span>
+					<span class="text">11￥</span>
+				</div>
+				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
 					<span class="iconfont icon-dingwei1"></span>
 					<span class="text">{{ detailInfo.addr }}</span>
@@ -49,8 +55,20 @@
 				</div>
 				<NoData v-if="recommendData.length === 0"></NoData>
 			</div>
+			<!-- 主播 -->
+			<div class="anchor tab-container" v-show="activeTab === 2">
+				<div class="anchor-item">
+					<div class="left">
+						<img class="image"
+							src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202107%2F19%2F20210719150601_4401e.thumb.1000_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1695301334&t=55126573fcc46d59419be207d803f58e">
+					</div>
+					<div class="right">
+						描述新消息
+					</div>
+				</div>
+			</div>
 			<!-- 评价 -->
-			<div class="comment tab-container" v-show="activeTab === 2">
+			<div class="comment tab-container" v-show="activeTab === 3">
 				<div class="comment-item" v-for="(item, index) in commentData" :key="index">
 					<div class="content">
 						<span class="content-span">{{ index + 1 }}、</span>
@@ -91,7 +109,7 @@
 		},
 		data() {
 			return {
-				tabList: ['简介', '推荐', '评价'],
+				tabList: ['简介', '推荐', '主播', '评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -329,7 +347,7 @@
 					padding: 15rpx 0 25rpx 0;
 				}
 
-				.open-time {
+				&-item {
 					display: flex;
 					justify-content: center;
 					font-weight: bold;
@@ -349,6 +367,10 @@
 						color: #ff7f24;
 						margin-right: 10rpx;
 					}
+				}
+
+				.consume {
+					font-weight: normal;
 				}
 
 				.adds {
@@ -405,11 +427,14 @@
 				}
 			}
 
+			.tab-container {
+				background-color: white;
+				padding: 10rpx 25rpx;
+			}
+
 			// 简介
 			.des {
-				background-color: white;
 				text-indent: 2rem;
-				padding: 10rpx 25rpx;
 				line-height: 50rpx;
 				font-size: 30rpx;
 				color: #333;
@@ -417,7 +442,6 @@
 
 			// 推荐
 			.recommend {
-				background-color: white;
 
 				&-item {
 					display: flex;
@@ -465,22 +489,33 @@
 				}
 			}
 
+			// 主播
+			.anchor {
+				&-item {
+					display: flex;
+					padding: 10rpx;
+
+					.image {
+						width: 100rpx;
+						height: 100rpx;
+						border-radius: 50%;
+					}
+
+					.right {
+						margin-left: 10rpx;
+					}
+				}
+			}
+
 			// 评价
 			.comment {
-				background-color: white;
-
 				&-item {
-					// margin-top: 20rpx;
-					//background-color: #f4f4f4;
 					padding: 20rpx 20rpx 0rpx;
-
-					.name {}
 
 					.content {
 						font-size: $uni-font-size-sm;
 						margin-top: $uni-spacing-row-base;
 
-						//color: $uni-text-color-grey;
 						.content-span {
 							margin-right: 5rpx;
 							font-size: 30rpx;

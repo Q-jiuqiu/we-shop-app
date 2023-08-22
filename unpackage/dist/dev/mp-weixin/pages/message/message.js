@@ -74,7 +74,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_vendor.p({
       type: "warning",
       plain: true,
-      text: "镂空"
+      text: "取消"
     }),
     f: common_vendor.o($options.handleSaveMessage),
     g: common_vendor.p({

@@ -63,23 +63,26 @@
   font-size: 32rpx;
   padding: 15rpx 0 25rpx 0;
 }
-.detail .header .info .open-time.data-v-a6d5e4bb {
+.detail .header .info-item.data-v-a6d5e4bb {
   display: flex;
   justify-content: center;
   font-weight: bold;
   border-bottom: #eee 1px solid;
   padding: 10rpx 0 10rpx 0;
 }
-.detail .header .info .open-time .open.data-v-a6d5e4bb {
+.detail .header .info-item .open.data-v-a6d5e4bb {
   color: #2fca32;
   margin-right: 10rpx;
 }
-.detail .header .info .open-time .time.data-v-a6d5e4bb {
+.detail .header .info-item .time.data-v-a6d5e4bb {
   margin-right: 10rpx;
 }
-.detail .header .info .open-time .close.data-v-a6d5e4bb {
+.detail .header .info-item .close.data-v-a6d5e4bb {
   color: #ff7f24;
   margin-right: 10rpx;
+}
+.detail .header .info .consume.data-v-a6d5e4bb {
+  font-weight: normal;
 }
 .detail .header .info .adds.data-v-a6d5e4bb {
   padding: 10rpx 0 10rpx 0;
@@ -126,16 +129,15 @@
   background-color: #fff;
   letter-spacing: 10rpx;
 }
-.detail .container .des.data-v-a6d5e4bb {
+.detail .container .tab-container.data-v-a6d5e4bb {
   background-color: white;
-  text-indent: 2rem;
   padding: 10rpx 25rpx;
+}
+.detail .container .des.data-v-a6d5e4bb {
+  text-indent: 2rem;
   line-height: 50rpx;
   font-size: 30rpx;
   color: #333;
-}
-.detail .container .recommend.data-v-a6d5e4bb {
-  background-color: white;
 }
 .detail .container .recommend-item.data-v-a6d5e4bb {
   display: flex;
@@ -176,8 +178,17 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
-.detail .container .comment.data-v-a6d5e4bb {
-  background-color: white;
+.detail .container .anchor-item.data-v-a6d5e4bb {
+  display: flex;
+  padding: 10rpx;
+}
+.detail .container .anchor-item .image.data-v-a6d5e4bb {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+.detail .container .anchor-item .right.data-v-a6d5e4bb {
+  margin-left: 10rpx;
 }
 .detail .container .comment-item.data-v-a6d5e4bb {
   padding: 20rpx 20rpx 0rpx;
