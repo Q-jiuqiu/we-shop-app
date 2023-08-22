@@ -4,7 +4,7 @@
 		<u-textarea v-model="value" placeholder="请输入留言内容" :maxlength="-1"></u-textarea>
 		<div class="buttons">
 			<div class="cancel button">
-				<u-button type="warning" :plain="true" text="镂空" @click="handleInputClear">取消</u-button>
+				<u-button type="warning" :plain="true" text="取消" @click="handleInputClear"></u-button>
 			</div>
 			<div class="confirm button">
 				<u-button type="warning" text="确定" :loading="btnLoading" @click="handleSaveMessage"></u-button>
