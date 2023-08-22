@@ -26,6 +26,7 @@ const _sfc_main = {
       typeList: [{ name: "全部景点" }],
       // 类型
       sortList: [{ name: "智能排序" }, { name: "热度" }, { name: "距离" }],
+      freeList: [{ name: "是否免费" }, { name: "付费" }, { name: "免费" }],
       twoCur: 1,
       // 二级数据类型的当前页
       // twoContent: [], // 二级数据
@@ -220,6 +221,13 @@ const _sfc_main = {
       }
     },
     /**
+     * @description 选中是否免费
+     * @param {number} index 
+     */
+    handleFreeSelect(index) {
+      console.log("Free", index, this.freeList[index]);
+    },
+    /**
      * @description 获取指定分类数据
      * @param {Object} item
      */
@@ -396,8 +404,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       selectName: "sort",
       options: $data.sortList
     }),
-    r: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
-    s: common_vendor.f($data.threeContent, (item, index, i0) => {
+    r: common_vendor.o($options.handleFreeSelect),
+    s: common_vendor.o($options.handleFixStyle),
+    t: common_vendor.p({
+      selectName: "sort",
+      options: $data.freeList
+    }),
+    v: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
+    w: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
@@ -407,15 +421,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         f: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };
     }),
-    t: $data.threeContent.length === 0
+    x: $data.threeContent.length === 0
   }, $data.threeContent.length === 0 ? {
-    v: common_vendor.p({
+    y: common_vendor.p({
       tips: "当前城市暂无数据"
     })
   } : {}, {
-    w: !$data.isThreeLastPage
+    z: !$data.isThreeLastPage
   }, !$data.isThreeLastPage ? {} : {}), {
-    x: common_vendor.s($data.fixedStyle)
+    A: common_vendor.s($data.fixedStyle)
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "D:/学习/小程序/we-shop-app/pages/sense/sense.vue"]]);

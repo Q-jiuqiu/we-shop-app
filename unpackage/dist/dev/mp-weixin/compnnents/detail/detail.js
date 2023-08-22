@@ -34,6 +34,9 @@ const _sfc_main = {
         height = parseInt(statusBarHeight);
       }
       return height + 44 + "px";
+    },
+    isSense() {
+      return detailInfo.type === "风景";
     }
   },
   created() {
@@ -220,10 +223,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       close: !$data.isOpen
     }),
     f: common_vendor.t($props.detailInfo.workTime),
-    g: $props.detailInfo.type === "风景"
-  }, $props.detailInfo.type === "风景" ? {} : {}, {
-    h: $props.detailInfo.type === "风景"
-  }, $props.detailInfo.type === "风景" ? {
+    g: $options.isSense
+  }, $options.isSense ? {} : {}, {
+    h: $options.isSense
+  }, $options.isSense ? {
     i: common_vendor.t($props.detailInfo.threeType)
   } : {}) : {}, {
     j: common_vendor.t($props.detailInfo.addr),
@@ -249,7 +252,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     r: $props.detailInfo.remark,
     s: $data.activeTab === 0,
-    t: common_vendor.f($data.recommendData, (item, index, i0) => {
+    t: $options.isSense
+  }, $options.isSense ? {} : common_vendor.e({
+    v: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -257,41 +262,41 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    v: $data.recommendData.length === 0
-  }, $data.recommendData.length === 0 ? {} : {}, {
-    w: $data.activeTab === 1,
-    x: $data.activeTab === 2,
-    y: common_vendor.f($data.commentData, (item, index, i0) => {
+    w: $data.recommendData.length === 0
+  }, $data.recommendData.length === 0 ? {} : {}), {
+    x: $data.activeTab === 1,
+    y: $data.activeTab === 2,
+    z: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    z: $data.commentData.length === 0
+    A: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    A: !$data.commentLast
+    B: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    B: $data.activeTab === 3,
-    C: common_vendor.o(($event) => $data.comment = $event),
-    D: common_vendor.p({
+    C: $data.activeTab === 3,
+    D: common_vendor.o(($event) => $data.comment = $event),
+    E: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    E: common_vendor.o($options.close),
-    F: common_vendor.p({
+    F: common_vendor.o($options.close),
+    G: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    G: common_vendor.o($options.handleConfirm),
-    H: common_vendor.p({
+    H: common_vendor.o($options.handleConfirm),
+    I: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    I: common_vendor.o($options.close),
-    J: common_vendor.p({
+    J: common_vendor.o($options.close),
+    K: common_vendor.p({
       show: $data.show
     })
   });

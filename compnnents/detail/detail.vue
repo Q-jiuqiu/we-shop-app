@@ -11,8 +11,8 @@
 				<div class="open-time info-item" v-if="detailInfo.workTime">
 					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
 					<div class="time">{{ detailInfo.workTime }}</div>
-					<div class="open" v-if="detailInfo.type === '风景'">景区等级：</div>
-					<div class="time" v-if="detailInfo.type === '风景'">{{ detailInfo.threeType }}</div>
+					<div class="open" v-if="isSense">景区等级：</div>
+					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
 				</div>
 				<!-- 人均消费 -->
 				<div class="info-item consume">
@@ -44,16 +44,21 @@
 			</div>
 			<!-- 推荐 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
-					<div class="left">
-						<img class="image" :src="item.image" />
+				<!-- 风景-推荐 -->
+				<div v-if="isSense"> </div>
+				<!-- 美食-推荐 -->
+				<div v-else>
+					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
+						<div class="left">
+							<img class="image" :src="item.image" />
+						</div>
+						<div class="right">
+							<div class="title">{{ item.foodName }}</div>
+							<div class="describe">{{ item.describe }}</div>
+						</div>
 					</div>
-					<div class="right">
-						<div class="title">{{ item.foodName }}</div>
-						<div class="describe">{{ item.describe }}</div>
-					</div>
+					<NoData v-if="recommendData.length === 0"></NoData>
 				</div>
-				<NoData v-if="recommendData.length === 0"></NoData>
 			</div>
 			<!-- 主播 -->
 			<div class="anchor tab-container" v-show="activeTab === 2">
@@ -131,6 +136,9 @@
 				}
 				// 44为自定义顶部导航栏高度
 				return height + 44 + 'px'
+			},
+			isSense() {
+				return detailInfo.type === '风景'
 			}
 		},
 		created() {

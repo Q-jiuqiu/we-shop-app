@@ -46,7 +46,10 @@
   align-items: center;
 }
 .sense .option .select .type.data-v-052ffb32 {
-  margin-right: 40rpx;
+  margin-right: 20rpx;
+}
+.sense .option .select .sort.data-v-052ffb32 {
+  margin-right: 20rpx;
 }
 .sense .option .map-button.data-v-052ffb32 {
   background-color: #fdc307;

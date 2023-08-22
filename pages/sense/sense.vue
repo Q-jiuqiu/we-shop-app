@@ -20,6 +20,10 @@
 						<CusSelect selectName="sort" :options="sortList" @select="handleSortSelect"
 							@fixedTo="handleFixStyle"></CusSelect>
 					</div>
+					<div class="free">
+						<CusSelect selectName="sort" :options="freeList" @select="handleFreeSelect"
+							@fixedTo="handleFixStyle"></CusSelect>
+					</div>
 				</div>
 				<div class="map-button" @click="handleShowMap">进入地图模式</div>
 			</div>
@@ -72,6 +76,7 @@
 				curPage: 1, // 当前的页数
 				typeList: [{ name: '全部景点' }], // 类型
 				sortList: [{ name: '智能排序' }, { name: '热度' }, { name: '距离' }],
+				freeList: [{ name: '是否免费' }, { name: '付费' }, { name: '免费' }],
 				twoCur: 1, // 二级数据类型的当前页
 				// twoContent: [], // 二级数据
 				// twoContentCopy: [],
@@ -103,7 +108,6 @@
 			// this.twoContentCopy = JSON.parse(JSON.stringify(this.twoContent))
 			// this.isTwoLastPage = last
 			// this.isShowTwo = true
-
 			// await authorize.getLocationInfo()
 		},
 
@@ -293,6 +297,13 @@
 				}
 			},
 			/**
+			 * @description 选中是否免费
+			 * @param {number} index 
+			 */
+			handleFreeSelect(index) {
+				console.log('Free', index, this.freeList[index])
+			},
+			/**
 			 * @description 获取指定分类数据
 			 * @param {Object} item
 			 */
@@ -456,7 +467,11 @@
 				align-items: center;
 
 				.type {
-					margin-right: 40rpx;
+					margin-right: 20rpx;
+				}
+
+				.sort {
+					margin-right: 20rpx;
 				}
 			}
 
