@@ -53,7 +53,7 @@
 							</div>
 						</div>
 						<div class="text-item dis">
-							<div class="value">{{ item.remark }}</div>
+							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 					</div>
 				</div>
@@ -542,7 +542,6 @@
 					&-item {
 						display: flex;
 						justify-content: space-between;
-						// margin-bottom: $uni-spacing-row-base;
 					}
 
 					.dis {
@@ -554,6 +553,10 @@
 							white-space: normal !important;
 							-webkit-line-clamp: 4;
 							-webkit-box-orient: vertical;
+						}
+
+						.line2{
+							-webkit-line-clamp: 2;
 						}
 					}
 
