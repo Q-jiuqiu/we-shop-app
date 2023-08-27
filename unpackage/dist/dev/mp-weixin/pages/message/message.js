@@ -74,7 +74,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_vendor.p({
       type: "warning",
       plain: true,
-      text: "镂空"
+      text: "取消"
     }),
     f: common_vendor.o($options.handleSaveMessage),
     g: common_vendor.p({
@@ -84,5 +84,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-4c1b26cf"], ["__file", "/Users/heyuanpeng/Desktop/small-project/pages/message/message.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-4c1b26cf"], ["__file", "D:/学习/小程序/we-shop-app/pages/message/message.vue"]]);
 wx.createPage(MiniProgramPage);

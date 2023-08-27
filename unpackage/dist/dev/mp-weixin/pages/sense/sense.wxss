@@ -46,11 +46,15 @@
   align-items: center;
 }
 .sense .option .select .type.data-v-052ffb32 {
-  margin-right: 40rpx;
+  margin-right: 20rpx;
+}
+.sense .option .select .sort.data-v-052ffb32 {
+  margin-right: 20rpx;
 }
 .sense .option .map-button.data-v-052ffb32 {
-  background-color: white;
-  padding: 8rpx;
+  background-color: #fdc307;
+  color: white;
+  padding: 10rpx;
   border-radius: 10rpx;
 }
 .sense .content.data-v-052ffb32 {

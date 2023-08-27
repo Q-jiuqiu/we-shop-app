@@ -12,7 +12,9 @@ const _sfc_main = {
   components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
   data() {
     return {
-      imageList: ["https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"],
+      imageList: [
+        "https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"
+      ],
       cityDes: "",
       contentList: [],
       showDetail: false,
@@ -24,6 +26,7 @@ const _sfc_main = {
       typeList: [{ name: "全部景点" }],
       // 类型
       sortList: [{ name: "智能排序" }, { name: "热度" }, { name: "距离" }],
+      freeList: [{ name: "是否免费" }, { name: "付费" }, { name: "免费" }],
       twoCur: 1,
       // 二级数据类型的当前页
       // twoContent: [], // 二级数据
@@ -50,9 +53,10 @@ const _sfc_main = {
   },
   // 监听页面加载
   onLoad: async function() {
+    this.getCityInfo();
     const { content, last } = await this.getOneDatas();
     this.typeList.push(...content);
-    await utils_authorize.authorize.getLocationInfo();
+    await this.getThreeData({ city: this.city, type: "风景" });
   },
   created() {
     common_vendor.index.$on("locationChange", this.handleCityChange);
@@ -117,10 +121,11 @@ const _sfc_main = {
     },
     // 城市改变
     async handleCityChange({ city }) {
+      var _a;
       if (this.city === city) {
         return;
       }
-      this.$refs.customNav.handleInputClear();
+      (_a = this.$refs.customNav) == null ? void 0 : _a.handleInputClear();
       this.city = city;
       if (!this.isShowTwo) {
         this.threeContent = [];
@@ -141,7 +146,7 @@ const _sfc_main = {
      * @description 根据城市名称获取城市详细数据
      * @param {string} city
      */
-    getCityInfo(city) {
+    getCityInfo() {
       console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
@@ -214,6 +219,13 @@ const _sfc_main = {
       } else {
         this.threeContent = this.threeContentCopy;
       }
+    },
+    /**
+     * @description 选中是否免费
+     * @param {number} index 
+     */
+    handleFreeSelect(index) {
+      console.log("Free", index, this.freeList[index]);
     },
     /**
      * @description 获取指定分类数据
@@ -373,7 +385,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, {
     g: $data.showDetail
   }, $data.showDetail ? {
-    h: common_vendor.o(_ctx.hanldeDetialBack),
+    h: common_vendor.o($options.handleDetailBack),
     i: common_vendor.p({
       detailInfo: $data.detail
     })
@@ -383,17 +395,23 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     l: common_vendor.o($options.handleTypeSelect),
     m: common_vendor.o($options.handleFixStyle),
     n: common_vendor.p({
-      selecName: "type",
+      selectName: "type",
       options: $data.typeList
     }),
     o: common_vendor.o($options.handleSortSelect),
     p: common_vendor.o($options.handleFixStyle),
     q: common_vendor.p({
-      selecName: "sort",
+      selectName: "sort",
       options: $data.sortList
     }),
-    r: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
-    s: common_vendor.f($data.threeContent, (item, index, i0) => {
+    r: common_vendor.o($options.handleFreeSelect),
+    s: common_vendor.o($options.handleFixStyle),
+    t: common_vendor.p({
+      selectName: "sort",
+      options: $data.freeList
+    }),
+    v: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
+    w: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
@@ -403,16 +421,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         f: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };
     }),
-    t: $data.threeContent.length === 0
+    x: $data.threeContent.length === 0
   }, $data.threeContent.length === 0 ? {
-    v: common_vendor.p({
+    y: common_vendor.p({
       tips: "当前城市暂无数据"
     })
   } : {}, {
-    w: !$data.isThreeLastPage
+    z: !$data.isThreeLastPage
   }, !$data.isThreeLastPage ? {} : {}), {
-    x: common_vendor.s($data.fixedStyle)
+    A: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "/Users/heyuanpeng/Desktop/small-project/pages/sense/sense.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "D:/学习/小程序/we-shop-app/pages/sense/sense.vue"]]);
 wx.createPage(MiniProgramPage);

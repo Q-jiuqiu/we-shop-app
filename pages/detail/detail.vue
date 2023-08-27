@@ -63,10 +63,10 @@
 			</div>
 			<div class="buttons">
 				<div class="cancel">
-					<u-button type="warning" :plain="true" text="镂空" @click="close">取消</u-button>
+					<u-button type="warning" :plain="true" text="取消" @click="close"></u-button>
 				</div>
 				<div class="confirm">
-					<u-button type="warning" text="确定" @click="handleConfirm">确认</u-button>
+					<u-button type="warning" text="确认" @click="handleConfirm"></u-button>
 				</div>
 			</div>
 		</u-popup>

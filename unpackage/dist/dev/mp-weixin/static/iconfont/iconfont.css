@@ -12,6 +12,10 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-initiate:before {
+	content: "\e893";
+}
+
 .icon-fanhui1:before {
 	content: "\e600";
 }

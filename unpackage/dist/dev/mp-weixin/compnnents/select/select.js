@@ -7,7 +7,7 @@ const _sfc_main = {
       type: Array,
       default: () => []
     },
-    selecName: {
+    selectName: {
       type: String,
       default: () => ""
     }
@@ -21,7 +21,7 @@ const _sfc_main = {
     };
   },
   created() {
-    console.log(this.selecName);
+    console.log(this.selectName);
     const query = common_vendor.index.createSelectorQuery().in(this);
     query.select(".select-item").boundingClientRect((rect) => {
       console.log("backTop:", rect);
@@ -74,5 +74,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: $data.height
   };
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-79700a36"], ["__file", "/Users/heyuanpeng/Desktop/small-project/compnnents/select/select.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-79700a36"], ["__file", "D:/学习/小程序/we-shop-app/compnnents/select/select.vue"]]);
 wx.createComponent(Component);
