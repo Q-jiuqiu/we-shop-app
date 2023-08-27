@@ -482,7 +482,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         a: item.image,
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
-        d: common_vendor.t(item.remark),
+        d: common_vendor.t(item.introduction),
         e: index,
         f: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };

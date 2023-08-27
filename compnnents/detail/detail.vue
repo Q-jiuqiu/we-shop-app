@@ -17,7 +17,7 @@
 				<!-- 人均消费 -->
 				<div class="info-item consume">
 					<span class="label">人均消费：</span>
-					<span class="text">11￥</span>
+					<span class="text">{{detailInfo.capitaConsumption}}￥</span>
 				</div>
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
@@ -138,7 +138,7 @@
 				return height + 44 + 'px'
 			},
 			isSense() {
-				return detailInfo.type === '风景'
+				return this.detailInfo.type === '风景'
 			}
 		},
 		created() {

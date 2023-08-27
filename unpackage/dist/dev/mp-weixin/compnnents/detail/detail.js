@@ -36,7 +36,7 @@ const _sfc_main = {
       return height + 44 + "px";
     },
     isSense() {
-      return detailInfo.type === "风景";
+      return this.detailInfo.type === "风景";
     }
   },
   created() {
@@ -229,12 +229,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $options.isSense ? {
     i: common_vendor.t($props.detailInfo.threeType)
   } : {}) : {}, {
-    j: common_vendor.t($props.detailInfo.addr),
-    k: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
-    l: $data.backTop,
-    m: $data.activeTab === 2,
-    n: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
-    o: common_vendor.f($data.tabList, (item, index, i0) => {
+    j: common_vendor.t($props.detailInfo.capitaConsumption),
+    k: common_vendor.t($props.detailInfo.addr),
+    l: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
+    m: $data.backTop,
+    n: $data.activeTab === 2,
+    o: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
+    p: common_vendor.f($data.tabList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -244,17 +245,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: common_vendor.o(($event) => $options.handleTabClick(index), index)
       };
     }),
-    p: common_vendor.sr("sticky", "a6d5e4bb-0"),
-    q: common_vendor.p({
+    q: common_vendor.sr("sticky", "a6d5e4bb-0"),
+    r: common_vendor.p({
       bgColor: "#fff",
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    r: $props.detailInfo.remark,
-    s: $data.activeTab === 0,
-    t: $options.isSense
+    s: $props.detailInfo.remark,
+    t: $data.activeTab === 0,
+    v: $options.isSense
   }, $options.isSense ? {} : common_vendor.e({
-    v: common_vendor.f($data.recommendData, (item, index, i0) => {
+    w: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -262,41 +263,41 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    w: $data.recommendData.length === 0
+    x: $data.recommendData.length === 0
   }, $data.recommendData.length === 0 ? {} : {}), {
-    x: $data.activeTab === 1,
-    y: $data.activeTab === 2,
-    z: common_vendor.f($data.commentData, (item, index, i0) => {
+    y: $data.activeTab === 1,
+    z: $data.activeTab === 2,
+    A: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    A: $data.commentData.length === 0
+    B: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    B: !$data.commentLast
+    C: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    C: $data.activeTab === 3,
-    D: common_vendor.o(($event) => $data.comment = $event),
-    E: common_vendor.p({
+    D: $data.activeTab === 3,
+    E: common_vendor.o(($event) => $data.comment = $event),
+    F: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    F: common_vendor.o($options.close),
-    G: common_vendor.p({
+    G: common_vendor.o($options.close),
+    H: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    H: common_vendor.o($options.handleConfirm),
-    I: common_vendor.p({
+    I: common_vendor.o($options.handleConfirm),
+    J: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    J: common_vendor.o($options.close),
-    K: common_vendor.p({
+    K: common_vendor.o($options.close),
+    L: common_vendor.p({
       show: $data.show
     })
   });
