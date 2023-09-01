@@ -70,7 +70,7 @@ import NoData from '@/compnnents/noData/noData.vue';
 import CusSelect from '@/compnnents/select/select.vue';
 import CustomNav from '@/compnnents/customNav/customNav.vue';
 import customNavBack from '@/compnnents/customNavBack/customNavBack.vue';
-import Detail from '@/pages/detail/detail.vue';
+import Detail from '@/compnnents/detail/detail.vue';
 import authorize from '@/utils/authorize.js';
 
 export default {

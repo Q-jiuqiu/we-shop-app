@@ -6,7 +6,7 @@ const NoData = () => "../../compnnents/noData/noData.js";
 const CusSelect = () => "../../compnnents/select/select.js";
 const CustomNav = () => "../../compnnents/customNav/customNav.js";
 const customNavBack = () => "../../compnnents/customNavBack/customNavBack.js";
-const Detail = () => "../detail/detail2.js";
+const Detail = () => "../../compnnents/detail/detail.js";
 const _sfc_main = {
   name: "FoodsIndex",
   components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
