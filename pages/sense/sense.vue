@@ -41,7 +41,11 @@
 							</div>
 						</div>
 						<div class="text-item dis">
-							<div class="value">{{ item.remark }}</div>
+							<div class="value">{{ item.introduction }}</div>
+						</div>
+							<div class="value capitaConsumption">
+							门票:<span class="capitaConsumption-text" v-if="item.capitaConsumption !== '0'">{{ item.capitaConsumption }}¥</span>
+							<span class="capitaConsumption-text" v-else>免费</span>
 						</div>
 					</div>
 				</div>
@@ -509,8 +513,7 @@
 
 					&-item {
 						display: flex;
-						justify-content: space-between;
-						// margin-bottom: $uni-spacing-row-base;
+						justify-content: space-between; 
 					}
 
 					.dis {
@@ -520,9 +523,15 @@
 							text-overflow: ellipsis;
 							word-wrap: break-word;
 							white-space: normal !important;
-							-webkit-line-clamp: 4;
+							-webkit-line-clamp: 3;
 							-webkit-box-orient: vertical;
 						}
+					}
+					.capitaConsumption {
+						height: 40rpx;
+						font-size: 12px;
+						text-align: right;
+						color: #fdc307;
 					}
 
 					.name {

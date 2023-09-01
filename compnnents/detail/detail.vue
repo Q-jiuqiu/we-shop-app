@@ -14,10 +14,14 @@
 					<div class="open" v-if="isSense">景区等级：</div>
 					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
 				</div>
-				<!-- 人均消费 -->
+				<!-- 排队情况 -->
 				<div class="info-item consume">
-					<span class="label">人均消费：</span>
-					<span class="text">{{detailInfo.capitaConsumption}}￥</span>
+					<span class="label">排队情况：</span>
+					<span class="text">{{detailInfo.environment}}</span>
+				</div>
+					<div class="info-item consume">
+					<span class="label">环境情况：</span>
+					<span class="text">{{detailInfo.queue}}</span>
 				</div>
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
@@ -28,15 +32,24 @@
 			</div>
 		</header>
 		<section class="container">
-			<button :style="{ top: backTop }" v-show="activeTab === 2" id="add" class="add" ref="add" type="default"
+			<button :style="{ top: backTop }" v-show="activeTab === 3" id="add" class="add" ref="add" type="default"
 				@click="addComment">我要评论</button>
 			<!-- 使tabs滑动浮动在最顶部 -->
 			<u-sticky ref="sticky" bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
-				<div class="tabs">
+				<!-- 风景 -->
+				<div class="tabs" v-if="isSense">
+					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabSenseList"
+						:key="index" @click="handleTabClick(index)">
+						{{ item }}
+					</div>
+				</div>
+					<!-- 美食 -->
+				<div class="tabs" v-else>
 					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabList"
 						:key="index" @click="handleTabClick(index)">
 						{{ item }}
 					</div>
+				
 				</div>
 			</u-sticky>
 			<!-- 简介 -->
@@ -45,7 +58,33 @@
 			<!-- 推荐 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
 				<!-- 风景-推荐 -->
-				<div v-if="isSense"> </div>
+				<div v-if="isSense && faresData.length" >
+				 <div class="anchor-item">
+						<div class="left">
+							成人票
+						</div>
+						<div class="right">
+							{{faresData[0].adult}}¥
+						</div>
+				 </div> 
+				 <div class="anchor-item">
+						<div class="left">
+							老人票
+						</div>
+						<div class="right">
+								{{faresData[0].elder}}¥
+						</div>
+				 </div> 
+				 <div class="anchor-item">
+						<div class="left">
+							儿童票
+						</div>
+						<div class="right">
+								{{faresData[0].child}}¥
+						</div>
+				 </div> 
+					
+				</div>
 				<!-- 美食-推荐 -->
 				<div v-else>
 					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
@@ -57,18 +96,18 @@
 							<div class="describe">{{ item.describe }}</div>
 						</div>
 					</div>
-					<NoData v-if="recommendData.length === 0"></NoData>
-				</div>
+					<NoData v-if="recommendData.length === 0"></NoData>	
+			</div>
 			</div>
 			<!-- 主播 -->
 			<div class="anchor tab-container" v-show="activeTab === 2">
-				<div class="anchor-item">
+				<div class="anchor-item" v-for="(item, index) in exploreShopData" :key="index">
 					<div class="left">
 						<img class="image"
-							src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202107%2F19%2F20210719150601_4401e.thumb.1000_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1695301334&t=55126573fcc46d59419be207d803f58e">
+							:src="item.headSculpture">
 					</div>
 					<div class="right">
-						描述新消息
+						{{item.name}}
 					</div>
 				</div>
 			</div>
@@ -115,6 +154,7 @@
 		data() {
 			return {
 				tabList: ['简介', '推荐', '主播', '评价'],
+				tabSenseList:['简介', '票价','主播','评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -123,7 +163,9 @@
 				show: false,
 				comment: '',
 				commentCur: 1,
-				commentLast: true // 评价数据是否是最后一页
+				commentLast: true,
+				exploreShopData:[]  ,
+				faresData:[]
 			}
 		},
 		computed: {
@@ -146,18 +188,16 @@
 		},
 		watch: {
 			activeTab(newVal) {
-				console.log('newVal', newVal)
-				if (newVal === 2) {
+				console.log('新的', newVal)
+				if (newVal === 3) {
 					this.$nextTick(() => {
-						setTimeout(() => {
-							console.log('this', this)
+						setTimeout(() => { 
 							const menuInfo = uni.getStorageSync('menuInfo')
 							const windowHeight = parseInt(menuInfo.windowHeight)
 							const query = uni.createSelectorQuery().in(this)
 							query
 								.select('#add')
-								.boundingClientRect(rect => {
-									console.log('backTop:', rect)
+								.boundingClientRect(rect => { 
 									const height = rect.height + 2
 									this.backTop = `${windowHeight - height}px`
 								})
@@ -170,8 +210,7 @@
 		methods: {
 			// 关闭新增评论弹框
 			close() {
-				this.show = false
-				console.log('close')
+				this.show = false 
 			},
 			// 判断是否在营业中 统一换算成24小时制
 			judgeOpen(openingHours) {
@@ -203,19 +242,62 @@
 			},
 			// 点击tab
 			handleTabClick(index) {
+				console.log(index);
 				this.activeTab = index
 				switch (index) {
 					// 推荐
 					case 1:
-						this.getRecommendData()
+						if(this.isSense){
+							this.getFaresData()
+						}else{
+							this.getRecommendData()		
+						}
+						
 						break
-						// 评价
-					case 2:
+					// 主播
+					case 2: 
+						this.getExploreShopData()
+						break
+					// 评价
+					case 3:
 						this.commentCur = 1
 						this.commentData = []
 						this.getCommentData()
-						break
+						break 
 				}
+			},
+				// 获取主播数据
+			getExploreShopData() {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+					method: 'GET',
+					success: res => {
+						const data = res.data.data
+						this.exploreShopData = data
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
+			},
+			// 获取票价数据
+			getFaresData() {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+					method: 'GET',
+					success: res => {
+						console.log(res.data);
+						const data = res.data.data
+						this.faresData = data
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
 			},
 			// 获取推荐数据
 			getRecommendData() {
@@ -357,8 +439,7 @@
 
 				&-item {
 					display: flex;
-					justify-content: center;
-					font-weight: bold;
+					justify-content: center; 
 					border-bottom: #eee 1px solid;
 					padding: 10rpx 0 10rpx 0;
 
@@ -378,7 +459,11 @@
 				}
 
 				.consume {
-					font-weight: normal;
+					font-size: 24rpx;
+    			
+					.label{
+						color: #ff7f24;
+					}
 				}
 
 				.adds {
@@ -426,7 +511,7 @@
 				padding: 0 40rpx;
 
 				&-item {
-					padding: 15rpx 20rpx 25rpx 20rpx;
+					padding: 15rpx 40rpx 25rpx;
 				}
 
 				.active {
@@ -502,6 +587,7 @@
 				&-item {
 					display: flex;
 					padding: 10rpx;
+					align-items: center;
 
 					.image {
 						width: 100rpx;
@@ -510,7 +596,7 @@
 					}
 
 					.right {
-						margin-left: 10rpx;
+						margin-left: 50rpx;
 					}
 				}
 			}

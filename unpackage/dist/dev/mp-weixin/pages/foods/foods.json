@@ -5,6 +5,6 @@
     "cus-select": "../../compnnents/select/select",
     "custom-nav": "../../compnnents/customNav/customNav",
     "custom-nav-back": "../../compnnents/customNavBack/customNavBack",
-    "detail": "../../compnnents/detail/detail"
+    "detail": "../detail/detail"
   }
 }

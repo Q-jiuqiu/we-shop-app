@@ -91,8 +91,14 @@
   text-overflow: ellipsis;
   word-wrap: break-word;
   white-space: normal !important;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.sense .content-item .text .capitaConsumption.data-v-052ffb32 {
+  height: 40rpx;
+  font-size: 12px;
+  text-align: right;
+  color: #fdc307;
 }
 .sense .content-item .text .name.data-v-052ffb32 {
   color: #b50a0e;

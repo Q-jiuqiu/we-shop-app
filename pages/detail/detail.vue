@@ -1,57 +1,122 @@
 <template>
 	<div class="detail">
-		<CustomNavBack></CustomNavBack>
 		<header class="header">
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image" />
 			</div>
 			<div class="info">
+				<!-- 标题 -->
 				<div class="title">{{ detailInfo.name }}</div>
-				<div class="open-time" v-if="detailInfo.workTime">
-					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中' : '歇业中' }}</div>
+				<!-- 营业时间/风景等级 -->
+				<div class="open-time info-item" v-if="detailInfo.workTime">
+					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
 					<div class="time">{{ detailInfo.workTime }}</div>
+					<div class="open" v-if="isSense">景区等级：</div>
+					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
 				</div>
+				<!-- 排队情况 -->
+				<div class="info-item consume">
+					<span class="label">排队情况：</span>
+					<span class="text">{{detailInfo.environment}}</span>
+				</div>
+					<div class="info-item consume">
+					<span class="label">环境情况：</span>
+					<span class="text">{{detailInfo.queue}}</span>
+				</div>
+				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
 					<span class="iconfont icon-dingwei1"></span>
 					<span class="text">{{ detailInfo.addr }}</span>
+					<span class="iconfont icon-initiate"></span>
 				</div>
 			</div>
 		</header>
-		<!-- 占位 -->
-		<div class="box"></div>
 		<section class="container">
-			<div id="add" class="add" ref="add" @click="addComment" :style="{ top: backTop }" v-show="activeTab === 2">
-				<span class="iconfont">+</span>
-			</div>
+			<button :style="{ top: backTop }" v-show="activeTab === 3" id="add" class="add" ref="add" type="default"
+				@click="addComment">我要评论</button>
 			<!-- 使tabs滑动浮动在最顶部 -->
-			<u-sticky bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
-				<div class="tabs">
-					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabList" :key="index" @click="handleTabClick(index)">
+			<u-sticky ref="sticky" bgColor="#fff" :offset-top="stickyTop" bg-color="#f4f4f4">
+				<!-- 风景 -->
+				<div class="tabs" v-if="isSense">
+					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabSenseList"
+						:key="index" @click="handleTabClick(index)">
 						{{ item }}
 					</div>
 				</div>
+					<!-- 美食 -->
+				<div class="tabs" v-else>
+					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabList"
+						:key="index" @click="handleTabClick(index)">
+						{{ item }}
+					</div>
+				
+				</div>
 			</u-sticky>
 			<!-- 简介 -->
-			<div class="des tab-container" v-show="activeTab === 0">
-				{{ detailInfo.remark }}
+			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
 			<!-- 推荐 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
+				<!-- 风景-推荐 -->
+					<div v-if="isSense && faresData.length" >
+				 <div class="anchor-item">
+						<div class="left">
+							成人票
+						</div>
+						<div class="right">
+							{{faresData[0].adult}}¥
+						</div>
+				 </div> 
+				 <div class="anchor-item">
+						<div class="left">
+							老人票
+						</div>
+						<div class="right">
+								{{faresData[0].elder}}¥
+						</div>
+				 </div> 
+				 <div class="anchor-item">
+						<div class="left">
+							儿童票
+						</div>
+						<div class="right">
+								{{faresData[0].child}}¥
+						</div>
+				 </div>  
+				</div>
+				<!-- 美食-推荐 -->
+				<div v-else>
+					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
+						<div class="left">
+							<img class="image" :src="item.image" />
+						</div>
+						<div class="right">
+							<div class="title">{{ item.foodName }}</div>
+							<div class="describe">{{ item.describe }}</div>
+						</div>
+					</div>
+					<NoData v-if="recommendData.length === 0"></NoData>	 
+				</div>
+			</div>
+			<!-- 主播 -->
+			<div class="anchor tab-container" v-show="activeTab === 2">
+				<div class="anchor-item" v-for="(item, index) in exploreShopData" :key="index">
 					<div class="left">
-						<img class="image" :src="item.image" />
+						<img class="image"
+							:src="item.headSculpture">
 					</div>
 					<div class="right">
-						<div class="title">{{ item.foodName }}</div>
-						<div class="describe">{{ item.describe }}</div>
+						{{item.name}}
 					</div>
 				</div>
-				<NoData v-if="recommendData.length === 0"></NoData>
 			</div>
 			<!-- 评价 -->
-			<div class="comment tab-container" v-show="activeTab === 2">
+			<div class="comment tab-container" v-show="activeTab === 3">
 				<div class="comment-item" v-for="(item, index) in commentData" :key="index">
-					<div class="content">{{ item.comment }}</div>
+					<div class="content">
+						<span class="content-span">{{ index + 1 }}、</span>
+						{{ item.comment }}
+					</div>
 				</div>
 				<NoData v-if="commentData.length === 0"></NoData>
 				<div class="more" v-if="!commentLast">上拉获取更多数据</div>
@@ -82,7 +147,8 @@ export default {
 	components: { NoData, CustomNavBack },
 	data() {
 		return {
-			tabList: ['简介', '推荐', '评价'],
+			tabList: ['简介', '推荐', '主播', '评价'],
+			tabSenseList:['简介', '票价','主播','评价'],
 			activeTab: 0,
 			recommendData: [],
 			commentData: [],
@@ -92,7 +158,8 @@ export default {
 			comment: '',
 			commentCur: 1,
 			commentLast: true, // 评价数据是否是最后一页
-			detailInfo: {}
+			detailInfo: {}, 
+			exploreShopData:[]  
 		}
 	},
 	computed: {
@@ -103,17 +170,14 @@ export default {
 			if (statusBarHeight) {
 				height = parseInt(statusBarHeight)
 			}
-
 			// 44为自定义顶部导航栏高度
 			return height + 44 + 'px'
 		}
 	},
-	onLoad: function () {
-		console.log('onload')
+	onLoad: function () { 
 		const eventChannel = this.getOpenerEventChannel()
 		this.eventChannel = eventChannel
-		eventChannel.on('detailPage', ({ detail }) => {
-			console.log(detail)
+		eventChannel.on('detailPage', ({ detail }) => { 
 			this.detailInfo = detail
 		})
 	},
@@ -123,19 +187,16 @@ export default {
 	},
 
 	watch: {
-		activeTab(newVal) {
-			console.log('newVal', newVal)
-			if (newVal === 2) {
+		activeTab(newVal) { 
+			if (newVal === 3) {
 				this.$nextTick(() => {
-					setTimeout(() => {
-						console.log('this', this)
+					setTimeout(() => { 
 						const menuInfo = uni.getStorageSync('menuInfo')
 						const windowHeight = parseInt(menuInfo.windowHeight)
 						const query = uni.createSelectorQuery().in(this)
 						query
 							.select('#add')
-							.boundingClientRect(rect => {
-								console.log('backTop:', rect)
+							.boundingClientRect(rect => { 
 								const height = rect.height + 2
 								this.backTop = `${windowHeight - height}px`
 							})
@@ -150,7 +211,6 @@ export default {
 		// 关闭新增评论弹框
 		close() {
 			this.show = false
-			console.log('close')
 		},
 		// 判断是否在营业中 统一换算成24小时制
 		judgeOpen(openingHours) {
@@ -171,7 +231,6 @@ export default {
 
 				if (startTimes[0] * 1 > endTimes[0] * 1) {
 					// 说明是到第二天
-					console.log('第二天')
 					return !this.judgeOpen(endTime + '-' + startTime)
 				}
 
@@ -183,28 +242,34 @@ export default {
 		// 点击tab
 		handleTabClick(index) {
 			this.activeTab = index
+			console.log(index);
 			switch (index) {
 				// 推荐
 				case 1:
 					this.getRecommendData()
 					break
+				// 主播
+				case 2: 
+					this.getExploreShopData()
+					break
 				// 评价
-				case 2:
+				case 3:
 					this.commentCur = 1
 					this.commentData = []
 					this.getCommentData()
 					break
+				
 			}
 		},
-		// 获取推荐数据
-		getRecommendData() {
+		// 获取主播数据
+		getExploreShopData() {
 			uni.showLoading({ title: '获取数据中' })
 			uni.request({
-				url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
+				url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
 				method: 'GET',
 				success: res => {
-					console.log(res)
 					const data = res.data.data
+					this.exploreShopData = data
 					uni.hideLoading()
 				},
 				fail: err => {
@@ -212,6 +277,22 @@ export default {
 				}
 			})
 		},
+		// 获取推荐数据
+			getRecommendData() {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
+					method: 'GET',
+					success: res => {
+						const data = res.data.data
+						this.recommendData = data
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
+			},
 		// 增加留言
 		addComment() {
 			console.log('增加留言')
@@ -292,194 +373,251 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail {
-	min-height: 100vh;
-	font-size: $uni-font-size-base;
-	background-color: white;
+	.detail {
+		height: 100vh;
 
-	.header {
-		position: relative;
+		.header {
+			position: relative;
 
-		.image-container {
-			height: $uni-img-size-height-base;
-
-			.image {
+			.image-container {
+				height: $uni-img-size-height-base;
+				display: table;
+				vertical-align: middle;
+				margin: auto;
 				width: 100%;
-				height: 100%;
-			}
-		}
-
-		.info {
-			width: 95%;
-			position: absolute;
-			bottom: 0;
-			left: 50%;
-			transform: translate(-50%, 50%);
-			box-sizing: border-box;
-			background-color: white;
-			border-radius: 40rpx;
-			padding: $uni-spacing-row-base 30rpx;
-			z-index: 1111;
-			font-size: $uni-font-size-base;
-
-			.title {
-				font-weight: bold;
-				margin-bottom: $uni-spacing-row-base;
-				text-align: center;
-				border-bottom: #eee 1px solid;
-				font-size: $uni-font-size-lg;
-				padding: 15rpx 0 25rpx 0;
-			}
-
-			.open-time {
-				display: flex;
-				justify-content: center;
-				font-weight: bold;
-				border-bottom: #eee 1px solid;
-				padding: 10rpx 0 10rpx 0;
-
-				.open {
-					color: #2fca32;
-					margin-right: 10rpx;
-				}
-
-				.close {
-					color: #ff7f24;
-					margin-right: 10rpx;
-				}
-			}
-
-			.adds {
-				padding: 10rpx 0 10rpx 0;
-				display: flex;
-				align-items: center;
-
-				.iconfont {
-					margin-right: $uni-spacing-row-base;
-					font-size: 40rpx;
-				}
-
-				.text {
-					font-size: $uni-font-size-base;
-					flex: 1;
-					@include ellipsis();
-				}
-			}
-		}
-	}
-
-	.box {
-		height: 170rpx;
-		background-color: #f4f4f4;
-	}
-
-	.container {
-		.add {
-			background-color: rgba(253, 195, 7, 0.6);
-			position: fixed;
-			right: 10px;
-			text-align: center;
-			border-radius: 50%;
-			width: 100rpx;
-			height: 100rpx;
-
-			.iconfont {
-				color: white;
-				font-size: 60rpx;
-				line-height: 100rpx;
-				font-weight: bold;
-			}
-		}
-
-		.tabs {
-			display: flex;
-			justify-content: space-around;
-			padding: 0 40rpx;
-
-			&-item {
-				padding: 15rpx 20rpx 25rpx 20rpx;
-			}
-
-			.active {
-				background-color: #fff;
-				letter-spacing: 10rpx;
-			}
-		}
-
-		// 简介
-		.des {
-			text-indent: 2rem;
-			padding: 10rpx 25rpx;
-		}
-
-		// 推荐
-		.recommend {
-			background-color: white;
-
-			&-item {
-				display: flex;
-				align-items: center;
-				padding: 20rpx;
-				height: 225rpx;
-				margin-top: 20rpx;
-				letter-spacing: $letter-spacing-base;
-				background-color: #f4f4f4;
+				background-color: white;
 
 				.image {
-					width: 200rpx;
-					height: 200rpx;
-					border-radius: 20rpx;
+					max-width: 100%;
+					max-height: 100%;
+					display: block;
+					margin: auto;
+					object-fit: contain;
+				}
+			}
+
+			.info {
+				width: 95%;
+				margin: 5px auto 20rpx;
+				box-sizing: border-box;
+				background-color: white;
+				border-radius: 40rpx;
+				padding: $uni-spacing-row-base 30rpx;
+				z-index: 1111;
+				font-size: $uni-font-size-base;
+
+				.title {
+					font-weight: bold;
+					margin-bottom: $uni-spacing-row-base;
+					text-align: center;
+					border-bottom: #eee 1px solid;
+					font-size: $uni-font-size-lg;
+					padding: 15rpx 0 25rpx 0;
 				}
 
-				.right {
-					width: calc(100% - 200rpx);
-					padding-left: $uni-spacing-row-base;
-					height: 100%;
+				&-item {
+					display: flex;
+					justify-content: center; 
+					border-bottom: #eee 1px solid;
+					padding: 10rpx 0 10rpx 0;
 
-					.title {
-						color: #c50608;
+					.open {
+						color: #2fca32;
+						margin-right: 10rpx;
+					}
+
+					.time {
+						margin-right: 10rpx;
+					}
+
+					.close {
+						color: #ff7f24;
+						margin-right: 10rpx;
+					}
+				}
+
+				.consume {
+					font-size: 24rpx;
+    			
+					.label{
+						color: #ff7f24;
+					}
+				}
+
+				.adds {
+					padding: 10rpx 0 10rpx 0;
+					display: flex;
+					align-items: center;
+
+					.iconfont {
+						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;
 					}
 
-					&-item {
-						display: flex;
-						justify-content: space-between;
-						margin-bottom: $uni-spacing-row-base;
-					}
-
-					.describe {
-						margin-left: 5rpx;
-						display: -webkit-box;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						word-wrap: break-word;
-						white-space: normal !important;
-						-webkit-line-clamp: 4;
-						-webkit-box-orient: vertical;
+					.text {
+						font-size: $uni-font-size-base;
+						flex: 1;
+						@include ellipsis();
 					}
 				}
 			}
 		}
 
-		// 评价
-		.commit {
-			background-color: white;
+		.container {
+			.add {
+				background-color: rgba(253, 195, 7, 0.6);
+				position: fixed;
+				right: 10px;
+				width: 140rpx;
+				height: 50rpx;
+				font-size: 20rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 
-			&-item {
-				margin-top: 20rpx;
-				background-color: #f4f4f4;
-				padding: 20rpx 20rpx;
+				.iconfont {
+					color: white;
+					font-size: 60rpx;
+					line-height: 100rpx;
+					font-weight: bold;
+				}
+			}
 
-				.name {
+			.tabs {
+				display: flex;
+				justify-content: space-around;
+				padding: 0 40rpx;
+
+				&-item {
+					padding: 15rpx 40rpx 25rpx;
 				}
 
-				.content {
-					font-size: $uni-font-size-sm;
-					margin-top: $uni-spacing-row-base;
-					color: $uni-text-color-grey;
+				.active {
+					background-color: #fff;
+					letter-spacing: 10rpx;
 				}
+			}
+
+			.tab-container {
+				background-color: white;
+				padding: 10rpx 25rpx;
+			}
+
+			// 简介
+			.des {
+				text-indent: 2rem;
+				line-height: 50rpx;
+				font-size: 30rpx;
+				color: #333;
+			}
+
+			// 推荐
+			.recommend {
+
+				&-item {
+					display: flex;
+					align-items: center;
+					padding: 20rpx;
+					height: 225rpx;
+					margin-top: 20rpx;
+					letter-spacing: $letter-spacing-base;
+					background-color: #f4f4f4;
+
+					.image {
+						width: 200rpx;
+						height: 200rpx;
+						border-radius: 20rpx;
+					}
+
+					.right {
+						width: calc(100% - 200rpx);
+						padding-left: $uni-spacing-row-base;
+						height: 100%;
+
+						.title {
+							font-size: 30rpx;
+							color: #b50a0e;
+							font-weight: bold;
+						}
+
+						&-item {
+							display: flex;
+							justify-content: space-between;
+							margin-bottom: $uni-spacing-row-base;
+						}
+
+						.describe {
+							margin-left: 5rpx;
+							display: -webkit-box;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							word-wrap: break-word;
+							white-space: normal !important;
+							-webkit-line-clamp: 4;
+							-webkit-box-orient: vertical;
+						}
+					}
+				}
+			}
+
+			// 主播
+			.anchor {
+				&-item {
+					display: flex;
+					padding: 10rpx;
+					align-items: center;
+
+					.image {
+						width: 100rpx;
+						height: 100rpx;
+						border-radius: 50%;
+					}
+
+					.right {
+						margin-left: 50rpx;
+					}
+				}
+			}
+
+			// 评价
+			.comment {
+				&-item {
+					padding: 20rpx 20rpx 0rpx;
+
+					.content {
+						font-size: $uni-font-size-sm;
+						margin-top: $uni-spacing-row-base;
+
+						.content-span {
+							margin-right: 5rpx;
+							font-size: 30rpx;
+							color: #ff7f24;
+						}
+					}
+				}
+			}
+		}
+
+		.textarea {
+			margin-top: 20rpx;
+		}
+
+		.buttons {
+			padding: 30rpx $uni-spacing-row-base;
+			display: flex;
+			justify-content: space-around;
+
+			.cancel {
+				width: 200rpx;
+
+				::v-deep .u-button--plain {
+					color: #f9ae3d !important;
+				}
+			}
+
+			.confirm {
+				width: 200rpx;
 			}
 		}
 	}
-}
 </style>
