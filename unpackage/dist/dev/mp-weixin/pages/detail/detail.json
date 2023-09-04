@@ -2,7 +2,6 @@
   "navigationBarTitleText": "详情",
   "usingComponents": {
     "no-data": "../../compnnents/noData/noData",
-    "custom-nav-back": "../../compnnents/customNavBack/customNavBack",
     "u-sticky": "../../uni_modules/uview-plus/components/u-sticky/u-sticky",
     "u-textarea": "../../uni_modules/uview-plus/components/u-textarea/u-textarea",
     "u-button": "../../uni_modules/uview-plus/components/u-button/u-button",

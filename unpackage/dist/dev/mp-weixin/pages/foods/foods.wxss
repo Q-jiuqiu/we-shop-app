@@ -82,22 +82,31 @@
   display: flex;
   justify-content: space-between;
 }
-.foods .content-item .text .dis .value.data-v-31f9c6b2 {
+.foods .content-item .text .dis.data-v-31f9c6b2 {
+  height: 120rpx;
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
   word-wrap: break-word;
   white-space: normal !important;
-  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
 .foods .content-item .text .dis .line2.data-v-31f9c6b2 {
   -webkit-line-clamp: 2;
+  font-size: 12px;
+  color: #999;
+}
+.foods .content-item .text .capitaConsumption.data-v-31f9c6b2 {
+  height: 40rpx;
+  font-size: 12px;
+  text-align: right;
+  color: #fdc307;
 }
 .foods .content-item .text .name.data-v-31f9c6b2 {
   font-size: 40rpx;
   color: #b50a0e;
   font-weight: bold;
+  height: 40rpx;
 }
 .foods .content-item .text .name .value.data-v-31f9c6b2 {
   overflow: hidden;

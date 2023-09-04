@@ -7,7 +7,8 @@ const _sfc_main = {
   components: { NoData, CustomNavBack },
   data() {
     return {
-      tabList: ["简介", "推荐", "评价"],
+      tabList: ["简介", "推荐", "探店", "评价"],
+      tabSenseList: ["简介", "票价", "探店", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -18,7 +19,8 @@ const _sfc_main = {
       commentCur: 1,
       commentLast: true,
       // 评价数据是否是最后一页
-      detailInfo: {}
+      detailInfo: {},
+      exploreShopData: []
     };
   },
   computed: {
@@ -32,11 +34,9 @@ const _sfc_main = {
     }
   },
   onLoad: function() {
-    console.log("onload");
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("detailPage", ({ detail }) => {
-      console.log(detail);
       this.detailInfo = detail;
     });
   },
@@ -45,16 +45,13 @@ const _sfc_main = {
   },
   watch: {
     activeTab(newVal) {
-      console.log("newVal", newVal);
-      if (newVal === 2) {
+      if (newVal === 3) {
         this.$nextTick(() => {
           setTimeout(() => {
-            console.log("this", this);
             const menuInfo = common_vendor.index.getStorageSync("menuInfo");
             const windowHeight = parseInt(menuInfo.windowHeight);
             const query = common_vendor.index.createSelectorQuery().in(this);
             query.select("#add").boundingClientRect((rect) => {
-              console.log("backTop:", rect);
               const height = rect.height + 2;
               this.backTop = `${windowHeight - height}px`;
             }).exec();
@@ -67,7 +64,6 @@ const _sfc_main = {
     // 关闭新增评论弹框
     close() {
       this.show = false;
-      console.log("close");
     },
     // 判断是否在营业中 统一换算成24小时制
     judgeOpen(openingHours) {
@@ -83,7 +79,6 @@ const _sfc_main = {
         const start = date.setHours(startTimes[0], startTimes[1]);
         const end = date.setHours(endTimes[0], endTimes[1]);
         if (startTimes[0] * 1 > endTimes[0] * 1) {
-          console.log("第二天");
           return !this.judgeOpen(endTime + "-" + startTime);
         }
         return start < dqdq && dqdq < end;
@@ -94,16 +89,36 @@ const _sfc_main = {
     // 点击tab
     handleTabClick(index) {
       this.activeTab = index;
+      console.log(index);
       switch (index) {
         case 1:
           this.getRecommendData();
           break;
         case 2:
+          this.getExploreShopData();
+          break;
+        case 3:
           this.commentCur = 1;
           this.commentData = [];
           this.getCommentData();
           break;
       }
+    },
+    // 获取主播数据
+    getExploreShopData() {
+      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.request({
+        url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+        method: "GET",
+        success: (res) => {
+          const data = res.data.data;
+          this.exploreShopData = data;
+          common_vendor.index.hideLoading();
+        },
+        fail: (err) => {
+          console.log(err);
+        }
+      });
     },
     // 获取推荐数据
     getRecommendData() {
@@ -112,8 +127,8 @@ const _sfc_main = {
         url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
-          console.log(res);
-          res.data.data;
+          const data = res.data.data;
+          this.recommendData = data;
           common_vendor.index.hideLoading();
         },
         fail: (err) => {
@@ -199,13 +214,12 @@ const _sfc_main = {
   }
 };
 if (!Array) {
-  const _component_CustomNavBack = common_vendor.resolveComponent("CustomNavBack");
   const _easycom_u_sticky2 = common_vendor.resolveComponent("u-sticky");
   const _component_NoData = common_vendor.resolveComponent("NoData");
   const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
   const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
   const _easycom_u_popup2 = common_vendor.resolveComponent("u-popup");
-  (_component_CustomNavBack + _easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
+  (_easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
 }
 const _easycom_u_sticky = () => "../../uni_modules/uview-plus/components/u-sticky/u-sticky.js";
 const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
@@ -219,19 +233,28 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: $data.detailInfo.image,
     b: common_vendor.t($data.detailInfo.name),
     c: $data.detailInfo.workTime
-  }, $data.detailInfo.workTime ? {
-    d: common_vendor.t($data.isOpen ? "营业中" : "歇业中"),
+  }, $data.detailInfo.workTime ? common_vendor.e({
+    d: common_vendor.t($data.isOpen ? "营业中：" : "歇业中："),
     e: common_vendor.n({
       close: !$data.isOpen
     }),
-    f: common_vendor.t($data.detailInfo.workTime)
-  } : {}, {
-    g: common_vendor.t($data.detailInfo.addr),
-    h: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
-    i: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
-    j: $data.backTop,
-    k: $data.activeTab === 2,
-    l: common_vendor.f($data.tabList, (item, index, i0) => {
+    f: common_vendor.t($data.detailInfo.workTime),
+    g: _ctx.isSense
+  }, _ctx.isSense ? {} : {}, {
+    h: _ctx.isSense
+  }, _ctx.isSense ? {
+    i: common_vendor.t($data.detailInfo.threeType)
+  } : {}) : {}, {
+    j: common_vendor.t($data.detailInfo.environment),
+    k: common_vendor.t($data.detailInfo.queue),
+    l: common_vendor.t($data.detailInfo.addr),
+    m: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
+    n: $data.backTop,
+    o: $data.activeTab === 3,
+    p: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
+    q: _ctx.isSense
+  }, _ctx.isSense ? {
+    r: common_vendor.f($data.tabSenseList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -240,15 +263,34 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         c: index,
         d: common_vendor.o(($event) => $options.handleTabClick(index), index)
       };
-    }),
-    m: common_vendor.p({
+    })
+  } : {
+    s: common_vendor.f($data.tabList, (item, index, i0) => {
+      return {
+        a: common_vendor.t(item),
+        b: common_vendor.n({
+          active: $data.activeTab === index
+        }),
+        c: index,
+        d: common_vendor.o(($event) => $options.handleTabClick(index), index)
+      };
+    })
+  }, {
+    t: common_vendor.sr("sticky", "eca06f3c-0"),
+    v: common_vendor.p({
       bgColor: "#fff",
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    n: common_vendor.t($data.detailInfo.remark),
-    o: $data.activeTab === 0,
-    p: common_vendor.f($data.recommendData, (item, index, i0) => {
+    w: $data.detailInfo.remark,
+    x: $data.activeTab === 0,
+    y: _ctx.isSense && _ctx.faresData.length
+  }, _ctx.isSense && _ctx.faresData.length ? {
+    z: common_vendor.t(_ctx.faresData[0].adult),
+    A: common_vendor.t(_ctx.faresData[0].elder),
+    B: common_vendor.t(_ctx.faresData[0].child)
+  } : common_vendor.e({
+    C: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -256,42 +298,51 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    q: $data.recommendData.length === 0
-  }, $data.recommendData.length === 0 ? {} : {}, {
-    r: $data.activeTab === 1,
-    s: common_vendor.f($data.commentData, (item, index, i0) => {
+    D: $data.recommendData.length === 0
+  }, $data.recommendData.length === 0 ? {} : {}), {
+    E: $data.activeTab === 1,
+    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
-        a: common_vendor.t(item.comment),
-        b: index
+        a: item.headSculpture,
+        b: common_vendor.t(item.name),
+        c: index
       };
     }),
-    t: $data.commentData.length === 0
+    G: $data.activeTab === 2,
+    H: common_vendor.f($data.commentData, (item, index, i0) => {
+      return {
+        a: common_vendor.t(index + 1),
+        b: common_vendor.t(item.comment),
+        c: index
+      };
+    }),
+    I: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    v: !$data.commentLast
+    J: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    w: $data.activeTab === 2,
-    x: common_vendor.o(($event) => $data.comment = $event),
-    y: common_vendor.p({
+    K: $data.activeTab === 3,
+    L: common_vendor.o(($event) => $data.comment = $event),
+    M: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    z: common_vendor.o($options.close),
-    A: common_vendor.p({
+    N: common_vendor.o($options.close),
+    O: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    B: common_vendor.o($options.handleConfirm),
-    C: common_vendor.p({
+    P: common_vendor.o($options.handleConfirm),
+    Q: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    D: common_vendor.o($options.close),
-    E: common_vendor.p({
+    R: common_vendor.o($options.close),
+    S: common_vendor.p({
       show: $data.show
     })
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "D:/学习/小程序/we-shop-app/pages/detail/detail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/detail/detail.vue"]]);
 wx.createPage(MiniProgramPage);

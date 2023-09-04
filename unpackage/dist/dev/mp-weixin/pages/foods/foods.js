@@ -396,9 +396,7 @@ const _sfc_main = {
                 if (distance === -1) {
                   item.distance = "--";
                 } else {
-                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(
-                    1
-                  );
+                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(1);
                 }
               });
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
@@ -483,8 +481,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),
-        e: index,
-        f: common_vendor.o(($event) => $options.handleDetailShow(item), index)
+        e: common_vendor.t(item.capitaConsumption),
+        f: index,
+        g: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };
     }),
     A: $data.threeContent.length === 0
@@ -498,5 +497,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     D: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "D:/学习/小程序/we-shop-app/pages/foods/foods.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/foods/foods.vue"]]);
 wx.createPage(MiniProgramPage);

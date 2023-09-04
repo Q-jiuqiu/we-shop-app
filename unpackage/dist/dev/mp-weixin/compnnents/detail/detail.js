@@ -13,7 +13,8 @@ const _sfc_main = {
   },
   data() {
     return {
-      tabList: ["简介", "推荐", "主播", "评价"],
+      tabList: ["简介", "推荐", "探店", "评价"],
+      tabSenseList: ["简介", "票价", "探店", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -22,8 +23,9 @@ const _sfc_main = {
       show: false,
       comment: "",
       commentCur: 1,
-      commentLast: true
-      // 评价数据是否是最后一页
+      commentLast: true,
+      exploreShopData: [],
+      faresData: []
     };
   },
   computed: {
@@ -44,16 +46,14 @@ const _sfc_main = {
   },
   watch: {
     activeTab(newVal) {
-      console.log("newVal", newVal);
-      if (newVal === 2) {
+      console.log("新的", newVal);
+      if (newVal === 3) {
         this.$nextTick(() => {
           setTimeout(() => {
-            console.log("this", this);
             const menuInfo = common_vendor.index.getStorageSync("menuInfo");
             const windowHeight = parseInt(menuInfo.windowHeight);
             const query = common_vendor.index.createSelectorQuery().in(this);
             query.select("#add").boundingClientRect((rect) => {
-              console.log("backTop:", rect);
               const height = rect.height + 2;
               this.backTop = `${windowHeight - height}px`;
             }).exec();
@@ -66,7 +66,6 @@ const _sfc_main = {
     // 关闭新增评论弹框
     close() {
       this.show = false;
-      console.log("close");
     },
     // 判断是否在营业中 统一换算成24小时制
     judgeOpen(openingHours) {
@@ -92,17 +91,58 @@ const _sfc_main = {
     },
     // 点击tab
     handleTabClick(index) {
+      console.log(index);
       this.activeTab = index;
       switch (index) {
         case 1:
-          this.getRecommendData();
+          if (this.isSense) {
+            this.getFaresData();
+          } else {
+            this.getRecommendData();
+          }
           break;
         case 2:
+          this.getExploreShopData();
+          break;
+        case 3:
           this.commentCur = 1;
           this.commentData = [];
           this.getCommentData();
           break;
       }
+    },
+    // 获取主播数据
+    getExploreShopData() {
+      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.request({
+        url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+        method: "GET",
+        success: (res) => {
+          const data = res.data.data;
+          this.exploreShopData = data;
+          common_vendor.index.hideLoading();
+        },
+        fail: (err) => {
+          console.log(err);
+        }
+      });
+    },
+    // 获取票价数据
+    getFaresData() {
+      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.request({
+        url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+        method: "GET",
+        success: (res) => {
+          console.log(res.data);
+          const data = res.data.data;
+          this.faresData = data;
+          common_vendor.index.hideLoading();
+        },
+        fail: (err) => {
+          console.log(err);
+        }
+      });
     },
     // 获取推荐数据
     getRecommendData() {
@@ -229,13 +269,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $options.isSense ? {
     i: common_vendor.t($props.detailInfo.threeType)
   } : {}) : {}, {
-    j: common_vendor.t($props.detailInfo.capitaConsumption),
-    k: common_vendor.t($props.detailInfo.addr),
-    l: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
-    m: $data.backTop,
-    n: $data.activeTab === 2,
-    o: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
-    p: common_vendor.f($data.tabList, (item, index, i0) => {
+    j: common_vendor.t($props.detailInfo.environment),
+    k: common_vendor.t($props.detailInfo.queue),
+    l: common_vendor.t($props.detailInfo.addr),
+    m: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
+    n: $data.backTop,
+    o: $data.activeTab === 3,
+    p: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
+    q: $options.isSense
+  }, $options.isSense ? {
+    r: common_vendor.f($data.tabSenseList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -244,18 +287,34 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         c: index,
         d: common_vendor.o(($event) => $options.handleTabClick(index), index)
       };
-    }),
-    q: common_vendor.sr("sticky", "a6d5e4bb-0"),
-    r: common_vendor.p({
+    })
+  } : {
+    s: common_vendor.f($data.tabList, (item, index, i0) => {
+      return {
+        a: common_vendor.t(item),
+        b: common_vendor.n({
+          active: $data.activeTab === index
+        }),
+        c: index,
+        d: common_vendor.o(($event) => $options.handleTabClick(index), index)
+      };
+    })
+  }, {
+    t: common_vendor.sr("sticky", "a6d5e4bb-0"),
+    v: common_vendor.p({
       bgColor: "#fff",
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    s: $props.detailInfo.remark,
-    t: $data.activeTab === 0,
-    v: $options.isSense
-  }, $options.isSense ? {} : common_vendor.e({
-    w: common_vendor.f($data.recommendData, (item, index, i0) => {
+    w: $props.detailInfo.remark,
+    x: $data.activeTab === 0,
+    y: $options.isSense && $data.faresData.length
+  }, $options.isSense && $data.faresData.length ? {
+    z: common_vendor.t($data.faresData[0].adult),
+    A: common_vendor.t($data.faresData[0].elder),
+    B: common_vendor.t($data.faresData[0].child)
+  } : common_vendor.e({
+    C: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -263,44 +322,51 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    x: $data.recommendData.length === 0
+    D: $data.recommendData.length === 0
   }, $data.recommendData.length === 0 ? {} : {}), {
-    y: $data.activeTab === 1,
-    z: $data.activeTab === 2,
-    A: common_vendor.f($data.commentData, (item, index, i0) => {
+    E: $data.activeTab === 1,
+    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+      return {
+        a: item.headSculpture,
+        b: common_vendor.t(item.name),
+        c: index
+      };
+    }),
+    G: $data.activeTab === 2,
+    H: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    B: $data.commentData.length === 0
+    I: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    C: !$data.commentLast
+    J: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    D: $data.activeTab === 3,
-    E: common_vendor.o(($event) => $data.comment = $event),
-    F: common_vendor.p({
+    K: $data.activeTab === 3,
+    L: common_vendor.o(($event) => $data.comment = $event),
+    M: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    G: common_vendor.o($options.close),
-    H: common_vendor.p({
+    N: common_vendor.o($options.close),
+    O: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    I: common_vendor.o($options.handleConfirm),
-    J: common_vendor.p({
+    P: common_vendor.o($options.handleConfirm),
+    Q: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    K: common_vendor.o($options.close),
-    L: common_vendor.p({
+    R: common_vendor.o($options.close),
+    S: common_vendor.p({
       show: $data.show
     })
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "D:/学习/小程序/we-shop-app/compnnents/detail/detail.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/compnnents/detail/detail.vue"]]);
 wx.createComponent(Component);

@@ -66,7 +66,6 @@
 .detail .header .info-item.data-v-a6d5e4bb {
   display: flex;
   justify-content: center;
-  font-weight: bold;
   border-bottom: #eee 1px solid;
   padding: 10rpx 0 10rpx 0;
 }
@@ -82,7 +81,10 @@
   margin-right: 10rpx;
 }
 .detail .header .info .consume.data-v-a6d5e4bb {
-  font-weight: normal;
+  font-size: 24rpx;
+}
+.detail .header .info .consume .label.data-v-a6d5e4bb {
+  color: #ff7f24;
 }
 .detail .header .info .adds.data-v-a6d5e4bb {
   padding: 10rpx 0 10rpx 0;
@@ -123,7 +125,7 @@
   padding: 0 40rpx;
 }
 .detail .container .tabs-item.data-v-a6d5e4bb {
-  padding: 15rpx 20rpx 25rpx 20rpx;
+  padding: 15rpx 40rpx 25rpx;
 }
 .detail .container .tabs .active.data-v-a6d5e4bb {
   background-color: #fff;
@@ -181,6 +183,7 @@
 .detail .container .anchor-item.data-v-a6d5e4bb {
   display: flex;
   padding: 10rpx;
+  align-items: center;
 }
 .detail .container .anchor-item .image.data-v-a6d5e4bb {
   width: 100rpx;
@@ -188,7 +191,7 @@
   border-radius: 50%;
 }
 .detail .container .anchor-item .right.data-v-a6d5e4bb {
-  margin-left: 10rpx;
+  margin-left: 50rpx;
 }
 .detail .container .comment-item.data-v-a6d5e4bb {
   padding: 20rpx 20rpx 0rpx;

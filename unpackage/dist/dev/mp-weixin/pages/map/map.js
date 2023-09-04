@@ -21,11 +21,9 @@ const _sfc_main = {
     };
   },
   onLoad: function() {
-    console.log("onload");
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("postMap", ({ detail }) => {
-      console.log(detail);
       this.name = detail.name;
       this.address = detail.addr;
       this.detail = detail;
@@ -52,17 +50,13 @@ const _sfc_main = {
     handleMapOpen() {
       try {
         if (mapContext === null) {
-          console.log("获取地图实例");
           mapContext = common_vendor.wx$1.createMapContext("map", this);
-          console.log("地图实例:", mapContext);
         }
-        console.log(mapContext);
         mapContext.openMapApp({
           longitude: Number(this.detail.longitude),
           latitude: Number(this.detail.latitude),
           destination: this.name,
           fail: (res) => {
-            console.log("失败", res);
             if (res.errMsg.indexOf("cancel") > -1) {
               common_vendor.index.showToast({
                 icon: "fail",
@@ -97,5 +91,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     g: common_vendor.o((...args) => $options.handleMapOpen && $options.handleMapOpen(...args))
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-e06b858f"], ["__file", "D:/学习/小程序/we-shop-app/pages/map/map.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-e06b858f"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/map/map.vue"]]);
 wx.createPage(MiniProgramPage);
