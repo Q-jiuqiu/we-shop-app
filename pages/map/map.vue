@@ -34,12 +34,10 @@ export default {
 		}
 	},
 	onLoad: function () {
-		console.log('onload')
 		const eventChannel = this.getOpenerEventChannel()
 		this.eventChannel = eventChannel
 		// 监听postMessage事件，获取上一页面通过eventChannel传送到当前页面的数据
 		eventChannel.on('postMap', ({ detail }) => {
-			console.log(detail)
 			this.name = detail.name
 			this.address = detail.addr
 			this.detail = detail
@@ -67,18 +65,13 @@ export default {
 		handleMapOpen() {
 			try {
 				if (mapContext === null) {
-					console.log('获取地图实例')
 					mapContext = wx.createMapContext('map', this)
-					console.log('地图实例:', mapContext)
 				}
-
-				console.log(mapContext)
 				mapContext.openMapApp({
 					longitude: Number(this.detail.longitude),
 					latitude: Number(this.detail.latitude),
 					destination: this.name,
 					fail: res => {
-						console.log('失败', res)
 						if (res.errMsg.indexOf('cancel') > -1) {
 							uni.showToast({
 								icon: 'fail',

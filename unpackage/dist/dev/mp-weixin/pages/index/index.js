@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-require("../../static/qqmap-wx-jssdk.min.js");
 const CustomNavBack = () => "../../compnnents/customNavBack/customNavBack.js";
 let mapContext = null;
 const _sfc_main = {
@@ -29,7 +28,6 @@ const _sfc_main = {
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("foodMap", ({ data }) => {
-      console.log(data);
       this.dataList = data;
       this.setMarkers(data);
     });
@@ -37,7 +35,6 @@ const _sfc_main = {
   methods: {
     // 获取美食筛选数据
     getFoodsDatas(params = {}) {
-      console.log("筛选条件:", params);
       return new Promise((resolve) => {
         common_vendor.index.request({
           url: "https://www.aomue.cn/pro/rest/dbs/find",
@@ -45,11 +42,9 @@ const _sfc_main = {
           method: "GET",
           success: function(res) {
             const data = res.data.data;
-            console.log("结果:", data);
             resolve(data);
           },
           fail: function(err) {
-            console.log(err);
             resolve([]);
           }
         });
@@ -68,13 +63,11 @@ const _sfc_main = {
           callout: { content: point.name, display: "ALWAYS", padding: 6, borderRadius: 4, bgColor: "#fdc307" }
         };
       });
-      console.log(this.markers);
     },
     handleDetailShow(item) {
       common_vendor.index.navigateTo({
         url: "/pages/detail/detail",
         success: (res) => {
-          console.log(res);
           res.eventChannel.emit("postMessage", {
             detail: item,
             longitude: location.longitude,
@@ -85,10 +78,8 @@ const _sfc_main = {
     },
     // 移动到指定坐标为止
     handleMoveTo(location2) {
-      console.log("location", location2);
       if (mapContext === null) {
         mapContext = common_vendor.wx$1.createMapContext("map", this);
-        console.log(mapContext);
       }
       mapContext.moveToLocation({
         latitude: Number(location2.latitude),
@@ -96,11 +87,21 @@ const _sfc_main = {
       });
     },
     // marker点击事件
-    handleMarkerClick(event) {
-      console.log(1111);
-      console.log(event);
+    handleMarkerClick2(event) {
       const detail = event.detail;
-      console.log(detail);
+      if (detail && !isNaN(detail.markerId)) {
+        const detailInfo = this.dataList[detail.markerId];
+        common_vendor.index.navigateTo({
+          url: "/pages/detail/detail",
+          success: (res) => {
+            res.eventChannel.emit("detailPage", { detail: detailInfo });
+          }
+        });
+      }
+    },
+    // marker点击事件
+    handleMarkerClick(event) {
+      const detail = event.detail;
       if (detail && !isNaN(detail.markerId)) {
         const detailInfo = this.dataList[detail.markerId];
         common_vendor.index.navigateTo({
@@ -122,7 +123,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: $data.longitude,
     b: $data.latitude,
     c: $data.markers,
-    d: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
+    d: common_vendor.o((...args) => $options.handleMarkerClick2 && $options.handleMarkerClick2(...args)),
+    e: common_vendor.o((...args) => $options.handleMarkerClick && $options.handleMarkerClick(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1cf27b2a"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/index/index.vue"]]);

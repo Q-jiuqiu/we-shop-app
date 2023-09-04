@@ -7,8 +7,8 @@ const _sfc_main = {
   components: { NoData, CustomNavBack },
   data() {
     return {
-      tabList: ["简介", "推荐", "主播", "评价"],
-      tabSenseList: ["简介", "票价", "主播", "评价"],
+      tabList: ["简介", "推荐", "探店", "评价"],
+      tabSenseList: ["简介", "票价", "探店", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],

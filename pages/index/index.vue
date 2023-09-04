@@ -2,13 +2,13 @@
 	<div class="content">
 		<CustomNavBack></CustomNavBack>
 		<section class="map-content">
-			<map class="map" id="map" scale="12" :longitude="longitude" :latitude="latitude" :markers="markers" show-location="true" @markertap="handleMarkerClick"></map>
+			<map class="map" id="map" scale="12" :longitude="longitude" :latitude="latitude" :markers="markers" show-location="true"  @callouttap="handleMarkerClick2" @markertap="handleMarkerClick"
+			:enable-building="true"></map>
 		</section>
 	</div>
 </template>
 
-<script>
-const QQMapWX = require('../../static/qqmap-wx-jssdk.min.js')
+<script> 
 import CustomNavBack from '@/compnnents/customNavBack/customNavBack.vue'
 let mapContext = null
 
@@ -32,7 +32,6 @@ export default {
 		const eventChannel = this.getOpenerEventChannel()
 		this.eventChannel = eventChannel
 		eventChannel.on('foodMap', ({ data }) => {
-			console.log(data)
 			this.dataList = data
 			this.setMarkers(data)
 		})
@@ -41,7 +40,6 @@ export default {
 	methods: {
 		// 获取美食筛选数据
 		getFoodsDatas(params = {}) {
-			console.log('筛选条件:', params)
 			return new Promise(resolve => {
 				uni.request({
 					url: 'https://www.aomue.cn/pro/rest/dbs/find',
@@ -49,11 +47,9 @@ export default {
 					method: 'GET',
 					success: function (res) {
 						const data = res.data.data
-						console.log('结果:', data)
 						resolve(data)
 					},
 					fail: function (err) {
-						console.log(err)
 						resolve([])
 					}
 				})
@@ -73,7 +69,6 @@ export default {
 					callout: { content: point.name, display: 'ALWAYS', padding: 6, borderRadius: 4, bgColor: '#fdc307' }
 				}
 			})
-			console.log(this.markers)
 		},
 
 		handleDetailShow(item) {
@@ -81,7 +76,6 @@ export default {
 			uni.navigateTo({
 				url: '/pages/detail/detail',
 				success: res => {
-					console.log(res)
 					res.eventChannel.emit('postMessage', {
 						detail: item,
 						longitude: location.longitude,
@@ -93,11 +87,9 @@ export default {
 
 		// 移动到指定坐标为止
 		handleMoveTo(location) {
-			console.log('location', location)
 			// 已授权
 			if (mapContext === null) {
 				mapContext = wx.createMapContext('map', this)
-				console.log(mapContext)
 			}
 			mapContext.moveToLocation({
 				latitude: Number(location.latitude),
@@ -105,11 +97,21 @@ export default {
 			})
 		},
 		// marker点击事件
+		handleMarkerClick2(event) {
+			const detail = event.detail 
+			if (detail && !isNaN(detail.markerId)) {
+				const detailInfo = this.dataList[detail.markerId]
+				uni.navigateTo({
+					url: '/pages/detail/detail',
+					success: res => {
+						res.eventChannel.emit('detailPage', { detail: detailInfo })
+					}
+				})
+			}
+		},
+		// marker点击事件
 		handleMarkerClick(event) {
-			console.log(1111)
-			console.log(event)
-			const detail = event.detail
-			console.log(detail)
+			const detail = event.detail 
 			if (detail && !isNaN(detail.markerId)) {
 				const detailInfo = this.dataList[detail.markerId]
 				uni.navigateTo({

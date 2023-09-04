@@ -21,11 +21,9 @@ const _sfc_main = {
     };
   },
   onLoad: function() {
-    console.log("onload");
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("postMap", ({ detail }) => {
-      console.log(detail);
       this.name = detail.name;
       this.address = detail.addr;
       this.detail = detail;
@@ -52,17 +50,13 @@ const _sfc_main = {
     handleMapOpen() {
       try {
         if (mapContext === null) {
-          console.log("获取地图实例");
           mapContext = common_vendor.wx$1.createMapContext("map", this);
-          console.log("地图实例:", mapContext);
         }
-        console.log(mapContext);
         mapContext.openMapApp({
           longitude: Number(this.detail.longitude),
           latitude: Number(this.detail.latitude),
           destination: this.name,
           fail: (res) => {
-            console.log("失败", res);
             if (res.errMsg.indexOf("cancel") > -1) {
               common_vendor.index.showToast({
                 icon: "fail",
