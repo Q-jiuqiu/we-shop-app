@@ -14,14 +14,20 @@
 					<div class="open" v-if="isSense">景区等级：</div>
 					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
 				</div>
-				<!-- 排队情况 -->
-				<div class="info-item consume">
-					<span class="label">排队情况：</span>
-					<span class="text">{{detailInfo.environment}}</span>
-				</div>
-					<div class="info-item consume">
-					<span class="label">环境情况：</span>
-					<span class="text">{{detailInfo.queue}}</span>
+					<!-- 排队情况 -->
+				<div class="info-item consume"> 
+					<p>	
+						<span class="label">排队情况：</span>
+					  <span class="text">{{detailInfo.environment}}</span>
+					</p>
+					<p class="queue">
+						<span class="label">排队时长：</span>
+						<span class="text">{{detailInfo.queue}}</span>
+					</p>
+						<p>	
+						<span class="label">人均：</span>
+					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
+					</p>
 				</div>
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
@@ -29,6 +35,7 @@
 					<span class="text">{{ detailInfo.addr }}</span>
 					<span class="iconfont icon-initiate"></span>
 				</div>
+			
 			</div>
 		</header>
 		<section class="container">
@@ -430,8 +437,10 @@
 
 				.title {
 					font-weight: bold;
+					font-size: 40rpx;
+    			color: #b50a0e; 
 					margin-bottom: $uni-spacing-row-base;
-					text-align: center;
+					text-align: left;
 					border-bottom: #eee 1px solid;
 					font-size: $uni-font-size-lg;
 					padding: 15rpx 0 25rpx 0;
@@ -439,7 +448,7 @@
 
 				&-item {
 					display: flex;
-					justify-content: center; 
+					justify-content: start; 
 					border-bottom: #eee 1px solid;
 					padding: 10rpx 0 10rpx 0;
 
@@ -452,25 +461,22 @@
 						margin-right: 10rpx;
 					}
 
-					.close {
-						color: #ff7f24;
+					.close { 
 						margin-right: 10rpx;
 					}
 				}
 
 				.consume {
-					font-size: 24rpx;
-    			
-					.label{
-						color: #ff7f24;
+					 
+					.queue{
+						margin: 0 30px;
 					}
 				}
 
 				.adds {
 					padding: 10rpx 0 10rpx 0;
 					display: flex;
-					align-items: center;
-
+					align-items: center; 
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;

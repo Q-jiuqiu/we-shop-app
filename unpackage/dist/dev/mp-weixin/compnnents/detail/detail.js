@@ -271,14 +271,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {}) : {}, {
     j: common_vendor.t($props.detailInfo.environment),
     k: common_vendor.t($props.detailInfo.queue),
-    l: common_vendor.t($props.detailInfo.addr),
-    m: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
-    n: $data.backTop,
-    o: $data.activeTab === 3,
-    p: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
-    q: $options.isSense
+    l: common_vendor.t($props.detailInfo.capitaConsumption),
+    m: common_vendor.t($props.detailInfo.addr),
+    n: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
+    o: $data.backTop,
+    p: $data.activeTab === 3,
+    q: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
+    r: $options.isSense
   }, $options.isSense ? {
-    r: common_vendor.f($data.tabSenseList, (item, index, i0) => {
+    s: common_vendor.f($data.tabSenseList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -289,7 +290,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    s: common_vendor.f($data.tabList, (item, index, i0) => {
+    t: common_vendor.f($data.tabList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -300,21 +301,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   }, {
-    t: common_vendor.sr("sticky", "a6d5e4bb-0"),
-    v: common_vendor.p({
+    v: common_vendor.sr("sticky", "a6d5e4bb-0"),
+    w: common_vendor.p({
       bgColor: "#fff",
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    w: $props.detailInfo.remark,
-    x: $data.activeTab === 0,
-    y: $options.isSense && $data.faresData.length
+    x: $props.detailInfo.remark,
+    y: $data.activeTab === 0,
+    z: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    z: common_vendor.t($data.faresData[0].adult),
-    A: common_vendor.t($data.faresData[0].elder),
-    B: common_vendor.t($data.faresData[0].child)
+    A: common_vendor.t($data.faresData[0].adult),
+    B: common_vendor.t($data.faresData[0].elder),
+    C: common_vendor.t($data.faresData[0].child)
   } : common_vendor.e({
-    C: common_vendor.f($data.recommendData, (item, index, i0) => {
+    D: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -322,48 +323,48 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    D: $data.recommendData.length === 0
+    E: $data.recommendData.length === 0
   }, $data.recommendData.length === 0 ? {} : {}), {
-    E: $data.activeTab === 1,
-    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    F: $data.activeTab === 1,
+    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
     }),
-    G: $data.activeTab === 2,
-    H: common_vendor.f($data.commentData, (item, index, i0) => {
+    H: $data.activeTab === 2,
+    I: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    I: $data.commentData.length === 0
+    J: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    J: !$data.commentLast
+    K: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    K: $data.activeTab === 3,
-    L: common_vendor.o(($event) => $data.comment = $event),
-    M: common_vendor.p({
+    L: $data.activeTab === 3,
+    M: common_vendor.o(($event) => $data.comment = $event),
+    N: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    N: common_vendor.o($options.close),
-    O: common_vendor.p({
+    O: common_vendor.o($options.close),
+    P: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    P: common_vendor.o($options.handleConfirm),
-    Q: common_vendor.p({
+    Q: common_vendor.o($options.handleConfirm),
+    R: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    R: common_vendor.o($options.close),
-    S: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       show: $data.show
     })
   });

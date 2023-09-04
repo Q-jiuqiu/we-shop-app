@@ -57,15 +57,17 @@
 }
 .detail .header .info .title.data-v-eca06f3c {
   font-weight: bold;
+  font-size: 40rpx;
+  color: #b50a0e;
   margin-bottom: 10rpx;
-  text-align: center;
+  text-align: left;
   border-bottom: #eee 1px solid;
   font-size: 32rpx;
   padding: 15rpx 0 25rpx 0;
 }
 .detail .header .info-item.data-v-eca06f3c {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   border-bottom: #eee 1px solid;
   padding: 10rpx 0 10rpx 0;
 }
@@ -80,11 +82,8 @@
   color: #ff7f24;
   margin-right: 10rpx;
 }
-.detail .header .info .consume.data-v-eca06f3c {
-  font-size: 24rpx;
-}
-.detail .header .info .consume .label.data-v-eca06f3c {
-  color: #ff7f24;
+.detail .header .info .consume .queue.data-v-eca06f3c {
+  margin: 0 30px;
 }
 .detail .header .info .adds.data-v-eca06f3c {
   padding: 10rpx 0 10rpx 0;

@@ -1,12 +1,13 @@
-<template>
+<template> 
 	<div class="detail">
+		<CustomNavBack></CustomNavBack>
 		<header class="header">
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image" />
 			</div>
 			<div class="info">
 				<!-- 标题 -->
-				<div class="title">{{ detailInfo.name }}</div>
+				<div class="title">{{ detailInfo.name }}地图</div>
 				<!-- 营业时间/风景等级 -->
 				<div class="open-time info-item" v-if="detailInfo.workTime">
 					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
@@ -16,13 +17,19 @@
 				</div>
 				<!-- 排队情况 -->
 				<div class="info-item consume">
-					<span class="label">排队情况：</span>
-					<span class="text">{{detailInfo.environment}}</span>
-				</div>
-					<div class="info-item consume">
-					<span class="label">环境情况：</span>
-					<span class="text">{{detailInfo.queue}}</span>
-				</div>
+					<p>	
+						<span class="label">排队情况：</span>
+					  <span class="text">{{detailInfo.environment}}</span>
+					</p>
+					<p class="queue">
+						<span class="label">排队时长：</span>
+						<span class="text">{{detailInfo.queue}}</span>
+					</p>
+						<p>	
+						<span class="label">人均：</span>
+					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
+					</p>
+				</div> 
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
 					<span class="iconfont icon-dingwei1"></span>
@@ -408,8 +415,10 @@ export default {
 
 				.title {
 					font-weight: bold;
+					font-size: 40rpx;
+    			color: #b50a0e; 
 					margin-bottom: $uni-spacing-row-base;
-					text-align: center;
+					text-align: left;
 					border-bottom: #eee 1px solid;
 					font-size: $uni-font-size-lg;
 					padding: 15rpx 0 25rpx 0;
@@ -417,7 +426,7 @@ export default {
 
 				&-item {
 					display: flex;
-					justify-content: center; 
+					justify-content: start; 
 					border-bottom: #eee 1px solid;
 					padding: 10rpx 0 10rpx 0;
 
@@ -436,19 +445,16 @@ export default {
 					}
 				}
 
-				.consume {
-					font-size: 24rpx;
-    			
-					.label{
-						color: #ff7f24;
+				.consume {  
+					.queue{
+						margin: 0 30px;
 					}
 				}
 
 				.adds {
 					padding: 10rpx 0 10rpx 0;
 					display: flex;
-					align-items: center;
-
+					align-items: center; 
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;
