@@ -67,88 +67,25 @@
 			<!-- 简介 -->
 			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
-			<!-- 推荐 -->
+			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-推荐  && faresData.length -->
-				<div v-if="isSense" > 
-					<table border="0" width="100%" height="16em" cellpadding="4.8" align="center">
-		<tr>
-			<th>排名</th>
-			<th>道路名称</th>
-			<th>拥堵指数</th>
-			<th>平均车速</th>
-		</tr>
-		<tr>
-			<td>1</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>2</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>3</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>4</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>5</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>6</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-		<tr>
-			<td>7</td>
-			<td>学院路</td>
-			<td>90</td>
-			<td>20</td>
-		</tr>
-	</table>
-
+				<!-- 风景-购票 -->
+				<div class="table" v-if="isSense && faresData.length">
+					<div class="table-header">
+						<div class="tr">
+							<div class="th">人群类型</div>
+							<div class="th">具体条件</div>
+							<div class="th">票价</div>
+						</div>
+					</div>
+					<div class="table-body">
+						<div class="tr" v-for="(item,index) in faresData" :key="index">
+							<div class="td">{{item.adult}}</div>
+							<div class="td">{{item.elder}}</div>
+							<div class="td">{{item.child}}</div>
+						</div>
+					</div>
 				</div>
-
-				<!--  <div class="anchor-item">
-						<div class="left">
-							成人票
-						</div>
-						<div class="right">
-							{{faresData[0].adult}}¥
-						</div>
-				 </div> 
-				 <div class="anchor-item">
-						<div class="left">
-							老人票
-						</div>
-						<div class="right">
-								{{faresData[0].elder}}¥
-						</div>
-				 </div> 
-				 <div class="anchor-item">
-						<div class="left">
-							儿童票
-						</div>
-						<div class="right">
-								{{faresData[0].child}}¥
-						</div>
-				 </div>   -->
-			
 				<!-- 美食-推荐 -->
 				<div v-else>
 					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
@@ -160,7 +97,7 @@
 							<div class="describe">{{ item.describe }}</div>
 						</div>
 					</div>
-					<NoData v-if="recommendData.length === 0"></NoData>	 
+					<NoData v-if="recommendData.length === 0"></NoData>
 				</div>
 			</div>
 			<!-- 主播 -->
@@ -321,7 +258,12 @@ export default {
 			switch (index) {
 				// 推荐
 				case 1:
-					this.getRecommendData()
+						if (this.isSense) {
+							this.getFaresData()
+						} else {
+							this.getRecommendData()
+						}
+
 					break
 				// 主播
 				case 2: 
@@ -336,6 +278,23 @@ export default {
 				
 			}
 		},
+		// 获取票价数据
+			getFaresData() {
+				uni.showLoading({ title: '获取数据中' })
+				uni.request({
+					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+					method: 'GET',
+					success: res => {
+						console.log(res.data);
+						const data = res.data.data
+						this.faresData = data
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
+			},
 		// 获取主播数据
 		getExploreShopData() {
 			uni.showLoading({ title: '获取数据中' })
@@ -486,7 +445,7 @@ export default {
 					justify-content: space-between;
 					margin-bottom: $uni-spacing-row-base; 
 					border-bottom: #eee 1px solid; 
-					padding: 15rpx 0 25rpx 0;
+					padding: 15rpx 0 15rpx 0;
 						.name{
 							font-weight: bold;
 							font-size: $uni-font-size-lg;
@@ -497,12 +456,14 @@ export default {
     					padding-top: 10rpx;
 						}
 				}
-
+				.open-time{
+					border-bottom: #eee 1px solid;
+				}
 				&-item {
 					display: flex;
 				  justify-content: space-between;
 					padding: 10rpx 0 10rpx 0;
-					border-bottom: #eee 1px solid;
+				
 					.open {
 						color: #2fca32;
 						margin-right: 10rpx;
@@ -571,6 +532,54 @@ export default {
 			.tab-container {
 				background-color: white;
 				padding: 10rpx 25rpx;
+					.table {
+					font-size: 15rpx;
+					width: 98%;
+					margin: 20rpx 1%;
+
+					.tr {
+						display: grid;
+						grid-template-columns: 25% 55% 20%;
+					}
+
+					.th,
+					.td {
+						width: 100%;
+						text-align: center;
+						align-items: center;
+						justify-content: center;
+						height: 3rem;
+					}
+
+					.tr,
+					.table {
+						border: 1rpx solid #e9e9e9;
+					}
+
+					.th {
+						border-top: 1rpx solid #e9e9e9;
+						border-left: 1rpx solid #e9e9e9;
+					}
+
+					.td {
+						border-left: 1rpx solid #e9e9e9;
+					}
+
+					.tr:last-child {
+						border-top: none;
+					}
+
+					.th {
+						display: flex; 
+					}
+
+					.td {
+						padding: 10rpx 0;
+						display: flex;
+						justify-content: center;
+					}
+
+				}
 			}
 
 			// 简介
@@ -581,7 +590,7 @@ export default {
 				color: #333;
 			}
 
-			// 推荐
+		// 推荐
 			.recommend {
 
 				&-item {
