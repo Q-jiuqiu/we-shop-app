@@ -430,5 +430,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     A: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "D:/学习/小程序/we-shop-app/pages/sense/sense.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/sense/sense.vue"]]);
 wx.createPage(MiniProgramPage);

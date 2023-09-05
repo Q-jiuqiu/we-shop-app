@@ -435,7 +435,7 @@
 					justify-content: space-between;
 					margin-bottom: $uni-spacing-row-base;
 					border-bottom: #eee 1px solid;
-					padding: 15rpx 0 25rpx 0;
+					padding: 15rpx 0 15rpx 0;
 
 					.name {
 						font-weight: bold;
@@ -448,12 +448,13 @@
 						padding-top: 10rpx;
 					}
 				}
-
+				.open-time{
+					border-bottom: #eee 1px solid;
+				}
 				&-item {
 					display: flex;
 					justify-content: space-between;
-					padding: 10rpx 0 10rpx 0;
-					border-bottom: #eee 1px solid;
+					padding: 10rpx 0 10rpx 0; 
 
 					.open {
 						color: #2fca32;
@@ -566,8 +567,7 @@
 					}
 
 					.th {
-						display: flex;
-						font-size: large;
+						display: flex; 
 					}
 
 					.td {

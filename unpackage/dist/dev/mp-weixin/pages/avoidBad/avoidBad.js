@@ -158,5 +158,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     j: !$data.senseLast
   }, !$data.senseLast ? {} : {}));
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-d726279d"], ["__file", "D:/学习/小程序/we-shop-app/pages/avoidBad/avoidBad.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-d726279d"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/avoidBad/avoidBad.vue"]]);
 wx.createPage(MiniProgramPage);
