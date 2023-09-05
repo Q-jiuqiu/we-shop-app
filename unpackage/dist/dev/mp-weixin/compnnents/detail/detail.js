@@ -14,7 +14,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["简介", "票价", "探店", "评价"],
+      tabSenseList: ["简介", "购票", "探店", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -316,11 +316,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     A: $data.activeTab === 0,
     B: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    C: common_vendor.t($data.faresData[0].adult),
-    D: common_vendor.t($data.faresData[0].elder),
-    E: common_vendor.t($data.faresData[0].child)
+    C: common_vendor.f($data.faresData, (item, index, i0) => {
+      return {
+        a: common_vendor.t(item.adult),
+        b: common_vendor.t(item.elder),
+        c: common_vendor.t(item.child),
+        d: index
+      };
+    })
   } : common_vendor.e({
-    F: common_vendor.f($data.recommendData, (item, index, i0) => {
+    D: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
@@ -328,51 +333,51 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    G: $data.recommendData.length === 0
+    E: $data.recommendData.length === 0
   }, $data.recommendData.length === 0 ? {} : {}), {
-    H: $data.activeTab === 1,
-    I: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    F: $data.activeTab === 1,
+    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
     }),
-    J: $data.activeTab === 2,
-    K: common_vendor.f($data.commentData, (item, index, i0) => {
+    H: $data.activeTab === 2,
+    I: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(index + 1),
         b: common_vendor.t(item.comment),
         c: index
       };
     }),
-    L: $data.commentData.length === 0
+    J: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    M: !$data.commentLast
+    K: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    N: $data.activeTab === 3,
-    O: common_vendor.o(($event) => $data.comment = $event),
-    P: common_vendor.p({
+    L: $data.activeTab === 3,
+    M: common_vendor.o(($event) => $data.comment = $event),
+    N: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    Q: common_vendor.o($options.close),
-    R: common_vendor.p({
+    O: common_vendor.o($options.close),
+    P: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    S: common_vendor.o($options.handleConfirm),
-    T: common_vendor.p({
+    Q: common_vendor.o($options.handleConfirm),
+    R: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    U: common_vendor.o($options.close),
-    V: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       show: $data.show
     })
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/compnnents/detail/detail.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "D:/学习/小程序/we-shop-app/compnnents/detail/detail.vue"]]);
 wx.createComponent(Component);

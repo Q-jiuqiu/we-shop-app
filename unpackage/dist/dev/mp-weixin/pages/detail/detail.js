@@ -356,5 +356,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/detail/detail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "D:/学习/小程序/we-shop-app/pages/detail/detail.vue"]]);
 wx.createPage(MiniProgramPage);
