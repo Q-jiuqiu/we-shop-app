@@ -53,7 +53,10 @@
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
-							人均消费:<span class="capitaConsumption-text">{{ item.capitaConsumption }}¥</span>
+							<span>排队时长:{{ item.queue }}</span>
+							<span>就餐环境:{{ item.environment }}</span>
+							<span>人均:¥{{ item.capitaConsumption }}</span>
+							
 						</div>
 					</div>
 				</div>
@@ -109,8 +112,7 @@ export default {
 	onLoad: async function () {
 		this.getCityInfo();
 		// 获取筛选条件
-		const { content } = await this.getFilterDatas();
-		console.log('监听页面加载', content);
+		const { content } = await this.getFilterDatas(); 
 		this.getTwoDatas();
 		if (content.length) {
 			this.filterData.push(...content);
@@ -127,8 +129,7 @@ export default {
 	onReachBottom: async function () {
 		if (this.showDetail) {
 			return;
-		}
-		console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage);
+		} 
 
 		if (this.isShowTwo) {
 			// 二级目录获取更多数据
@@ -139,8 +140,7 @@ export default {
 				});
 			} else {
 				this.twoCur++;
-				const params = {};
-				console.log('测试下拉', this.secondeType);
+				const params = {}; 
 				if (this.secondType) {
 					params = { parentName: this.secondType };
 				}
@@ -175,8 +175,7 @@ export default {
 		navigateCityInfo() {
 			uni.navigateTo({
 				url: '/pages/cityInfo/cityInfo',
-				success: (res) => {
-					console.log(res);
+				success: (res) => { 
 					res.eventChannel.emit('cityInfo', {
 						cityInfo: {
 							imageList: this.imageList,
@@ -197,8 +196,7 @@ export default {
 		/**
 		 * @description 城市改变
 		 */
-		handleCityChange({ city }) {
-			console.log('城市改变', city);
+		handleCityChange({ city }) { 
 			if (this.city === city) {
 				return;
 			}
@@ -221,8 +219,7 @@ export default {
 		 * @description 根据城市名称获取城市详细数据
 		 * @param {string} city
 		 */
-		getCityInfo() {
-			console.log('根据城市名称获取城市详细数据', this.city);
+		getCityInfo() { 
 			uni.request({
 				url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
 				method: 'GET',
@@ -286,14 +283,12 @@ export default {
 		 * @description 选中排序
 		 * @param {number} index 选中下标
 		 */
-		handleSortSelect(index) {
-			console.log('Sort', index);
+		handleSortSelect(index) { 
 			// 按距离排序
 			if (index === 2) {
 				for (let i = 0; i < this.threeContent.length; i++) {
 					for (let j = i + 1; j < this.threeContent.length; j++) {
-						const tmep = this.threeContent[j];
-						console.log(this.threeContent[i].distance, this.threeContent[j].distance);
+						const tmep = this.threeContent[j]; 
 						if (this.threeContent[i].distance >= this.threeContent[j].distance) {
 							this.threeContent[j] = this.threeContent[i];
 							this.threeContent[i] = tmep;
@@ -308,13 +303,11 @@ export default {
 		 * @description 获取指定二级(小类)数据详情
 		 * @param {Object} item
 		 */
-		handleTwoDetails(item) {
-			console.log(item, this.city);
+		handleTwoDetails(item) { 
 			if (this.city) {
 				this.isShowTwo = false;
 				this.threeContent = [];
-				this.threeType = item.name;
-				console.log('this.city', this.city);
+				this.threeType = item.name; 
 				this.getThreeData({ threeType: item.name, city: this.city });
 			} else {
 				authorize.authorizeAgain();
@@ -324,8 +317,7 @@ export default {
 		 * @description 获取三级数据--二级(小类)详情
 		 * @param {Object} params 请求条件
 		 */
-		getThreeData(params = {}) {
-			console.log('获取三级数据');
+		getThreeData(params = {}) { 
 			uni.showLoading({ title: '获取数据中' });
 			uni.request({
 				url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
@@ -334,11 +326,9 @@ export default {
 				success: async (res) => {
 					const data = res.data.data;
 					const { content, last } = data;
-					this.threeContent.push(...content);
-					console.log('this.threeContent', this.threeContent);
+					this.threeContent.push(...content); 
 					this.isThreeLastPage = last;
-					this.isShowTwo = false;
-					console.log('0000', this.location);
+					this.isShowTwo = false; 
 					await this.getDistance({
 						longitude: this.location.longitude,
 						latitude: this.location.latitude
@@ -351,8 +341,7 @@ export default {
 			});
 		},
 		// 详情
-		handleDetailShow(detail) {
-			console.log(detail);
+		handleDetailShow(detail) { 
 			this.detail = detail;
 			this.showInput = false;
 			this.showDetail = true;
@@ -375,8 +364,7 @@ export default {
 				uni.request({
 					url: 'https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
 					method: 'GET',
-					success: (res) => {
-						console.log('res', res);
+					success: (res) => { 
 						const data = res.data.data;
 						uni.hideLoading();
 						resolve(data);
@@ -397,8 +385,7 @@ export default {
 				url: `https://www.aomue.cn/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3&city=${this.city}`,
 				data: params,
 				method: 'GET',
-				success: (res) => {
-					console.log('res-', res);
+				success: (res) => { 
 					const data = res.data.data;
 					const { content, last } = data;
 					this.twoContent.push(...content);
@@ -432,16 +419,14 @@ export default {
 		getDistance({ longitude, latitude }) {
 			if (this.threeContent.length > 0) {
 				const toList = [];
-				for (let item of this.threeContent) {
-					console.log('item--', item);
+				for (let item of this.threeContent) { 
 					if (item.longitude && item.latitude) {
 						toList.push({
 							longitude: Number(item.longitude),
 							latitude: Number(item.latitude)
 						});
 					}
-				}
-				console.log('toList', toList);
+				} 
 				if (toList.length > 0) {
 					// 腾讯地图Api
 					const qqmapsdk = new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' });
@@ -452,8 +437,7 @@ export default {
 						},
 						to: toList,
 						success: ({ result }) => {
-							//成功后的回调
-							console.log('result', result);
+							//成功后的回调 
 							const distanceInfo = result.elements;
 							this.threeContent.forEach((item, index) => {
 								const distance = distanceInfo[index].distance;
@@ -463,8 +447,7 @@ export default {
 									item.distance = (distanceInfo[index].distance / 1000).toFixed(1);
 								}
 							});
-							this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
-							console.log('距离', this.threeContent);
+							this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent)); 
 						},
 						fail: function (error) {
 							console.error(error);
@@ -544,7 +527,7 @@ export default {
 				}
 
 				.dis {
-					height: 120rpx;
+					-webkit-line-clamp: 4;
 					display: -webkit-box;
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -554,15 +537,19 @@ export default {
 
 					.line2 {
 						-webkit-line-clamp: 2;
-						font-size: 12px;
-						color: #999;
+						font-size: 12px; 
 					}
 				}
 				.capitaConsumption {
 					height: 40rpx;
-					font-size: 12px;
-					text-align: right;
-					color: #fdc307;
+					font-size: 25rpx; 
+				  color: #0072bd;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					span{
+						color: #0072bd;
+					}
 				}
 
 				.name {

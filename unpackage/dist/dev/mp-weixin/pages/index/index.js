@@ -64,33 +64,22 @@ const _sfc_main = {
         };
       });
     },
-    handleDetailShow(item) {
-      common_vendor.index.navigateTo({
-        url: "/pages/detail/detail",
-        success: (res) => {
-          res.eventChannel.emit("postMessage", {
-            detail: item,
-            longitude: location.longitude,
-            latitude: location.latitude
-          });
-        }
-      });
-    },
     // 移动到指定坐标为止
-    handleMoveTo(location2) {
+    handleMoveTo(location) {
       if (mapContext === null) {
         mapContext = common_vendor.wx$1.createMapContext("map", this);
       }
       mapContext.moveToLocation({
-        latitude: Number(location2.latitude),
-        longitude: Number(location2.longitude)
+        latitude: Number(location.latitude),
+        longitude: Number(location.longitude)
       });
     },
-    // marker点击事件
+    // marker中title点击事件
     handleMarkerClick2(event) {
       const detail = event.detail;
       if (detail && !isNaN(detail.markerId)) {
         const detailInfo = this.dataList[detail.markerId];
+        console.log(detailInfo);
         common_vendor.index.navigateTo({
           url: "/pages/detail/detail",
           success: (res) => {

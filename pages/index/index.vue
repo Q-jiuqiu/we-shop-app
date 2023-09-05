@@ -71,20 +71,6 @@ export default {
 			})
 		},
 
-		handleDetailShow(item) {
-			// 通过eventChannel向被打开页面传送数据
-			uni.navigateTo({
-				url: '/pages/detail/detail',
-				success: res => {
-					res.eventChannel.emit('postMessage', {
-						detail: item,
-						longitude: location.longitude,
-						latitude: location.latitude
-					})
-				}
-			})
-		},
-
 		// 移动到指定坐标为止
 		handleMoveTo(location) {
 			// 已授权
@@ -96,11 +82,13 @@ export default {
 				longitude: Number(location.longitude)
 			})
 		},
-		// marker点击事件
+
+		// marker中title点击事件
 		handleMarkerClick2(event) {
 			const detail = event.detail 
 			if (detail && !isNaN(detail.markerId)) {
 				const detailInfo = this.dataList[detail.markerId]
+				console.log(detailInfo);
 				uni.navigateTo({
 					url: '/pages/detail/detail',
 					success: res => {
@@ -109,6 +97,7 @@ export default {
 				})
 			}
 		},
+
 		// marker点击事件
 		handleMarkerClick(event) {
 			const detail = event.detail 

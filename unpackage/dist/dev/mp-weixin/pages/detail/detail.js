@@ -20,7 +20,9 @@ const _sfc_main = {
       commentLast: true,
       // 评价数据是否是最后一页
       detailInfo: {},
-      exploreShopData: []
+      exploreShopData: [],
+      isSense: false,
+      faresData: []
     };
   },
   computed: {
@@ -38,6 +40,13 @@ const _sfc_main = {
     this.eventChannel = eventChannel;
     eventChannel.on("detailPage", ({ detail }) => {
       this.detailInfo = detail;
+      const type = this.detailInfo.type;
+      console.log(type);
+      if (type === "风景") {
+        this.isSense = true;
+      } else {
+        this.isSense = false;
+      }
     });
   },
   created() {
@@ -214,12 +223,13 @@ const _sfc_main = {
   }
 };
 if (!Array) {
+  const _component_CustomNavBack = common_vendor.resolveComponent("CustomNavBack");
   const _easycom_u_sticky2 = common_vendor.resolveComponent("u-sticky");
   const _component_NoData = common_vendor.resolveComponent("NoData");
   const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
   const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
   const _easycom_u_popup2 = common_vendor.resolveComponent("u-popup");
-  (_easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
+  (_component_CustomNavBack + _easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
 }
 const _easycom_u_sticky = () => "../../uni_modules/uview-plus/components/u-sticky/u-sticky.js";
 const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
@@ -232,29 +242,35 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: $data.detailInfo.image,
     b: common_vendor.t($data.detailInfo.name),
-    c: $data.detailInfo.workTime
-  }, $data.detailInfo.workTime ? common_vendor.e({
-    d: common_vendor.t($data.isOpen ? "营业中：" : "歇业中："),
-    e: common_vendor.n({
+    c: $data.isSense
+  }, $data.isSense ? {
+    d: common_vendor.t($data.detailInfo.threeType)
+  } : {}, {
+    e: $data.detailInfo.workTime
+  }, $data.detailInfo.workTime ? {
+    f: common_vendor.t($data.isOpen ? "营业中：" : "歇业中："),
+    g: common_vendor.t($data.detailInfo.workTime),
+    h: common_vendor.n({
       close: !$data.isOpen
-    }),
-    f: common_vendor.t($data.detailInfo.workTime),
-    g: _ctx.isSense
-  }, _ctx.isSense ? {} : {}, {
-    h: _ctx.isSense
-  }, _ctx.isSense ? {
-    i: common_vendor.t($data.detailInfo.threeType)
-  } : {}) : {}, {
-    j: common_vendor.t($data.detailInfo.environment),
-    k: common_vendor.t($data.detailInfo.queue),
-    l: common_vendor.t($data.detailInfo.addr),
-    m: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
-    n: $data.backTop,
-    o: $data.activeTab === 3,
-    p: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
-    q: _ctx.isSense
-  }, _ctx.isSense ? {
-    r: common_vendor.f($data.tabSenseList, (item, index, i0) => {
+    })
+  } : {}, {
+    i: common_vendor.t($data.detailInfo.addr),
+    j: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
+    k: $data.isSense
+  }, $data.isSense ? {} : {}, {
+    l: common_vendor.t($data.detailInfo.environment),
+    m: $data.isSense
+  }, $data.isSense ? {} : {}, {
+    n: common_vendor.t($data.detailInfo.queue),
+    o: $data.isSense
+  }, $data.isSense ? {} : {}, {
+    p: common_vendor.t($data.detailInfo.capitaConsumption),
+    q: $data.backTop,
+    r: $data.activeTab === 3,
+    s: common_vendor.o((...args) => $options.addComment && $options.addComment(...args)),
+    t: $data.isSense
+  }, $data.isSense ? {
+    v: common_vendor.f($data.tabSenseList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -265,7 +281,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    s: common_vendor.f($data.tabList, (item, index, i0) => {
+    w: common_vendor.f($data.tabList, (item, index, i0) => {
       return {
         a: common_vendor.t(item),
         b: common_vendor.n({
@@ -276,20 +292,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   }, {
-    t: common_vendor.sr("sticky", "eca06f3c-0"),
-    v: common_vendor.p({
+    x: common_vendor.sr("sticky", "eca06f3c-1"),
+    y: common_vendor.p({
       bgColor: "#fff",
       ["offset-top"]: $options.stickyTop,
       ["bg-color"]: "#f4f4f4"
     }),
-    w: $data.detailInfo.remark,
-    x: $data.activeTab === 0,
-    y: _ctx.isSense && _ctx.faresData.length
-  }, _ctx.isSense && _ctx.faresData.length ? {
-    z: common_vendor.t(_ctx.faresData[0].adult),
-    A: common_vendor.t(_ctx.faresData[0].elder),
-    B: common_vendor.t(_ctx.faresData[0].child)
-  } : common_vendor.e({
+    z: $data.detailInfo.remark,
+    A: $data.activeTab === 0,
+    B: $data.isSense
+  }, $data.isSense ? {} : common_vendor.e({
     C: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,

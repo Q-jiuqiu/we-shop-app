@@ -83,7 +83,7 @@
   justify-content: space-between;
 }
 .foods .content-item .text .dis.data-v-31f9c6b2 {
-  height: 120rpx;
+  -webkit-line-clamp: 4;
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -94,13 +94,17 @@
 .foods .content-item .text .dis .line2.data-v-31f9c6b2 {
   -webkit-line-clamp: 2;
   font-size: 12px;
-  color: #999;
 }
 .foods .content-item .text .capitaConsumption.data-v-31f9c6b2 {
   height: 40rpx;
-  font-size: 12px;
-  text-align: right;
-  color: #fdc307;
+  font-size: 25rpx;
+  color: #0072bd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.foods .content-item .text .capitaConsumption span.data-v-31f9c6b2 {
+  color: #0072bd;
 }
 .foods .content-item .text .name.data-v-31f9c6b2 {
   font-size: 40rpx;

@@ -55,7 +55,6 @@ const _sfc_main = {
   onLoad: async function() {
     this.getCityInfo();
     const { content } = await this.getFilterDatas();
-    console.log("监听页面加载", content);
     this.getTwoDatas();
     if (content.length) {
       this.filterData.push(...content);
@@ -70,7 +69,6 @@ const _sfc_main = {
     if (this.showDetail) {
       return;
     }
-    console.log("到底部啦", this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage);
     if (this.isShowTwo) {
       if (this.isTwoLastPage) {
         common_vendor.index.showToast({
@@ -80,7 +78,6 @@ const _sfc_main = {
       } else {
         this.twoCur++;
         const params = {};
-        console.log("测试下拉", this.secondeType);
         if (this.secondType) {
           params = { parentName: this.secondType };
         }
@@ -116,7 +113,6 @@ const _sfc_main = {
       common_vendor.index.navigateTo({
         url: "/pages/cityInfo/cityInfo",
         success: (res) => {
-          console.log(res);
           res.eventChannel.emit("cityInfo", {
             cityInfo: {
               imageList: this.imageList,
@@ -138,7 +134,6 @@ const _sfc_main = {
      * @description 城市改变
      */
     handleCityChange({ city }) {
-      console.log("城市改变", city);
       if (this.city === city) {
         return;
       }
@@ -160,7 +155,6 @@ const _sfc_main = {
      * @param {string} city
      */
     getCityInfo() {
-      console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
@@ -224,12 +218,10 @@ const _sfc_main = {
      * @param {number} index 选中下标
      */
     handleSortSelect(index) {
-      console.log("Sort", index);
       if (index === 2) {
         for (let i = 0; i < this.threeContent.length; i++) {
           for (let j = i + 1; j < this.threeContent.length; j++) {
             const tmep = this.threeContent[j];
-            console.log(this.threeContent[i].distance, this.threeContent[j].distance);
             if (this.threeContent[i].distance >= this.threeContent[j].distance) {
               this.threeContent[j] = this.threeContent[i];
               this.threeContent[i] = tmep;
@@ -245,12 +237,10 @@ const _sfc_main = {
      * @param {Object} item
      */
     handleTwoDetails(item) {
-      console.log(item, this.city);
       if (this.city) {
         this.isShowTwo = false;
         this.threeContent = [];
         this.threeType = item.name;
-        console.log("this.city", this.city);
         this.getThreeData({ threeType: item.name, city: this.city });
       } else {
         utils_authorize.authorize.authorizeAgain();
@@ -261,7 +251,6 @@ const _sfc_main = {
      * @param {Object} params 请求条件
      */
     getThreeData(params = {}) {
-      console.log("获取三级数据");
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
@@ -271,10 +260,8 @@ const _sfc_main = {
           const data = res.data.data;
           const { content, last } = data;
           this.threeContent.push(...content);
-          console.log("this.threeContent", this.threeContent);
           this.isThreeLastPage = last;
           this.isShowTwo = false;
-          console.log("0000", this.location);
           await this.getDistance({
             longitude: this.location.longitude,
             latitude: this.location.latitude
@@ -288,7 +275,6 @@ const _sfc_main = {
     },
     // 详情
     handleDetailShow(detail) {
-      console.log(detail);
       this.detail = detail;
       this.showInput = false;
       this.showDetail = true;
@@ -312,7 +298,6 @@ const _sfc_main = {
           url: "https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2",
           method: "GET",
           success: (res) => {
-            console.log("res", res);
             const data = res.data.data;
             common_vendor.index.hideLoading();
             resolve(data);
@@ -334,7 +319,6 @@ const _sfc_main = {
         data: params,
         method: "GET",
         success: (res) => {
-          console.log("res-", res);
           const data = res.data.data;
           const { content, last } = data;
           this.twoContent.push(...content);
@@ -369,7 +353,6 @@ const _sfc_main = {
       if (this.threeContent.length > 0) {
         const toList = [];
         for (let item of this.threeContent) {
-          console.log("item--", item);
           if (item.longitude && item.latitude) {
             toList.push({
               longitude: Number(item.longitude),
@@ -377,7 +360,6 @@ const _sfc_main = {
             });
           }
         }
-        console.log("toList", toList);
         if (toList.length > 0) {
           const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
           qqmapsdk.calculateDistance({
@@ -389,7 +371,6 @@ const _sfc_main = {
             },
             to: toList,
             success: ({ result }) => {
-              console.log("result", result);
               const distanceInfo = result.elements;
               this.threeContent.forEach((item, index) => {
                 const distance = distanceInfo[index].distance;
@@ -400,7 +381,6 @@ const _sfc_main = {
                 }
               });
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
-              console.log("距离", this.threeContent);
             },
             fail: function(error) {
               console.error(error);
@@ -481,9 +461,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),
-        e: common_vendor.t(item.capitaConsumption),
-        f: index,
-        g: common_vendor.o(($event) => $options.handleDetailShow(item), index)
+        e: common_vendor.t(item.queue),
+        f: common_vendor.t(item.environment),
+        g: common_vendor.t(item.capitaConsumption),
+        h: index,
+        i: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };
     }),
     A: $data.threeContent.length === 0

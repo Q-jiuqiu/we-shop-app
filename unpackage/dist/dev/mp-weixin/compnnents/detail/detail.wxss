@@ -56,40 +56,42 @@
   font-size: 29rpx;
 }
 .detail .header .info .title.data-v-a6d5e4bb {
-  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10rpx;
-  text-align: center;
   border-bottom: #eee 1px solid;
-  font-size: 32rpx;
   padding: 15rpx 0 25rpx 0;
+}
+.detail .header .info .title .name.data-v-a6d5e4bb {
+  font-weight: bold;
+  font-size: 32rpx;
+  color: #b50a0e;
+}
+.detail .header .info .title .open.data-v-a6d5e4bb {
+  font-size: 24rpx;
+  padding-top: 10rpx;
 }
 .detail .header .info-item.data-v-a6d5e4bb {
   display: flex;
-  justify-content: center;
-  border-bottom: #eee 1px solid;
+  justify-content: space-between;
   padding: 10rpx 0 10rpx 0;
+  border-bottom: #eee 1px solid;
 }
 .detail .header .info-item .open.data-v-a6d5e4bb {
   color: #2fca32;
   margin-right: 10rpx;
 }
-.detail .header .info-item .time.data-v-a6d5e4bb {
-  margin-right: 10rpx;
+.detail .header .info-item .open .time.data-v-a6d5e4bb {
+  color: #333;
 }
 .detail .header .info-item .close.data-v-a6d5e4bb {
-  color: #ff7f24;
   margin-right: 10rpx;
-}
-.detail .header .info .consume.data-v-a6d5e4bb {
-  font-size: 24rpx;
-}
-.detail .header .info .consume .label.data-v-a6d5e4bb {
-  color: #ff7f24;
 }
 .detail .header .info .adds.data-v-a6d5e4bb {
   padding: 10rpx 0 10rpx 0;
   display: flex;
   align-items: center;
+  border-bottom: #eee 1px solid;
 }
 .detail .header .info .adds .iconfont.data-v-a6d5e4bb {
   margin-right: 10rpx;
