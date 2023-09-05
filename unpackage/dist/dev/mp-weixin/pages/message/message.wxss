@@ -24,10 +24,21 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.message.data-v-4c1b26cf {
+  background: #eee;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 .message.data-v-4c1b26cf .u-textarea__field {
   min-height: 750rpx;
 }
+.message-text.data-v-4c1b26cf {
+  background: #eee;
+  padding: 20rpx 10rpx;
+}
 .message .buttons.data-v-4c1b26cf {
+  background: #eee;
   padding: 30rpx 10rpx;
   display: flex;
   justify-content: space-around;

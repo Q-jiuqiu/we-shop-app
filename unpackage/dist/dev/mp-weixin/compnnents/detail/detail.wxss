@@ -137,6 +137,46 @@
   background-color: white;
   padding: 10rpx 25rpx;
 }
+.detail .container .tab-container .table.data-v-a6d5e4bb {
+  font-size: 15rpx;
+  width: 98%;
+  margin: 20rpx 1%;
+}
+.detail .container .tab-container .table .tr.data-v-a6d5e4bb {
+  display: grid;
+  grid-template-columns: 25% 55% 20%;
+}
+.detail .container .tab-container .table .th.data-v-a6d5e4bb,
+.detail .container .tab-container .table .td.data-v-a6d5e4bb {
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+}
+.detail .container .tab-container .table .tr.data-v-a6d5e4bb,
+.detail .container .tab-container .table .table.data-v-a6d5e4bb {
+  border: 1rpx solid #e9e9e9;
+}
+.detail .container .tab-container .table .th.data-v-a6d5e4bb {
+  border-top: 1rpx solid #e9e9e9;
+  border-left: 1rpx solid #e9e9e9;
+}
+.detail .container .tab-container .table .td.data-v-a6d5e4bb {
+  border-left: 1rpx solid #e9e9e9;
+}
+.detail .container .tab-container .table .tr.data-v-a6d5e4bb:last-child {
+  border-top: none;
+}
+.detail .container .tab-container .table .th.data-v-a6d5e4bb {
+  display: flex;
+  font-size: large;
+}
+.detail .container .tab-container .table .td.data-v-a6d5e4bb {
+  padding: 10rpx 0;
+  display: flex;
+  justify-content: center;
+}
 .detail .container .des.data-v-a6d5e4bb {
   text-indent: 2rem;
   line-height: 50rpx;
