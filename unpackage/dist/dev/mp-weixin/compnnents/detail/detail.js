@@ -38,6 +38,7 @@ const _sfc_main = {
       return height + 44 + "px";
     },
     isSense() {
+      console.log(this.detailInfo);
       return this.detailInfo.type === "风景";
     }
   },

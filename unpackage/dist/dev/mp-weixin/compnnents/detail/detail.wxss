@@ -37,13 +37,15 @@
   margin: auto;
   width: 100%;
   background-color: white;
+  padding: 20rpx 0;
 }
 .detail .header .image-container .image.data-v-a6d5e4bb {
-  max-width: 100%;
+  width: 90%;
   max-height: 100%;
   display: block;
   margin: auto;
-  object-fit: contain;
+  object-fit: fill;
+  border-radius: 40rpx;
 }
 .detail .header .info.data-v-a6d5e4bb {
   width: 95%;

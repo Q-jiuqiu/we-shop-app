@@ -179,6 +179,7 @@
 				return height + 44 + 'px'
 			},
 			isSense() {
+				console.log(this.detailInfo);
 				return this.detailInfo.type === '风景'
 			}
 		},
@@ -407,13 +408,15 @@
 				margin: auto;
 				width: 100%;
 				background-color: white;
+				padding: 20rpx 0;
 
 				.image {
-					max-width: 100%;
+					width: 90%;
 					max-height: 100%;
 					display: block;
 					margin: auto;
-					object-fit: contain;
+					object-fit: fill;
+					border-radius: 40rpx;
 				}
 			}
 
