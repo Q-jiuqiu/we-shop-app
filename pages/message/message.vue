@@ -1,6 +1,17 @@
+<!--
+ * @Author: 何元鹏
+ * @Date: 2023-08-28 21:18:38
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-09-05 21:34:38
+-->
 <template>
 	<div class="message">
 		<CustomNav :showInput="false"></CustomNav>
+		<div class="message-text">
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们热衷于给广大热爱旅游的朋友提供便利，可能有BUG或者内容错误的情况，希望大家能够帮助我们指出和改正；</pre>
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您的家乡还有什么美食和景点我们没有收录，也请您给我们留言，以便我们补充完整。</pre> 
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢您的理解与支持！</pre>
+		</div>
 		<u-textarea v-model="value" placeholder="请输入留言内容" :maxlength="-1"></u-textarea>
 		<div class="buttons">
 			<div class="cancel button">
@@ -70,11 +81,21 @@
 
 <style lang="scss" scoped>
 	.message {
+			background: #eee;
+			position: relative;
+			min-height: 100vh;
+			width: 100%;
+			height: 100%;
 		::v-deep .u-textarea__field {
 			min-height: 750rpx;
 		}
-
+		&-text{
+			background: #eee;
+    	padding: 20rpx 10rpx;
+			letter-spacing:3px;
+		}
 		.buttons {
+			background: #eee;
 			padding: 30rpx $uni-spacing-row-base;
 			display: flex;
 			justify-content: space-around;
