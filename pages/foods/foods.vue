@@ -55,7 +55,7 @@
 						<div class="value capitaConsumption">
 							<span>排队时长:{{ item.queue }}</span>
 							<span>就餐环境:{{ item.environment }}</span>
-							<span>人均:{{ item.capitaConsumption }}</span>
+							<span>人均:¥{{ item.capitaConsumption }}</span>
 							
 						</div>
 					</div>
@@ -537,13 +537,12 @@ export default {
 
 					.line2 {
 						-webkit-line-clamp: 2;
-						font-size: 12px;
-						color: #999;
+						font-size: 12px; 
 					}
 				}
 				.capitaConsumption {
 					height: 40rpx;
-					font-size: 20rpx; 
+					font-size: 25rpx; 
 				  color: #0072bd;
 					display: flex;
 					justify-content: space-between;

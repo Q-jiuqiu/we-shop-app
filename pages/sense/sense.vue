@@ -40,12 +40,12 @@
 								<div class="distance">{{ item.distance }}km</div>
 							</div>
 						</div>
-						<div class="text-item dis">
-							<div class="value">{{ item.introduction }}</div>
-						</div>
-							<div class="value capitaConsumption">
-							门票:<span class="capitaConsumption-text" v-if="item.capitaConsumption !== '0'">{{ item.capitaConsumption }}¥</span>
-							<span class="capitaConsumption-text" v-else>免费</span>
+						<div class="dis">
+							<div class="value line2">{{ item.introduction }}</div>
+						</div> 
+						<div class="value capitaConsumption">
+							<span>预约:{{ item.environment }}</span>
+							<span>门票: ¥<span v-if=" item.capitaConsumption ==='0'">免费</span><span v-else>{{  item.capitaConsumption }}</span></span> 
 						</div>
 					</div>
 				</div>
@@ -70,9 +70,7 @@
 		components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
 		data() {
 			return {
-				imageList: [
-					'https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'
-				],
+				imageList: [],
 				cityDes: '',
 				contentList: [],
 				showDetail: false, // 是否展示详情
@@ -81,12 +79,7 @@
 				typeList: [{ name: '全部景点' }], // 类型
 				sortList: [{ name: '智能排序' }, { name: '热度' }, { name: '距离' }],
 				freeList: [{ name: '是否免费' }, { name: '付费' }, { name: '免费' }],
-				twoCur: 1, // 二级数据类型的当前页
-				// twoContent: [], // 二级数据
-				// twoContentCopy: [],
-				// isShowTwo: true, // 是否展示二级数据
-				// isTwoLastPage: true, // 二级数据是否是最后一页
-				// 三级数据
+				twoCur: 1, // 二级数据类型的当前页 
 				threeCur: 1,
 				threeContent: [],
 				threeContentCopy: [], // 用以排序
@@ -107,12 +100,7 @@
 			// 获取二级数据
 			const { content, last } = await this.getOneDatas()
 			this.typeList.push(...content)
-			await this.getThreeData({ city: this.city, type: '风景' })
-			// this.twoContent = content
-			// this.twoContentCopy = JSON.parse(JSON.stringify(this.twoContent))
-			// this.isTwoLastPage = last
-			// this.isShowTwo = true
-			// await authorize.getLocationInfo()
+			await this.getThreeData({ city: this.city, type: '风景' }) 
 		},
 
 		created() {
@@ -141,24 +129,7 @@
 						title: '没更多数据啦'
 					})
 				}
-			}
-			// 二级目录获取更多数据
-			// if (this.isShowTwo) {
-			// 	if (!this.isTwoLastPage) {
-			// 		this.twoCur++
-			// 		const { content, last } = await this.getOneDatas()
-			// 		this.typeList.push(...content)
-			// 		this.twoContent = content
-			// 		this.isTwoLastPage = last
-			// 		this.isShowTwo = true
-			// 	} else {
-			// 		uni.showToast({
-			// 			icon: 'none',
-			// 			title: '没更多数据啦'
-			// 		})
-			// 	}
-			// } else {
-			// }
+			} 
 		},
 
 		methods: {
@@ -506,52 +477,60 @@
 					border-radius: 20rpx;
 				}
 
-				.text {
-					width: calc(100% - 220rpx);
-					padding-left: $uni-spacing-row-base;
-					height: 100%;
+		.text {
+				width: calc(100% - 220rpx);
+				padding-left: $uni-spacing-row-base;
+				height: 100%;
 
-					&-item {
-						display: flex;
-						justify-content: space-between; 
-					}
+				&-item {
+					display: flex;
+					justify-content: space-between;
+				}
 
-					.dis {
-						.value {
-							display: -webkit-box;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							word-wrap: break-word;
-							white-space: normal !important;
-							-webkit-line-clamp: 3;
-							-webkit-box-orient: vertical;
-						}
-					}
-					.capitaConsumption {
-						height: 40rpx;
-						font-size: 12px;
-						text-align: right;
-						color: #fdc307;
-					}
+				.dis {
+					-webkit-line-clamp: 4;
+					display: -webkit-box;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					word-wrap: break-word;
+					white-space: normal !important;
+					-webkit-box-orient: vertical;
 
-					.name {
-						color: #b50a0e;
-						font-weight: bold;
-
-						.value {
-							font-size: $uni-font-size-lg;
-							@include ellipsis();
-						}
-
-						.location {
-							display: flex;
-							color: $uni-text-color-grey;
-							font-size: $uni-font-size-sm;
-							font-weight: normal;
-							align-items: center;
-						}
+					.line2 {
+						-webkit-line-clamp: 2;
+						font-size: 12px; 
 					}
 				}
+				.capitaConsumption {
+					height: 40rpx;
+					font-size: 25rpx; 
+				  color: #0072bd;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					span{
+						color: #0072bd;
+					}
+				}
+
+				.name {
+					font-size: 40rpx;
+					color: #b50a0e;
+					font-weight: bold;
+					height: 40rpx;
+					.value {
+						@include ellipsis();
+					}
+
+					.location {
+						display: flex;
+						color: $uni-text-color-grey;
+						font-size: $uni-font-size-sm;
+						font-weight: normal;
+						align-items: center;
+					}
+				}
+			}
 			}
 		}
 	}

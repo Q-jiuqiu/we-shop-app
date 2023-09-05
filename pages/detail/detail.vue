@@ -5,37 +5,42 @@
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image" />
 			</div>
-			<div class="info">
+				<div class="info">
 				<!-- 标题 -->
-				<div class="title">{{ detailInfo.name }}地图</div>
+				<div class="title">
+					<span class="name">{{ detailInfo.name }}</span>
+					<div class="open" v-if="isSense">景区等级：{{ detailInfo.threeType }}</div>
+				</div>
 				<!-- 营业时间/风景等级 -->
 				<div class="open-time info-item" v-if="detailInfo.workTime">
-					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
-					<div class="time">{{ detailInfo.workTime }}</div>
-					<div class="open" v-if="isSense">景区等级：</div>
-					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
+					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}	
+						<span class="time">{{ detailInfo.workTime }}</span>
+					</div> 
 				</div>
-				<!-- 排队情况 -->
-				<div class="info-item consume">
-					<p>	
-						<span class="label">排队情况：</span>
-					  <span class="text">{{detailInfo.environment}}</span>
-					</p>
-					<p class="queue">
-						<span class="label">排队时长：</span>
-						<span class="text">{{detailInfo.queue}}</span>
-					</p>
-						<p>	
-						<span class="label">人均：</span>
-					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
-					</p>
-				</div> 
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
 					<span class="iconfont icon-dingwei1"></span>
 					<span class="text">{{ detailInfo.addr }}</span>
 					<span class="iconfont icon-initiate"></span>
 				</div>
+					<!-- 排队情况 -->
+				<div class="info-item consume"> 
+					<p>	
+						<span class="label" v-if="isSense">预约：</span>
+						<span class="label" v-else>排队情况：</span>
+					  <span class="text">{{detailInfo.environment}}</span>
+					</p>
+					<p class="queue">
+						<span class="label" v-if="isSense">拥挤指数：</span> 
+						<span class="label" v-else>排队时长：</span>
+						<span class="text">{{detailInfo.queue}}</span>
+					</p>
+					<p>	
+						<span class="label" v-if="isSense">门票：</span> 
+						<span class="label" v-else>人均：</span>
+					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
+					</p>
+				</div>  
 			</div>
 		</header>
 		<section class="container">
@@ -64,9 +69,62 @@
 			</div>
 			<!-- 推荐 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-推荐 -->
-					<div v-if="isSense && faresData.length" >
-				 <div class="anchor-item">
+				<!-- 风景-推荐  && faresData.length -->
+				<div v-if="isSense" > 
+					<table border="0" width="100%" height="16em" cellpadding="4.8" align="center">
+		<tr>
+			<th>排名</th>
+			<th>道路名称</th>
+			<th>拥堵指数</th>
+			<th>平均车速</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>6</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>7</td>
+			<td>学院路</td>
+			<td>90</td>
+			<td>20</td>
+		</tr>
+	</table>
+
+				</div>
+
+				<!--  <div class="anchor-item">
 						<div class="left">
 							成人票
 						</div>
@@ -89,8 +147,8 @@
 						<div class="right">
 								{{faresData[0].child}}¥
 						</div>
-				 </div>  
-				</div>
+				 </div>   -->
+			
 				<!-- 美食-推荐 -->
 				<div v-else>
 					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
@@ -166,7 +224,9 @@ export default {
 			commentCur: 1,
 			commentLast: true, // 评价数据是否是最后一页
 			detailInfo: {}, 
-			exploreShopData:[]  
+			exploreShopData:[],
+			isSense:false,
+			faresData:[]
 		}
 	},
 	computed: {
@@ -186,11 +246,19 @@ export default {
 		this.eventChannel = eventChannel
 		eventChannel.on('detailPage', ({ detail }) => { 
 			this.detailInfo = detail
+			const type = this.detailInfo.type
+				console.log(type);
+			if(type === '风景'){
+				this.isSense = true
+			}else{
+				this.isSense = false
+			}
 		})
 	},
 
 	created() {
 		this.isOpen = this.judgeOpen(this.detailInfo.workTime)
+	
 	},
 
 	watch: {
@@ -414,47 +482,43 @@ export default {
 				font-size: $uni-font-size-base;
 
 				.title {
-					font-weight: bold;
-					font-size: 40rpx;
-    			color: #b50a0e; 
-					margin-bottom: $uni-spacing-row-base;
-					text-align: left;
-					border-bottom: #eee 1px solid;
-					font-size: $uni-font-size-lg;
+					display: flex;
+					justify-content: space-between;
+					margin-bottom: $uni-spacing-row-base; 
+					border-bottom: #eee 1px solid; 
 					padding: 15rpx 0 25rpx 0;
+						.name{
+							font-weight: bold;
+							font-size: $uni-font-size-lg;
+							color: #b50a0e; 
+						} 
+						.open{
+							font-size: 24rpx;
+    					padding-top: 10rpx;
+						}
 				}
 
 				&-item {
 					display: flex;
-					justify-content: start; 
-					border-bottom: #eee 1px solid;
+				  justify-content: space-between;
 					padding: 10rpx 0 10rpx 0;
-
+					border-bottom: #eee 1px solid;
 					.open {
 						color: #2fca32;
 						margin-right: 10rpx;
-					}
-
-					.time {
+						.time {
+							color: #333;
+						}
+					} 
+					.close { 
 						margin-right: 10rpx;
 					}
-
-					.close {
-						color: #ff7f24;
-						margin-right: 10rpx;
-					}
-				}
-
-				.consume {  
-					.queue{
-						margin: 0 30px;
-					}
-				}
-
+				} 
 				.adds {
 					padding: 10rpx 0 10rpx 0;
 					display: flex;
-					align-items: center; 
+					align-items: center;
+					border-bottom: #eee 1px solid;
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;

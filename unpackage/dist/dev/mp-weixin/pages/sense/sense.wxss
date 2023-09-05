@@ -85,27 +85,37 @@
   display: flex;
   justify-content: space-between;
 }
-.sense .content-item .text .dis .value.data-v-052ffb32 {
+.sense .content-item .text .dis.data-v-052ffb32 {
+  -webkit-line-clamp: 4;
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
   word-wrap: break-word;
   white-space: normal !important;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.sense .content-item .text .dis .line2.data-v-052ffb32 {
+  -webkit-line-clamp: 2;
+  font-size: 12px;
 }
 .sense .content-item .text .capitaConsumption.data-v-052ffb32 {
   height: 40rpx;
-  font-size: 12px;
-  text-align: right;
-  color: #fdc307;
+  font-size: 25rpx;
+  color: #0072bd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sense .content-item .text .capitaConsumption span.data-v-052ffb32 {
+  color: #0072bd;
 }
 .sense .content-item .text .name.data-v-052ffb32 {
+  font-size: 40rpx;
   color: #b50a0e;
   font-weight: bold;
+  height: 40rpx;
 }
 .sense .content-item .text .name .value.data-v-052ffb32 {
-  font-size: 32rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

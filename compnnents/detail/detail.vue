@@ -6,28 +6,15 @@
 			</div>
 			<div class="info">
 				<!-- 标题 -->
-				<div class="title">{{ detailInfo.name }}</div>
+				<div class="title">
+					<span class="name">{{ detailInfo.name }}</span>
+					<div class="open" v-if="isSense">景区等级：{{ detailInfo.threeType }}</div>
+				</div>
 				<!-- 营业时间/风景等级 -->
 				<div class="open-time info-item" v-if="detailInfo.workTime">
-					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}</div>
-					<div class="time">{{ detailInfo.workTime }}</div>
-					<div class="open" v-if="isSense">景区等级：</div>
-					<div class="time" v-if="isSense">{{ detailInfo.threeType }}</div>
-				</div>
-					<!-- 排队情况 -->
-				<div class="info-item consume"> 
-					<p>	
-						<span class="label">排队情况：</span>
-					  <span class="text">{{detailInfo.environment}}</span>
-					</p>
-					<p class="queue">
-						<span class="label">排队时长：</span>
-						<span class="text">{{detailInfo.queue}}</span>
-					</p>
-						<p>	
-						<span class="label">人均：</span>
-					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
-					</p>
+					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}	
+						<span class="time">{{ detailInfo.workTime }}</span>
+					</div> 
 				</div>
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
@@ -35,7 +22,24 @@
 					<span class="text">{{ detailInfo.addr }}</span>
 					<span class="iconfont icon-initiate"></span>
 				</div>
-			
+					<!-- 排队情况 -->
+				<div class="info-item consume"> 
+					<p>	
+						<span class="label" v-if="isSense">预约：</span>
+						<span class="label" v-else>排队情况：</span>
+					  <span class="text">{{detailInfo.environment}}</span>
+					</p>
+					<p class="queue">
+						<span class="label" v-if="isSense">拥挤指数：</span> 
+						<span class="label" v-else>排队时长：</span>
+						<span class="text">{{detailInfo.queue}}</span>
+					</p>
+					<p>	
+						<span class="label" v-if="isSense">门票：</span> 
+						<span class="label" v-else>人均：</span>
+					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
+					</p>
+				</div>  
 			</div>
 		</header>
 		<section class="container">
@@ -436,47 +440,43 @@
 				font-size: $uni-font-size-base;
 
 				.title {
-					font-weight: bold;
-					font-size: 40rpx;
-    			color: #b50a0e; 
-					margin-bottom: $uni-spacing-row-base;
-					text-align: left;
-					border-bottom: #eee 1px solid;
-					font-size: $uni-font-size-lg;
+					display: flex;
+					justify-content: space-between;
+					margin-bottom: $uni-spacing-row-base; 
+					border-bottom: #eee 1px solid; 
 					padding: 15rpx 0 25rpx 0;
+						.name{
+							font-weight: bold;
+							font-size: $uni-font-size-lg;
+							color: #b50a0e; 
+						} 
+						.open{
+							font-size: 24rpx;
+    					padding-top: 10rpx;
+						}
 				}
 
 				&-item {
 					display: flex;
-					justify-content: start; 
-					border-bottom: #eee 1px solid;
+				  justify-content: space-between;
 					padding: 10rpx 0 10rpx 0;
-
+					border-bottom: #eee 1px solid;
 					.open {
 						color: #2fca32;
 						margin-right: 10rpx;
-					}
-
-					.time {
-						margin-right: 10rpx;
-					}
-
+						.time {
+							color: #333;
+						}
+					} 
 					.close { 
 						margin-right: 10rpx;
 					}
-				}
-
-				.consume {
-					 
-					.queue{
-						margin: 0 30px;
-					}
-				}
-
+				} 
 				.adds {
 					padding: 10rpx 0 10rpx 0;
 					display: flex;
-					align-items: center; 
+					align-items: center;
+					border-bottom: #eee 1px solid;
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;

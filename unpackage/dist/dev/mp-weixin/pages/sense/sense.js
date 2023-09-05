@@ -12,9 +12,7 @@ const _sfc_main = {
   components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
   data() {
     return {
-      imageList: [
-        "https://img2.baidu.com/it/u=1566529500,2995650727&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"
-      ],
+      imageList: [],
       cityDes: "",
       contentList: [],
       showDetail: false,
@@ -28,12 +26,7 @@ const _sfc_main = {
       sortList: [{ name: "智能排序" }, { name: "热度" }, { name: "距离" }],
       freeList: [{ name: "是否免费" }, { name: "付费" }, { name: "免费" }],
       twoCur: 1,
-      // 二级数据类型的当前页
-      // twoContent: [], // 二级数据
-      // twoContentCopy: [],
-      // isShowTwo: true, // 是否展示二级数据
-      // isTwoLastPage: true, // 二级数据是否是最后一页
-      // 三级数据
+      // 二级数据类型的当前页 
       threeCur: 1,
       threeContent: [],
       threeContentCopy: [],
@@ -417,12 +410,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),
-        e: item.capitaConsumption !== "0"
-      }, item.capitaConsumption !== "0" ? {
-        f: common_vendor.t(item.capitaConsumption)
-      } : {}, {
-        g: index,
-        h: common_vendor.o(($event) => $options.handleDetailShow(item), index)
+        e: common_vendor.t(item.environment),
+        f: item.capitaConsumption === "0"
+      }, item.capitaConsumption === "0" ? {} : {
+        g: common_vendor.t(item.capitaConsumption)
+      }, {
+        h: index,
+        i: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       });
     }),
     x: $data.threeContent.length === 0
