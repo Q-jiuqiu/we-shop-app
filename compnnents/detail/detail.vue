@@ -12,9 +12,9 @@
 				</div>
 				<!-- 营业时间/风景等级 -->
 				<div class="open-time info-item" v-if="detailInfo.workTime">
-					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}	
+					<div :class="['open', { close: !isOpen }]">{{ isOpen ? '营业中：' : '歇业中：' }}
 						<span class="time">{{ detailInfo.workTime }}</span>
-					</div> 
+					</div>
 				</div>
 				<!-- 位置 -->
 				<div class="adds" @click="navigatorToMap">
@@ -22,24 +22,24 @@
 					<span class="text">{{ detailInfo.addr }}</span>
 					<span class="iconfont icon-initiate"></span>
 				</div>
-					<!-- 排队情况 -->
-				<div class="info-item consume"> 
-					<p>	
+				<!-- 排队情况 -->
+				<div class="info-item consume">
+					<p>
 						<span class="label" v-if="isSense">预约：</span>
 						<span class="label" v-else>排队情况：</span>
-					  <span class="text">{{detailInfo.environment}}</span>
+						<span class="text">{{detailInfo.environment}}</span>
 					</p>
 					<p class="queue">
-						<span class="label" v-if="isSense">拥挤指数：</span> 
+						<span class="label" v-if="isSense">拥挤指数：</span>
 						<span class="label" v-else>排队时长：</span>
 						<span class="text">{{detailInfo.queue}}</span>
 					</p>
-					<p>	
-						<span class="label" v-if="isSense">门票：</span> 
+					<p>
+						<span class="label" v-if="isSense">门票：</span>
 						<span class="label" v-else>人均：</span>
-					  <span class="text">{{detailInfo.capitaConsumption}}¥</span>
+						<span class="text">{{detailInfo.capitaConsumption}}¥</span>
 					</p>
-				</div>  
+				</div>
 			</div>
 		</header>
 		<section class="container">
@@ -54,47 +54,36 @@
 						{{ item }}
 					</div>
 				</div>
-					<!-- 美食 -->
+				<!-- 美食 -->
 				<div class="tabs" v-else>
 					<div :class="['tabs-item', { active: activeTab === index }]" v-for="(item, index) in tabList"
 						:key="index" @click="handleTabClick(index)">
 						{{ item }}
 					</div>
-				
+
 				</div>
 			</u-sticky>
 			<!-- 简介 -->
 			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
-			<!-- 推荐 -->
+			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-推荐 -->
-				<div v-if="isSense && faresData.length" >
-				 <div class="anchor-item">
-						<div class="left">
-							成人票
+				<!-- 风景-购票 -->
+				<div class="table" v-if="isSense && faresData.length">
+					<div class="table-header">
+						<div class="tr">
+							<div class="th">人群类型</div>
+							<div class="th">具体条件</div>
+							<div class="th">票价</div>
 						</div>
-						<div class="right">
-							{{faresData[0].adult}}¥
+					</div>
+					<div class="table-body">
+						<div class="tr" v-for="(item,index) in faresData" :key="index">
+							<div class="td">{{item.adult}}</div>
+							<div class="td">{{item.elder}}</div>
+							<div class="td">{{item.child}}</div>
 						</div>
-				 </div> 
-				 <div class="anchor-item">
-						<div class="left">
-							老人票
-						</div>
-						<div class="right">
-								{{faresData[0].elder}}¥
-						</div>
-				 </div> 
-				 <div class="anchor-item">
-						<div class="left">
-							儿童票
-						</div>
-						<div class="right">
-								{{faresData[0].child}}¥
-						</div>
-				 </div> 
-					
+					</div>
 				</div>
 				<!-- 美食-推荐 -->
 				<div v-else>
@@ -107,15 +96,14 @@
 							<div class="describe">{{ item.describe }}</div>
 						</div>
 					</div>
-					<NoData v-if="recommendData.length === 0"></NoData>	
-			</div>
+					<NoData v-if="recommendData.length === 0"></NoData>
+				</div>
 			</div>
 			<!-- 主播 -->
 			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="anchor-item" v-for="(item, index) in exploreShopData" :key="index">
 					<div class="left">
-						<img class="image"
-							:src="item.headSculpture">
+						<img class="image" :src="item.headSculpture">
 					</div>
 					<div class="right">
 						{{item.name}}
@@ -165,7 +153,7 @@
 		data() {
 			return {
 				tabList: ['简介', '推荐', '探店', '评价'],
-				tabSenseList:['简介', '票价','探店','评价'],
+				tabSenseList: ['简介', '购票', '探店', '评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -175,8 +163,8 @@
 				comment: '',
 				commentCur: 1,
 				commentLast: true,
-				exploreShopData:[]  ,
-				faresData:[]
+				exploreShopData: [],
+				faresData: []
 			}
 		},
 		computed: {
@@ -191,6 +179,7 @@
 				return height + 44 + 'px'
 			},
 			isSense() {
+				console.log(this.detailInfo);
 				return this.detailInfo.type === '风景'
 			}
 		},
@@ -202,13 +191,13 @@
 				console.log('新的', newVal)
 				if (newVal === 3) {
 					this.$nextTick(() => {
-						setTimeout(() => { 
+						setTimeout(() => {
 							const menuInfo = uni.getStorageSync('menuInfo')
 							const windowHeight = parseInt(menuInfo.windowHeight)
 							const query = uni.createSelectorQuery().in(this)
 							query
 								.select('#add')
-								.boundingClientRect(rect => { 
+								.boundingClientRect(rect => {
 									const height = rect.height + 2
 									this.backTop = `${windowHeight - height}px`
 								})
@@ -221,7 +210,7 @@
 		methods: {
 			// 关闭新增评论弹框
 			close() {
-				this.show = false 
+				this.show = false
 			},
 			// 判断是否在营业中 统一换算成24小时制
 			judgeOpen(openingHours) {
@@ -258,26 +247,26 @@
 				switch (index) {
 					// 推荐
 					case 1:
-						if(this.isSense){
+						if (this.isSense) {
 							this.getFaresData()
-						}else{
-							this.getRecommendData()		
+						} else {
+							this.getRecommendData()
 						}
-						
+
 						break
-					// 主播
-					case 2: 
+						// 主播
+					case 2:
 						this.getExploreShopData()
 						break
-					// 评价
+						// 评价
 					case 3:
 						this.commentCur = 1
 						this.commentData = []
 						this.getCommentData()
-						break 
+						break
 				}
 			},
-				// 获取主播数据
+			// 获取主播数据
 			getExploreShopData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
@@ -419,13 +408,15 @@
 				margin: auto;
 				width: 100%;
 				background-color: white;
+				padding: 20rpx 0;
 
 				.image {
-					max-width: 100%;
+					width: 90%;
 					max-height: 100%;
 					display: block;
 					margin: auto;
-					object-fit: contain;
+					object-fit: fill;
+					border-radius: 40rpx;
 				}
 			}
 
@@ -442,41 +433,48 @@
 				.title {
 					display: flex;
 					justify-content: space-between;
-					margin-bottom: $uni-spacing-row-base; 
-					border-bottom: #eee 1px solid; 
+					margin-bottom: $uni-spacing-row-base;
+					border-bottom: #eee 1px solid;
 					padding: 15rpx 0 25rpx 0;
-						.name{
-							font-weight: bold;
-							font-size: $uni-font-size-lg;
-							color: #b50a0e; 
-						} 
-						.open{
-							font-size: 24rpx;
-    					padding-top: 10rpx;
-						}
+
+					.name {
+						font-weight: bold;
+						font-size: $uni-font-size-lg;
+						color: #b50a0e;
+					}
+
+					.open {
+						font-size: 24rpx;
+						padding-top: 10rpx;
+					}
 				}
 
 				&-item {
 					display: flex;
-				  justify-content: space-between;
+					justify-content: space-between;
 					padding: 10rpx 0 10rpx 0;
 					border-bottom: #eee 1px solid;
+
 					.open {
 						color: #2fca32;
 						margin-right: 10rpx;
+
 						.time {
 							color: #333;
 						}
-					} 
-					.close { 
+					}
+
+					.close {
 						margin-right: 10rpx;
 					}
-				} 
+				}
+
 				.adds {
 					padding: 10rpx 0 10rpx 0;
 					display: flex;
 					align-items: center;
 					border-bottom: #eee 1px solid;
+
 					.iconfont {
 						margin-right: $uni-spacing-row-base;
 						font-size: 40rpx;
@@ -529,6 +527,57 @@
 			.tab-container {
 				background-color: white;
 				padding: 10rpx 25rpx;
+
+				.table {
+					font-size: 15rpx;
+					width: 98%;
+					margin: 20rpx 1%;
+
+					.tr {
+						display: grid;
+						grid-template-columns: 25% 55% 20%;
+					}
+
+					.th,
+					.td {
+						width: 100%;
+						text-align: center;
+						align-items: center;
+						justify-content: center;
+						height: 3rem;
+					}
+
+					.tr,
+					.table {
+						border: 1rpx solid #e9e9e9;
+					}
+
+					.th {
+						border-top: 1rpx solid #e9e9e9;
+						border-left: 1rpx solid #e9e9e9;
+					}
+
+					.td {
+						border-left: 1rpx solid #e9e9e9;
+					}
+
+					.tr:last-child {
+						border-top: none;
+					}
+
+					.th {
+						display: flex;
+						font-size: large;
+					}
+
+					.td {
+						padding: 10rpx 0;
+						display: flex;
+						justify-content: center;
+					}
+
+				}
+
 			}
 
 			// 简介
