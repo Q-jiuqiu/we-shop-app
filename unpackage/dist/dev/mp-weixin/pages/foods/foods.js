@@ -259,6 +259,7 @@ const _sfc_main = {
         success: async (res) => {
           const data = res.data.data;
           const { content, last } = data;
+          console.log("content", content);
           this.threeContent.push(...content);
           this.isThreeLastPage = last;
           this.isShowTwo = false;
@@ -377,7 +378,9 @@ const _sfc_main = {
                 if (distance === -1) {
                   item.distance = "--";
                 } else {
-                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(1);
+                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(
+                    1
+                  );
                 }
               });
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
