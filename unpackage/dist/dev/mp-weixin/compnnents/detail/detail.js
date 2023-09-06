@@ -255,7 +255,7 @@ if (!Math) {
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
-    a: $props.detailInfo.image,
+    a: $props.detailInfo.image2,
     b: common_vendor.t($props.detailInfo.name),
     c: $options.isSense
   }, $options.isSense ? {

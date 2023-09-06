@@ -100,8 +100,23 @@
   word-wrap: break-word;
   white-space: normal !important;
   -webkit-box-orient: vertical;
+  height: calc(100% - 40rpx);
 }
 .foods .content-item .text .dis .line2.data-v-31f9c6b2 {
+  -webkit-line-clamp: 2;
+  font-size: 12px;
+  height: 100%;
+}
+.foods .content-item .text .die.data-v-31f9c6b2 {
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal !important;
+  -webkit-box-orient: vertical;
+}
+.foods .content-item .text .die .line2.data-v-31f9c6b2 {
   -webkit-line-clamp: 2;
   font-size: 12px;
 }

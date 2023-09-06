@@ -507,19 +507,19 @@
 				}
 
 				.dis {
-					-webkit-line-clamp: 4;
-					display: -webkit-box;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					word-wrap: break-word;
-					white-space: normal !important;
-					-webkit-box-orient: vertical;
+						-webkit-line-clamp: 4;
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-box-orient: vertical; 
 
-					.line2 {
-						-webkit-line-clamp: 2;
-						font-size: 12px; 
+						.line2 {
+							-webkit-line-clamp: 2;
+							font-size: 12px; 
+						}
 					}
-				}
 				.capitaConsumption {
 					height: 40rpx;
 					font-size: 25rpx; 

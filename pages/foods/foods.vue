@@ -55,7 +55,7 @@
 								<div class="distance">{{ item.distance }}km</div>
 							</div>
 						</div>
-						<div class="dis">
+						<div class="die">
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
@@ -556,13 +556,28 @@
 						word-wrap: break-word;
 						white-space: normal !important;
 						-webkit-box-orient: vertical;
+						height: calc(100% - 40rpx);
 
 						.line2 {
 							-webkit-line-clamp: 2;
 							font-size: 12px;
+							height: 100%;
 						}
 					}
+					.die {
+						-webkit-line-clamp: 4;
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-box-orient: vertical; 
 
+						.line2 {
+							-webkit-line-clamp: 2;
+							font-size: 12px; 
+						}
+					}
 					.capitaConsumption {
 						height: 40rpx;
 						font-size: 25rpx;
