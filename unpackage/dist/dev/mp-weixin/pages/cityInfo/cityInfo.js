@@ -6,9 +6,7 @@ const _sfc_main = {
   components: { CustomNavBack },
   data() {
     return {
-      imageList: [
-        "https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF"
-      ],
+      imageList: [],
       cityDes: ""
     };
   },
@@ -36,7 +34,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.p({
       list: $data.imageList
     }),
-    b: common_vendor.t($data.cityDes)
+    b: $data.cityDes
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-be7b8072"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/cityInfo/cityInfo.vue"]]);

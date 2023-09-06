@@ -64,7 +64,7 @@
 }
 .detail .header .info .title .name.data-v-eca06f3c {
   font-weight: bold;
-  font-size: 32rpx;
+  font-size: 30rpx;
   color: #b50a0e;
 }
 .detail .header .info .title .open.data-v-eca06f3c {

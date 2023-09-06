@@ -30,11 +30,21 @@
 }
 .foods .image-container.data-v-31f9c6b2 {
   background-color: white;
+}
+.foods .image-container .image-list.data-v-31f9c6b2 {
   height: 400rpx;
 }
-.foods .image-container .image.data-v-31f9c6b2 {
-  width: 100%;
-  height: 100%;
+.foods .image-container .image-list.data-v-31f9c6b2 .u-swiper {
+  height: 100% !important;
+}
+.foods .image-container .image-list.data-v-31f9c6b2 .u-swiper .u-swiper__wrapper {
+  height: 100% !important;
+}
+.foods .image-container .image-list.data-v-31f9c6b2 .u-swiper .u-swiper__wrapper .u-swiper__wrapper__item__wrapper {
+  height: 100% !important;
+}
+.foods .image-container .image-list.data-v-31f9c6b2 .u-swiper .u-swiper__wrapper image {
+  height: 100% !important;
 }
 .foods .option.data-v-31f9c6b2 {
   padding: 25rpx 20rpx 10rpx 20rpx;

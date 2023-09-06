@@ -53,4 +53,5 @@
   line-height: 55rpx;
   text-indent: 2rem;
   padding: 10rpx;
+  white-space: pre-wrap;
 }

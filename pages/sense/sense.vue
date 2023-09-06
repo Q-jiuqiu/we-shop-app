@@ -7,7 +7,9 @@
 		</div>
 		<div v-else>
 			<div class="image-container">
-				<img class="image" :src="imageList[0]" alt="景点" @click="navigateCityInfo" />
+				<div class="image-list"  @click="navigateCityInfo">
+					<u-swiper :list="[imageList[0]]" style="height: 100%;"></u-swiper>
+				</div>
 			</div>
 
 			<div class="option">
@@ -208,6 +210,8 @@
 							const keys = Object.keys(info)
 							for (let key of keys) {
 								if (key.indexOf('image') >= 0 && info[key]) {
+									console.log("图片信息",key);
+									console.log(info[key]);
 									this.imageList.push(info[key])
 								}
 							}
@@ -426,9 +430,24 @@
 			background-color: white;
 			height: 400rpx;
 
-			.image {
-				width: 100%;
-				height: 100%;
+				.image-list {
+				height: 400rpx;
+
+				::v-deep .u-swiper {
+					height: 100% !important;
+
+					.u-swiper__wrapper {
+						height: 100% !important;
+
+						.u-swiper__wrapper__item__wrapper {
+							height: 100% !important;
+						}
+
+						image {
+							height: 100% !important;
+						}
+					}
+				}
 			}
 		}
 

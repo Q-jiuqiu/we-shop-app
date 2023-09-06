@@ -1,9 +1,15 @@
+<!--
+ * @Author: 何元鹏
+ * @Date: 2023-08-28 21:18:38
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-09-06 20:43:00
+-->
 <template>
 	<div :style="{ paddingTop: statusBarHeight, height: '44px' }">
 		<div class="custom-nav" :style="{ paddingTop: statusBarHeight, height: '44px' }">
 			<div class="container" :style="{ width: surplusWidth }">
 				<div class="back" @click="handleNavigateBack">
-					<span class="iconfont icon-fanhui1"></span>
+					<span class="iconfont icon-fanhui1"></span><span style="margin-left: 5rpx;">后退</span>
 				</div>
 			</div>
 		</div>
@@ -63,6 +69,8 @@ export default {
 		align-items: center;
 
 		.back {
+			display: flex;
+			align-items: center;
 			.iconfont {
 				font-size: 50rpx;
 				font-weight: 500;

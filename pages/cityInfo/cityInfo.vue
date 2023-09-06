@@ -1,3 +1,9 @@
+<!--
+ * @Author: 何元鹏
+ * @Date: 2023-08-28 21:18:38
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-09-06 21:56:40
+-->
 <template>
 	<div class="city-info">
 		<CustomNavBack></CustomNavBack>
@@ -7,8 +13,8 @@
 					<u-swiper :list="imageList" style="height: 100%;"></u-swiper>
 				</div>
 				<div class="describe">
-					<div class="text">
-						{{cityDes}}
+					<div class="text" v-html="cityDes">
+					 
 					</div>
 				</div>
 			</div>
@@ -25,8 +31,7 @@
 		components: { CustomNavBack },
 		data() {
 			return {
-				imageList: [
-					'https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF'
+				imageList: [ 
 				],
 				cityDes: '',
 			}
@@ -78,6 +83,7 @@
 					line-height: 55rpx;
 					text-indent: 2rem;
 					padding: 10rpx;
+					white-space: pre-wrap;
 				}
 			}
 		}

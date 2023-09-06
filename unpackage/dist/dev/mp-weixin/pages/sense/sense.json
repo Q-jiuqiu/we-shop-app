@@ -5,6 +5,7 @@
     "cus-select": "../../compnnents/select/select",
     "custom-nav": "../../compnnents/customNav/customNav",
     "custom-nav-back": "../../compnnents/customNavBack/customNavBack",
-    "detail": "../../compnnents/detail/detail"
+    "detail": "../../compnnents/detail/detail",
+    "u-swiper": "../../uni_modules/uview-plus/components/u-swiper/u-swiper"
   }
 }
