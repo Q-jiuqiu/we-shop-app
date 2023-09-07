@@ -37,15 +37,13 @@
   margin: auto;
   width: 100%;
   background-color: white;
-  padding: 20rpx 0;
 }
 .detail .header .image-container .image.data-v-a6d5e4bb {
-  width: 90%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   display: block;
   margin: auto;
   object-fit: fill;
-  border-radius: 40rpx;
 }
 .detail .header .info.data-v-a6d5e4bb {
   width: 95%;
@@ -66,7 +64,7 @@
 }
 .detail .header .info .title .name.data-v-a6d5e4bb {
   font-weight: bold;
-  font-size: 32rpx;
+  font-size: 30rpx;
   color: #b50a0e;
 }
 .detail .header .info .title .open.data-v-a6d5e4bb {

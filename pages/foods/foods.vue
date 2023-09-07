@@ -7,7 +7,10 @@
 		</div>
 		<div v-else>
 			<div class="image-container">
-				<img class="image" :src="imageList[0]" alt="美食" @click="navigateCityInfo" />
+				<div class="image-list"  @click="navigateCityInfo">
+					<u-swiper :list="[imageList[0]]" style="height: 100%;"></u-swiper>
+				</div>
+				 
 			</div>
 			<!-- 下拉框操作栏 -->
 			<div class="option">
@@ -32,7 +35,7 @@
 							<div class="value">{{ item.name }}</div>
 						</div>
 						<div class="text-item dis">
-							<div class="value">{{ item.remark }}</div>
+							<div class="value line2">{{ item.remark }}</div>
 						</div>
 					</div>
 				</div>
@@ -52,7 +55,7 @@
 								<div class="distance">{{ item.distance }}km</div>
 							</div>
 						</div>
-						<div class="dis">
+						<div class="die">
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
@@ -84,7 +87,7 @@
 		components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
 		data() {
 			return {
-				imageList: ['https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF'],
+				imageList: [],
 				contentList: [],
 				showDetail: false, // 是否展示详情
 				isLastPage: false, // 是否是最后一页
@@ -471,12 +474,26 @@
 		background: $background;
 
 		.image-container {
-			background-color: white;
-			height: 400rpx;
+			background-color: white; 
 
-			.image {
-				width: 100%;
-				height: 100%;
+			.image-list {
+				height: 400rpx;
+
+				::v-deep .u-swiper {
+					height: 100% !important;
+
+					.u-swiper__wrapper {
+						height: 100% !important;
+
+						.u-swiper__wrapper__item__wrapper {
+							height: 100% !important;
+						}
+
+						image {
+							height: 100% !important;
+						}
+					}
+				}
 			}
 		}
 
@@ -539,13 +556,28 @@
 						word-wrap: break-word;
 						white-space: normal !important;
 						-webkit-box-orient: vertical;
+						height: calc(100% - 40rpx);
 
 						.line2 {
 							-webkit-line-clamp: 2;
 							font-size: 12px;
+							height: 100%;
 						}
 					}
+					.die {
+						-webkit-line-clamp: 4;
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-box-orient: vertical; 
 
+						.line2 {
+							-webkit-line-clamp: 2;
+							font-size: 12px; 
+						}
+					}
 					.capitaConsumption {
 						height: 40rpx;
 						font-size: 25rpx;

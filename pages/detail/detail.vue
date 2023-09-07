@@ -3,7 +3,7 @@
 		<CustomNavBack></CustomNavBack>
 		<header class="header">
 			<div class="image-container">
-				<img class="image" :src="detailInfo.image" />
+				<img class="image" :src="detailInfo.image2" />
 			</div>
 				<div class="info">
 				<!-- 标题 -->
@@ -419,14 +419,14 @@ export default {
 				vertical-align: middle;
 				margin: auto;
 				width: 100%;
-				background-color: white;
+				background-color: white; 
 
 				.image {
-					max-width: 100%;
-					max-height: 100%;
+					width: 100%;
+					height: 100%;
 					display: block;
 					margin: auto;
-					object-fit: contain;
+					object-fit: fill; 
 				}
 			}
 

@@ -2,15 +2,15 @@
  * @Author: 何元鹏
  * @Date: 2023-08-28 21:18:38
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-09-05 23:32:21
+ * @LastEditTime: 2023-09-06 21:18:21
 -->
 <template>
 	<div class="message">
 		<CustomNav :showInput="false"></CustomNav>
 		<div class="message-text">
-			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们热衷于给广大热爱旅游的朋友提供便利，可能有BUG或者内容错误的情况，希望大家能够帮助我们指出和改正；</pre>
-			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您的家乡还有什么美食和景点我们没有收录，也请您给我们留言，以便我们补充完整。</pre> 
-			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢您的理解与支持！</pre>
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp; 我们热衷于给广大热爱旅游的朋友提供便利，可能有BUG或者内容错误的情况，希望大家能够帮助我们指出和改正；</pre>
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp; 如果您的家乡还有什么美食和景点我们没有收录，也请您给我们留言，以便我们补充完整。</pre> 
+			<pre style="">&nbsp;&nbsp;&nbsp;&nbsp; 感谢您的理解与支持！</pre>
 		</div>
 		<u-textarea v-model="value" placeholder="请输入留言内容" :maxlength="-1"></u-textarea>
 		<div class="buttons">

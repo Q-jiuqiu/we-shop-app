@@ -2,7 +2,7 @@
 	<div class="detail">
 		<header class="header">
 			<div class="image-container">
-				<img class="image" :src="detailInfo.image" />
+				<img class="image" :src="detailInfo.image2" />
 			</div>
 			<div class="info">
 				<!-- 标题 -->
@@ -407,16 +407,14 @@
 				vertical-align: middle;
 				margin: auto;
 				width: 100%;
-				background-color: white;
-				padding: 20rpx 0;
+				background-color: white; 
 
 				.image {
-					width: 90%;
-					max-height: 100%;
+					width: 100%;
+					height: 100%;
 					display: block;
 					margin: auto;
-					object-fit: fill;
-					border-radius: 40rpx;
+					object-fit: fill; 
 				}
 			}
 

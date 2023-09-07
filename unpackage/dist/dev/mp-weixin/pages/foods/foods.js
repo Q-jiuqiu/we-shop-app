@@ -12,7 +12,7 @@ const _sfc_main = {
   components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
   data() {
     return {
-      imageList: ["https://t7.baidu.com/it/u=760837404,2640971403&fm=193&f=GIF"],
+      imageList: [],
       contentList: [],
       showDetail: false,
       // 是否展示详情
@@ -398,9 +398,14 @@ if (!Array) {
   const _component_customNavBack = common_vendor.resolveComponent("customNavBack");
   const _component_CustomNav = common_vendor.resolveComponent("CustomNav");
   const _component_Detail = common_vendor.resolveComponent("Detail");
+  const _easycom_u_swiper2 = common_vendor.resolveComponent("u-swiper");
   const _component_CusSelect = common_vendor.resolveComponent("CusSelect");
   const _component_NoData = common_vendor.resolveComponent("NoData");
-  (_component_customNavBack + _component_CustomNav + _component_Detail + _component_CusSelect + _component_NoData)();
+  (_component_customNavBack + _component_CustomNav + _component_Detail + _easycom_u_swiper2 + _component_CusSelect + _component_NoData)();
+}
+const _easycom_u_swiper = () => "../../uni_modules/uview-plus/components/u-swiper/u-swiper.js";
+if (!Math) {
+  _easycom_u_swiper();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
@@ -424,7 +429,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       detailInfo: $data.detail
     })
   } : common_vendor.e({
-    j: $data.imageList[0],
+    j: common_vendor.p({
+      list: [$data.imageList[0]]
+    }),
     k: common_vendor.o((...args) => $options.navigateCityInfo && $options.navigateCityInfo(...args)),
     l: common_vendor.o($options.handleTypeSelect),
     m: common_vendor.o($options.handleFixStyle),

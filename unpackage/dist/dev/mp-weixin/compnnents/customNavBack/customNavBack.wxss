@@ -39,6 +39,10 @@
   display: flex;
   align-items: center;
 }
+.custom-nav .container .back.data-v-17b2be72 {
+  display: flex;
+  align-items: center;
+}
 .custom-nav .container .back .iconfont.data-v-17b2be72 {
   font-size: 50rpx;
   font-weight: 500;
