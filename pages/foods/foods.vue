@@ -59,9 +59,9 @@
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
-							<span>排队时长:{{ item.queue }}</span>
-							<span>就餐环境:{{ item.environment }}</span>
-							<span>人均:¥{{ item.capitaConsumption }}</span>
+							<span>拥挤度:{{ item.queue }}</span>
+							<span>卫生度:{{ item.environment }}</span>
+							<span>人均:{{ item.capitaConsumption }}</span>
 
 						</div>
 					</div>
@@ -513,7 +513,7 @@
 
 			.map-button {
 				background-color: #fdc307;
-				color: white;
+				color: #000;
 				padding: 10rpx;
 				border-radius: 10rpx;
 			}

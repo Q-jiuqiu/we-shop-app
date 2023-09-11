@@ -60,7 +60,7 @@
 }
 .foods .option .map-button.data-v-31f9c6b2 {
   background-color: #fdc307;
-  color: white;
+  color: #000;
   padding: 10rpx;
   border-radius: 10rpx;
 }

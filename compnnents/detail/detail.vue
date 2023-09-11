@@ -26,18 +26,18 @@
 				<div class="info-item consume">
 					<p>
 						<span class="label" v-if="isSense">预约：</span>
-						<span class="label" v-else>排队情况：</span>
+						<span class="label" v-else>拥挤度：</span>
 						<span class="text">{{detailInfo.environment}}</span>
 					</p>
 					<p class="queue">
 						<span class="label" v-if="isSense">拥挤指数：</span>
-						<span class="label" v-else>排队时长：</span>
+						<span class="label" v-else>卫生度：</span>
 						<span class="text">{{detailInfo.queue}}</span>
 					</p>
 					<p>
 						<span class="label" v-if="isSense">门票：</span>
 						<span class="label" v-else>人均：</span>
-						<span class="text">{{detailInfo.capitaConsumption}}¥</span>
+						<span class="text">{{detailInfo.capitaConsumption}}</span>
 					</p>
 				</div>
 			</div>
@@ -87,34 +87,39 @@
 				</div>
 				<!-- 美食-推荐 -->
 				<div v-else>
-					<div class="recommend-item" v-for="(item, index) in recommendData" :key="index">
-						<div class="left">
-							<img class="image" :src="item.image" />
-						</div>
-						<div class="right">
-							<div class="title">{{ item.foodName }}</div>
-							<div class="describe">{{ item.describe }}</div>
-						</div>
-					</div>
-					<NoData v-if="recommendData.length === 0"></NoData>
+					<div class="explore-shop" >
+						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
+							<div class="explore-shop-item-center">
+								<img class="explore-shop-item-center-image"
+								:src="item.image">
+								<div class="explore-shop-item-center-name">
+									{{item.foodName}}
+								</div> 
+							</div> 
+						</div>	
+					</div> 
 				</div>
 			</div>
-			<!-- 主播 -->
-			<div class="anchor tab-container" v-show="activeTab === 2">
-				<div class="anchor-item" v-for="(item, index) in exploreShopData" :key="index">
-					<div class="left">
-						<img class="image" :src="item.headSculpture">
-					</div>
-					<div class="right">
-						{{item.name}}
-					</div>
-				</div>
+			<!-- 探店 -->
+			<div class="anchor tab-container" v-show="activeTab === 2"> 
+				 <div class="explore-shop" >
+					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
+						<div class="explore-shop-item-center">
+							<img class="explore-shop-item-center-image"
+							:src="item.headSculpture">
+							<div class="explore-shop-item-center-name">
+								{{item.name}}
+							</div> 
+						</div>
+						
+					</div>	
+				</div> 
 			</div>
 			<!-- 评价 -->
 			<div class="comment tab-container" v-show="activeTab === 3">
 				<div class="comment-item" v-for="(item, index) in commentData" :key="index">
 					<div class="content">
-						<span class="content-span">{{ index + 1 }}、</span>
+					<!-- 	<span class="content-span">{{ index + 1 }}、</span> -->
 						{{ item.comment }}
 					</div>
 				</div>
@@ -493,9 +498,9 @@
 				background-color: rgba(253, 195, 7, 0.6);
 				position: fixed;
 				right: 10px;
-				width: 140rpx;
-				height: 50rpx;
-				font-size: 20rpx;
+				width: 200rpx;
+				height: 70rpx;
+				font-size: 25rpx;
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -526,7 +531,8 @@
 			.tab-container {
 				background-color: white;
 				padding: 10rpx 25rpx;
-
+				min-height: 33vh;
+   			max-height: 100%;
 				.table {
 					font-size: 15rpx;
 					width: 98%;
@@ -584,72 +590,84 @@
 				line-height: 50rpx;
 				font-size: 30rpx;
 				color: #333;
+				letter-spacing: 3rpx;
+				white-space: pre-wrap;
+				min-height: 33vh;
+    		max-height: 100%;
 			}
 
 			// 推荐
 			.recommend {
-
-				&-item {
+				.explore-shop {
 					display: flex;
-					align-items: center;
-					padding: 20rpx;
-					height: 225rpx;
-					margin-top: 20rpx;
-					letter-spacing: $letter-spacing-base;
-					background-color: #f4f4f4;
-
-					.image {
-						width: 200rpx;
-						height: 200rpx;
-						border-radius: 20rpx;
-					}
-
-					.right {
-						width: calc(100% - 200rpx);
-						padding-left: $uni-spacing-row-base;
-						height: 100%;
-
-						.title {
-							font-size: 30rpx;
-							color: #b50a0e;
-							font-weight: bold;
-						}
-
+					flex-wrap: wrap;
+					justify-content: flex-start; /* 从左往右排列 */
+					align-items: center; /* 垂直居中 */
+					gap: 10px; /* 元素之间的间距 */
+					width: 400px; /* 设置容器宽度，根据需要调整 */
 						&-item {
+						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						text-align: center; /* 文本水平居中 */
+						padding: 10px; /* 内边距，根据需要调整 */
+						box-sizing: border-box;
+						&-center{
 							display: flex;
-							justify-content: space-between;
-							margin-bottom: $uni-spacing-row-base;
-						}
-
-						.describe {
-							margin-left: 5rpx;
-							display: -webkit-box;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							word-wrap: break-word;
-							white-space: normal !important;
-							-webkit-line-clamp: 4;
-							-webkit-box-orient: vertical;
-						}
+							justify-content: center; /* 水平居中 */
+							align-items: center; /* 垂直居中 */
+							flex-direction: column;
+							height: 100%; /* 让内容居中 */
+							&-image {
+								width: 100rpx;
+								height: 100rpx;
+								border-radius: 50%;
+							}
+							&-name{
+								width: 100rpx;
+								margin-top: 10rpx;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								font-size: 25rpx;
+							}
+						} 
 					}
 				}
 			}
 
 			// 主播
 			.anchor {
-				&-item {
+				.explore-shop {
 					display: flex;
-					padding: 10rpx;
-					align-items: center;
-
-					.image {
-						width: 100rpx;
-						height: 100rpx;
-						border-radius: 50%;
-					}
-
-					.right {
-						margin-left: 50rpx;
+					flex-wrap: wrap;
+					justify-content: flex-start; /* 从左往右排列 */
+					align-items: center; /* 垂直居中 */
+					gap: 10px; /* 元素之间的间距 */
+					width: 400px; /* 设置容器宽度，根据需要调整 */
+						&-item {
+						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						text-align: center; /* 文本水平居中 */
+						padding: 10px; /* 内边距，根据需要调整 */
+						box-sizing: border-box;
+						&-center{
+							display: flex;
+							justify-content: center; /* 水平居中 */
+							align-items: center; /* 垂直居中 */
+							flex-direction: column;
+							height: 100%; /* 让内容居中 */
+							&-image {
+								width: 100rpx;
+								height: 100rpx;
+								border-radius: 50%;
+							}
+							&-name{
+								width: 100rpx;
+								margin-top: 10rpx;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								font-size: 25rpx;
+							}
+						} 
 					}
 				}
 			}

@@ -47,7 +47,7 @@
 						</div> 
 						<div class="value capitaConsumption">
 							<span>预约:{{ item.environment }}</span>
-							<span>门票: ¥<span v-if=" item.capitaConsumption ==='0'">免费</span><span v-else>{{  item.capitaConsumption }}</span></span> 
+							<span>门票: <span v-if=" item.capitaConsumption ==='0'">免费</span><span v-else>{{  item.capitaConsumption }}</span></span> 
 						</div>
 					</div>
 				</div>
@@ -471,7 +471,7 @@
 
 			.map-button {
 				background-color: #fdc307;
-				color: white;
+				color: #000;
 				padding: 10rpx;
 				border-radius: 10rpx;
 			}
