@@ -110,9 +110,9 @@
   background-color: rgba(253, 195, 7, 0.6);
   position: fixed;
   right: 10px;
-  width: 140rpx;
-  height: 50rpx;
-  font-size: 20rpx;
+  width: 200rpx;
+  height: 70rpx;
+  font-size: 25rpx;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -138,6 +138,8 @@
 .detail .container .tab-container.data-v-a6d5e4bb {
   background-color: white;
   padding: 10rpx 25rpx;
+  min-height: 33vh;
+  max-height: 100%;
 }
 .detail .container .tab-container .table.data-v-a6d5e4bb {
   font-size: 15rpx;
@@ -183,58 +185,98 @@
   line-height: 50rpx;
   font-size: 30rpx;
   color: #333;
+  letter-spacing: 3rpx;
+  white-space: pre-wrap;
+  min-height: 33vh;
+  max-height: 100%;
 }
-.detail .container .recommend-item.data-v-a6d5e4bb {
+.detail .container .recommend .explore-shop.data-v-a6d5e4bb {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* 从左往右排列 */
   align-items: center;
-  padding: 20rpx;
-  height: 225rpx;
-  margin-top: 20rpx;
-  letter-spacing: 4rpx;
-  background-color: #f4f4f4;
+  /* 垂直居中 */
+  gap: 10px;
+  /* 元素之间的间距 */
+  width: 400px;
+  /* 设置容器宽度，根据需要调整 */
 }
-.detail .container .recommend-item .image.data-v-a6d5e4bb {
-  width: 200rpx;
-  height: 200rpx;
-  border-radius: 20rpx;
+.detail .container .recommend .explore-shop-item.data-v-a6d5e4bb {
+  width: calc(25% - 10px);
+  /* 每列宽度为25%，减去间距 */
+  text-align: center;
+  /* 文本水平居中 */
+  padding: 10px;
+  /* 内边距，根据需要调整 */
+  box-sizing: border-box;
 }
-.detail .container .recommend-item .right.data-v-a6d5e4bb {
-  width: calc(100% - 200rpx);
-  padding-left: 10rpx;
+.detail .container .recommend .explore-shop-item-center.data-v-a6d5e4bb {
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  flex-direction: column;
   height: 100%;
+  /* 让内容居中 */
 }
-.detail .container .recommend-item .right .title.data-v-a6d5e4bb {
-  font-size: 30rpx;
-  color: #b50a0e;
-  font-weight: bold;
-}
-.detail .container .recommend-item .right-item.data-v-a6d5e4bb {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10rpx;
-}
-.detail .container .recommend-item .right .describe.data-v-a6d5e4bb {
-  margin-left: 5rpx;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  white-space: normal !important;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-.detail .container .anchor-item.data-v-a6d5e4bb {
-  display: flex;
-  padding: 10rpx;
-  align-items: center;
-}
-.detail .container .anchor-item .image.data-v-a6d5e4bb {
+.detail .container .recommend .explore-shop-item-center-image.data-v-a6d5e4bb {
   width: 100rpx;
   height: 100rpx;
   border-radius: 50%;
 }
-.detail .container .anchor-item .right.data-v-a6d5e4bb {
-  margin-left: 50rpx;
+.detail .container .recommend .explore-shop-item-center-name.data-v-a6d5e4bb {
+  width: 100rpx;
+  margin-top: 10rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 25rpx;
+}
+.detail .container .anchor .explore-shop.data-v-a6d5e4bb {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* 从左往右排列 */
+  align-items: center;
+  /* 垂直居中 */
+  gap: 10px;
+  /* 元素之间的间距 */
+  width: 400px;
+  /* 设置容器宽度，根据需要调整 */
+}
+.detail .container .anchor .explore-shop-item.data-v-a6d5e4bb {
+  width: calc(25% - 10px);
+  /* 每列宽度为25%，减去间距 */
+  text-align: center;
+  /* 文本水平居中 */
+  padding: 10px;
+  /* 内边距，根据需要调整 */
+  box-sizing: border-box;
+}
+.detail .container .anchor .explore-shop-item-center.data-v-a6d5e4bb {
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  flex-direction: column;
+  height: 100%;
+  /* 让内容居中 */
+}
+.detail .container .anchor .explore-shop-item-center-image.data-v-a6d5e4bb {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+.detail .container .anchor .explore-shop-item-center-name.data-v-a6d5e4bb {
+  width: 100rpx;
+  margin-top: 10rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 25rpx;
 }
 .detail .container .comment-item.data-v-a6d5e4bb {
   padding: 20rpx 20rpx 0rpx;

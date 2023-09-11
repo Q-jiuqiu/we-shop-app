@@ -64,7 +64,7 @@
 }
 .sense .option .map-button.data-v-052ffb32 {
   background-color: #fdc307;
-  color: white;
+  color: #000;
   padding: 10rpx;
   border-radius: 10rpx;
 }

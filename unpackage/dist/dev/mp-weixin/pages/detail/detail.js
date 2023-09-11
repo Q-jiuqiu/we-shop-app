@@ -331,57 +331,54 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     })
-  } : common_vendor.e({
+  } : {
     D: common_vendor.f($data.recommendData, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.foodName),
-        c: common_vendor.t(item.describe),
-        d: index
+        c: index
       };
-    }),
-    E: $data.recommendData.length === 0
-  }, $data.recommendData.length === 0 ? {} : {}), {
-    F: $data.activeTab === 1,
-    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    })
+  }, {
+    E: $data.activeTab === 1,
+    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
     }),
-    H: $data.activeTab === 2,
-    I: common_vendor.f($data.commentData, (item, index, i0) => {
+    G: $data.activeTab === 2,
+    H: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
-        a: common_vendor.t(index + 1),
-        b: common_vendor.t(item.comment),
-        c: index
+        a: common_vendor.t(item.comment),
+        b: index
       };
     }),
-    J: $data.commentData.length === 0
+    I: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    K: !$data.commentLast
+    J: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    L: $data.activeTab === 3,
-    M: common_vendor.o(($event) => $data.comment = $event),
-    N: common_vendor.p({
+    K: $data.activeTab === 3,
+    L: common_vendor.o(($event) => $data.comment = $event),
+    M: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    O: common_vendor.o($options.close),
-    P: common_vendor.p({
+    N: common_vendor.o($options.close),
+    O: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    Q: common_vendor.o($options.handleConfirm),
-    R: common_vendor.p({
+    P: common_vendor.o($options.handleConfirm),
+    Q: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    S: common_vendor.o($options.close),
-    T: common_vendor.p({
+    R: common_vendor.o($options.close),
+    S: common_vendor.p({
       show: $data.show
     })
   });
