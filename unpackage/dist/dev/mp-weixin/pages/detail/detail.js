@@ -8,7 +8,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["简介", "票价", "探店", "评价"],
+      tabSenseList: ["简介", "票价", "推荐", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -279,10 +279,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     j: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
     k: $data.isSense
   }, $data.isSense ? {} : {}, {
-    l: common_vendor.t($data.detailInfo.queue),
+    l: common_vendor.t($data.detailInfo.environment),
     m: $data.isSense
   }, $data.isSense ? {} : {}, {
-    n: common_vendor.t($data.detailInfo.environment),
+    n: common_vendor.t($data.detailInfo.queue),
     o: $data.isSense
   }, $data.isSense ? {} : {}, {
     p: common_vendor.t($data.detailInfo.capitaConsumption),

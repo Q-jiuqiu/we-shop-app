@@ -28,12 +28,12 @@
 					<p>	
 						<span class="label" v-if="isSense">预约：</span>
 						<span class="label" v-else>卫生度：</span>
-					  <span class="text">{{detailInfo.queue}}</span>
+					  <span class="text">{{detailInfo.environment }}</span>
 					</p>
 					<p class="queue">
 						<span class="label" v-if="isSense">拥挤指数：</span> 
 						<span class="label" v-else>拥挤度：</span>
-						<span class="text">{{detailInfo.environment}}</span>
+						<span class="text">{{detailInfo.queue}}</span>
 					</p>
 					<p>	
 						<span class="label" v-if="isSense">门票：</span> 
@@ -153,7 +153,7 @@ export default {
 	data() {
 		return {
 			tabList: ['简介', '推荐', '探店', '评价'],
-			tabSenseList:['简介', '票价','探店','评价'],
+			tabSenseList:['简介', '票价','推荐','评价'],
 			activeTab: 0,
 			recommendData: [],
 			commentData: [],
@@ -265,8 +265,7 @@ export default {
 							this.getFaresData()
 						} else {
 							this.getRecommendData()
-						}
-
+						} 
 					break
 				// 主播
 				case 2: 
