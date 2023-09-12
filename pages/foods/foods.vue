@@ -369,7 +369,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
+						url: 'https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2',
 						method: 'GET',
 						success: res => {
 							const data = res.data.data

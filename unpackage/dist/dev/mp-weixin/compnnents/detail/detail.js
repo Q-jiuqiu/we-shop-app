@@ -273,10 +273,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     j: common_vendor.o((...args) => $options.navigatorToMap && $options.navigatorToMap(...args)),
     k: $options.isSense
   }, $options.isSense ? {} : {}, {
-    l: common_vendor.t($props.detailInfo.environment),
+    l: common_vendor.t($props.detailInfo.queue),
     m: $options.isSense
   }, $options.isSense ? {} : {}, {
-    n: common_vendor.t($props.detailInfo.queue),
+    n: common_vendor.t($props.detailInfo.environment),
     o: $options.isSense
   }, $options.isSense ? {} : {}, {
     p: common_vendor.t($props.detailInfo.capitaConsumption),

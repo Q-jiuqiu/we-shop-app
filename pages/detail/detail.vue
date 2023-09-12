@@ -28,12 +28,12 @@
 					<p>	
 						<span class="label" v-if="isSense">预约：</span>
 						<span class="label" v-else>卫生度：</span>
-					  <span class="text">{{detailInfo.environment}}</span>
+					  <span class="text">{{detailInfo.queue}}</span>
 					</p>
 					<p class="queue">
 						<span class="label" v-if="isSense">拥挤指数：</span> 
 						<span class="label" v-else>拥挤度：</span>
-						<span class="text">{{detailInfo.queue}}</span>
+						<span class="text">{{detailInfo.environment}}</span>
 					</p>
 					<p>	
 						<span class="label" v-if="isSense">门票：</span> 
@@ -608,7 +608,7 @@ export default {
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
 					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					 
 						&-item {
 						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
@@ -622,8 +622,7 @@ export default {
 							height: 100%; /* 让内容居中 */
 							&-image {
 								width: 100rpx;
-								height: 100rpx;
-								border-radius: 50%;
+								height: 100rpx; 
 							}
 							&-name{
 								width: 100rpx;
@@ -646,7 +645,7 @@ export default {
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
 					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					 
 						&-item {
 						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */

@@ -27,12 +27,12 @@
 					<p>
 						<span class="label" v-if="isSense">预约：</span>
 						<span class="label" v-else>拥挤度：</span>
-						<span class="text">{{detailInfo.environment}}</span>
+						<span class="text">{{detailInfo.queue}}</span>
 					</p>
 					<p class="queue">
 						<span class="label" v-if="isSense">拥挤指数：</span>
 						<span class="label" v-else>卫生度：</span>
-						<span class="text">{{detailInfo.queue}}</span>
+						<span class="text">{{detailInfo.environment}}</span>
 					</p>
 					<p>
 						<span class="label" v-if="isSense">门票：</span>
@@ -603,12 +603,12 @@
 					flex-wrap: wrap;
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
-					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					gap: 10rpx; /* 元素之间的间距 */
+					 
 						&-item {
-						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						width: calc(25% - 10rpx); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
-						padding: 10px; /* 内边距，根据需要调整 */
+						padding: 10rpx; /* 内边距，根据需要调整 */
 						box-sizing: border-box;
 						&-center{
 							display: flex;
@@ -618,8 +618,7 @@
 							height: 100%; /* 让内容居中 */
 							&-image {
 								width: 100rpx;
-								height: 100rpx;
-								border-radius: 50%;
+								height: 100rpx; 
 							}
 							&-name{
 								width: 100rpx;
@@ -641,12 +640,12 @@
 					flex-wrap: wrap;
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
-					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					gap: 10rpx; /* 元素之间的间距 */
+					 
 						&-item {
-						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						width: calc(25% - 10rpx); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
-						padding: 10px; /* 内边距，根据需要调整 */
+						padding: 10rpx; /* 内边距，根据需要调整 */
 						box-sizing: border-box;
 						&-center{
 							display: flex;
