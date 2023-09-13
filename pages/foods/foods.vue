@@ -59,8 +59,8 @@
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
-							<span>拥挤度:{{ item.queue }}</span>
-							<span>卫生度:{{ item.environment }}</span>
+							<span>拥挤度:{{ item.environment }}</span>
+							<span>卫生度:{{ item.queue}}</span>
 							<span>人均:{{ item.capitaConsumption }}</span>
 
 						</div>
