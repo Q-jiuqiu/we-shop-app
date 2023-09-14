@@ -2,7 +2,7 @@
  * @Author: 何元鹏
  * @Date: 2023-08-28 21:18:38
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-09-06 23:34:55
+ * @LastEditTime: 2023-09-14 16:10:21
 -->
 <template>
 	<div class="city-info">
@@ -39,8 +39,7 @@
 		onLoad: function() {
 			const eventChannel = this.getOpenerEventChannel()
 			this.eventChannel = eventChannel
-			eventChannel.on('cityInfo', ({ cityInfo }) => {
-				console.log(cityInfo)
+			eventChannel.on('cityInfo', ({ cityInfo }) => { 
 				this.cityDes = cityInfo.cityDes
 				this.imageList = cityInfo.imageList
 			})

@@ -87,8 +87,7 @@ export default {
 		handleMarkerClick2(event) {
 			const detail = event.detail 
 			if (detail && !isNaN(detail.markerId)) {
-				const detailInfo = this.dataList[detail.markerId]
-				console.log(detailInfo);
+				const detailInfo = this.dataList[detail.markerId] 
 				uni.navigateTo({
 					url: '/pages/detail/detail',
 					success: res => {

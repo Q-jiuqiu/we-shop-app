@@ -49,8 +49,7 @@
 			this.getData({ type: '美食' })
 		},
 		// 页面上拉触底事件
-		onReachBottom: async function() {
-			console.log('到底部啦')
+		onReachBottom: async function() { 
 			// 获取更多美食数据
 			if (this.curNow === 0) {
 				if (this.foodLast) {
@@ -124,8 +123,7 @@
 						} else {
 							this.senseData.push(...result.content)
 							this.senseLast = result.last
-						}
-						console.log(this.foodData, this.senseData)
+						} 
 					},
 					fail: err => {
 						console.log(err)

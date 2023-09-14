@@ -31,7 +31,6 @@ const _sfc_main = {
             this.handleInputClear();
           },
           fail: (err) => {
-            console.log(err);
             this.$refs.uNotify.show({
               type: "warning",
               message: "留言失败",
@@ -44,7 +43,6 @@ const _sfc_main = {
           }
         });
       }
-      console.log(this.value);
     }
   }
 };

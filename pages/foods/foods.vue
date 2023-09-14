@@ -331,8 +331,7 @@
 					method: 'GET',
 					success: async res => {
 						const data = res.data.data
-						const { content, last } = data
-						console.log('content', content)
+						const { content, last } = data 
 						this.threeContent.push(...content)
 						this.isThreeLastPage = last
 						this.isShowTwo = false

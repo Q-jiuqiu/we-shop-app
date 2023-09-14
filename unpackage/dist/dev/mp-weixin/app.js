@@ -131,7 +131,6 @@ const _sfc_main = {
   onShow: function() {
     common_vendor.index.getSystemInfo({
       success: (result) => {
-        console.log("result", result);
         let statusBarHeight = result.statusBarHeight + "px";
         let safeAreaBottom = result.safeArea.bottom + "px";
         const menuButtonInfo = common_vendor.index.getMenuButtonBoundingClientRect();

@@ -153,7 +153,7 @@ export default {
 	data() {
 		return {
 			tabList: ['简介', '推荐', '探店', '评价'],
-			tabSenseList:['简介', '票价','推荐','评价'],
+			tabSenseList:['简介','推荐', '票价','评价'],
 			activeTab: 0,
 			recommendData: [],
 			commentData: [],
@@ -186,8 +186,7 @@ export default {
 		this.eventChannel = eventChannel
 		eventChannel.on('detailPage', ({ detail }) => { 
 			this.detailInfo = detail
-			const type = this.detailInfo.type
-				console.log(type);
+			const type = this.detailInfo.type 
 			if(type === '风景'){
 				this.isSense = true
 			}else{
@@ -256,20 +255,19 @@ export default {
 		},
 		// 点击tab
 		handleTabClick(index) {
-			this.activeTab = index
-			console.log(index);
+			this.activeTab = index 
 			switch (index) {
 				// 推荐
 				case 1:
-						if (this.isSense) {
-							this.getFaresData()
-						} else {
-							this.getRecommendData()
-						} 
+				this.getRecommendData()
 					break
 				// 主播
 				case 2: 
-					this.getExploreShopData()
+				if (this.isSense) {
+							this.getFaresData()
+						} else {
+							this.getExploreShopData()
+						} 
 					break
 				// 评价
 				case 3:
@@ -286,8 +284,7 @@ export default {
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
-					success: res => {
-						console.log(res.data);
+					success: res => { 
 						const data = res.data.data
 						this.faresData = data
 						uni.hideLoading()
@@ -330,13 +327,11 @@ export default {
 				})
 			},
 		// 增加留言
-		addComment() {
-			console.log('增加留言')
+		addComment() { 
 			this.show = true
 		},
 		// 确认增加
-		handleConfirm() {
-			console.log(this.detailInfo)
+		handleConfirm() { 
 			if (this.comment) {
 				uni.request({
 					url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
@@ -379,8 +374,7 @@ export default {
 				url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 				method: 'GET',
 				success: res => {
-					const data = res.data.data
-					console.log(res)
+					const data = res.data.data 
 					this.commentData.push(...data.content)
 					this.commentLast = data.last
 					uni.hideLoading()

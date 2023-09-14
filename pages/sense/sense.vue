@@ -117,8 +117,7 @@
 		},
 
 		// 页面上拉触底事件
-		onReachBottom: async function() {
-			console.log('到底部啦', this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage)
+		onReachBottom: async function() { 
 			if (this.showDetail) {
 				// 获取下一页留言数据
 				this.$refs.detail && this.$refs.detail.getLastComment()
@@ -144,8 +143,7 @@
 			navigateCityInfo() {
 				uni.navigateTo({
 					url: '/pages/cityInfo/cityInfo',
-					success: res => {
-						console.log(res)
+					success: res => { 
 						res.eventChannel.emit('cityInfo', {
 							cityInfo: {
 								imageList: this.imageList,
@@ -188,8 +186,7 @@
 					}
 					if (this.secondType) {
 						params.secondType = this.secondType
-					}
-					console.log(params)
+					} 
 					await this.getThreeData(params)
 					this.getCityInfo()
 				}
@@ -198,8 +195,7 @@
 			 * @description 根据城市名称获取城市详细数据
 			 * @param {string} city
 			 */
-			getCityInfo() {
-				console.log('根据城市名称获取城市详细数据', this.city)
+			getCityInfo() { 
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
 					method: 'GET',
@@ -240,8 +236,7 @@
 			 * @param {number} index 选中下标
 			 */
 			async handleTypeSelect(index) {
-				const { name } = this.typeList[index]
-				console.log('type', index)
+				const { name } = this.typeList[index] 
 				this.isShowTwo = true
 				const params = { city: this.city, type: '风景' }
 				if (index !== 0) {
@@ -304,13 +299,10 @@
 			 * @description 获取指定分类数据
 			 * @param {Object} item
 			 */
-			async handleTowData(item) {
-				console.log(item, this.city)
-				if (this.city) {
-					// this.isShowTwo = false
+			async handleTowData(item) { 
+				if (this.city) { 
 					this.threeContent = []
-					this.secondType = item.name
-					console.log('this.city', this.city)
+					this.secondType = item.name 
 					await this.getThreeData({ secondType: item.name, city: this.city })
 				} else {
 					authorize.authorizeAgain()
@@ -322,7 +314,7 @@
 				const res = await this.getSenseData(params) 
 				this.threeContent.push(...res.content) 
 				this.isThreeLastPage = res.last  
-this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
+				this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 				this.isShowTwo = false 
 				await this.getDistance({
 					longitude: this.location.longitude,
@@ -352,8 +344,7 @@ this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 					uni.request({
 						url: 'https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2',
 						method: 'GET',
-						success: res => {
-							console.log('res', res)
+						success: res => { 
 							const data = res.data.data
 							uni.hideLoading()
 							resolve(data)
@@ -395,8 +386,7 @@ this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 								latitude: Number(item.latitude)
 							})
 						}
-					}
-					console.log('toList', toList)
+					} 
 					if (toList.length > 0) {
 						// 腾讯地图Api
 						const qqmapsdk = new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
@@ -408,8 +398,7 @@ this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 							to: toList,
 							success: ({ result }) => {
 								//成功后的回调
-								const distanceInfo = result.elements
-								console.log('result', result, distanceInfo)
+								const distanceInfo = result.elements  
 								for (let i = 0; i < distanceInfo.length; i++) {
 									const distance = distanceInfo[i].distance
 									if (distance === -1) {
@@ -418,8 +407,7 @@ this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 										this.threeContent[start + i].distance = (distance / 1000).toFixed(1)
 									}
 								}
-								this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent))
-								console.log('距离', this.threeContent)
+								this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent)) 
 							},
 							fail: function(error) {
 								console.error(error)

@@ -259,7 +259,6 @@ const _sfc_main = {
         success: async (res) => {
           const data = res.data.data;
           const { content, last } = data;
-          console.log("content", content);
           this.threeContent.push(...content);
           this.isThreeLastPage = last;
           this.isShowTwo = false;
@@ -471,8 +470,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),
-        e: common_vendor.t(item.queue),
-        f: common_vendor.t(item.environment),
+        e: common_vendor.t(item.environment),
+        f: common_vendor.t(item.queue),
         g: common_vendor.t(item.capitaConsumption),
         h: index,
         i: common_vendor.o(($event) => $options.handleDetailShow(item), index)

@@ -2,7 +2,7 @@
  * @Author: 何元鹏
  * @Date: 2023-08-21 18:14:53
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-08-21 18:21:38
+ * @LastEditTime: 2023-09-14 16:51:07
  */
 const QQMapWX = require('../static/qqmap-wx-jssdk.min.js')
 
@@ -21,8 +21,7 @@ function authorizeAgain(callBack) {
 					success: function(tip) {
 						if (tip.confirm) { //查看是否点击确定
 							uni.openSetting({
-								success: async ({ authSetting }) => {
-									console.log('authSetting', authSetting)
+								success: async ({ authSetting }) => { 
 									const isLocation = authSetting && authSetting[
 										'scope.userLocation']
 									if (isLocation) {
@@ -75,35 +74,38 @@ function getLocationInfo(callBack) {
 		//位置信息默认数据
 		uni.getLocation({
 			type: 'gcj02',
-			success(res) {
-				console.log(res, '==')
+			success(res) { 
 				uni.showLoading({ title: '获取位置信息' })
 				location.longitude = res.longitude
 				location.latitude = res.latitude
 				// 腾讯地图Api
 				const qqmapsdk =
 					new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
-				qqmapsdk.reverseGeocoder({
-					location,
-					success(response) {
-						let info = response.result
-						console.log(info)
-						location.province = info.address_component.province
-						if (info.address_component.district.includes('区')) {
-							location.city = info.address_component.city
-						} else {
-							location.city = info.address_component.district
-						}
-						location.district = info.address_component.district
-						location.street = info.address_component.street
-						location.address = info.address
-						// 将当前位置存储至storage中
-						uni.setStorageSync('location', location)
-						uni.$emit('locationSave')
-						uni.hideLoading()
-						resolve(location)
-					},
-				})
+					qqmapsdk.reverseGeocoder({
+						location,
+						success(response) {
+							let info = response.result 
+							const specialRegion =  ['青白江区','合川区', '江津区', '永川区', '长寿区', '涪陵区', '南川区', '潼南区', '铜梁区', '大足区', '荣昌区', '綦江区', '璧山区'];
+							if(specialRegion.includes(info.address_component.district)){ 
+								location.city = info.address_component.district
+							}else{ 
+								if (info.address_component.district.includes('区')) {
+									location.city = info.address_component.city
+								} else {
+									location.city = info.address_component.district
+								}
+							}
+							location.province = info.address_component.province
+							location.district = info.address_component.district
+							location.street = info.address_component.street
+							location.address = info.address
+							// 将当前位置存储至storage中
+							uni.setStorageSync('location', location)
+							uni.$emit('locationSave')
+							uni.hideLoading()
+							resolve(location)
+						},
+					})
 			},
 			fail(err) {
 				// 将当前位置存储至storage中

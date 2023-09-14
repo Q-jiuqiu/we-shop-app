@@ -33,13 +33,11 @@ const _sfc_main = {
         url: "https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/-1",
         method: "GET",
         success: (res) => {
-          console.log("城市", res.data.data);
           this.cityData = res.data.data;
           res.data.data.forEach((item) => {
             this.columns.push(item.city);
           });
           this.columns = [this.columns];
-          console.log("城市1", this.columns);
           common_vendor.index.setStorageSync("cityData", this.cityData);
           common_vendor.index.setStorageSync("cityList", this.columns);
         },
@@ -64,13 +62,6 @@ const _sfc_main = {
         // 微信小程序无法将picker实例传出来，只能通过ref操作
         picker = this.$refs.uPicker
       } = e;
-      console.log(
-        columnIndex,
-        value,
-        values,
-        // values为当前变化列的数组内容
-        index
-      );
       if (columnIndex === 0) {
         const cityData = common_vendor.index.getStorageSync("cityData");
         cityData.forEach((item) => {
@@ -122,7 +113,6 @@ const _sfc_main = {
       if (this.city === city) {
         return;
       }
-      console.log(city);
       this.handleInputClear();
       this.city = city;
     },
@@ -146,14 +136,12 @@ const _sfc_main = {
       }
     },
     showPicker() {
-      console.log(this);
       if (this.columns.length > 0) {
         this.show = true;
       }
     },
     // picker选中
     handleConfirm(info) {
-      console.log(info);
       if (info.value[info.value.length - 1]) {
         this.city = info.value[info.value.length - 1];
       } else {

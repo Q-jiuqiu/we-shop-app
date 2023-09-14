@@ -14,7 +14,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["简介", "票价", "推荐", "评价"],
+      tabSenseList: ["1简介", "推荐", "票价", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -38,7 +38,6 @@ const _sfc_main = {
       return height + 44 + "px";
     },
     isSense() {
-      console.log(this.detailInfo);
       return this.detailInfo.type === "风景";
     }
   },
@@ -47,7 +46,6 @@ const _sfc_main = {
   },
   watch: {
     activeTab(newVal) {
-      console.log("新的", newVal);
       if (newVal === 3) {
         this.$nextTick(() => {
           setTimeout(() => {
@@ -82,7 +80,6 @@ const _sfc_main = {
         const start = date.setHours(startTimes[0], startTimes[1]);
         const end = date.setHours(endTimes[0], endTimes[1]);
         if (startTimes[0] * 1 > endTimes[0] * 1) {
-          console.log("第二天");
           return !this.judgeOpen(endTime + "-" + startTime);
         }
         return start < dqdq && dqdq < end;
@@ -92,18 +89,17 @@ const _sfc_main = {
     },
     // 点击tab
     handleTabClick(index) {
-      console.log(index);
       this.activeTab = index;
       switch (index) {
         case 1:
+          this.getRecommendData();
+          break;
+        case 2:
           if (this.isSense) {
             this.getFaresData();
           } else {
-            this.getRecommendData();
+            this.getExploreShopData();
           }
-          break;
-        case 2:
-          this.getExploreShopData();
           break;
         case 3:
           this.commentCur = 1;
@@ -135,7 +131,6 @@ const _sfc_main = {
         url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
-          console.log(res.data);
           const data = res.data.data;
           this.faresData = data;
           common_vendor.index.hideLoading();
@@ -163,12 +158,10 @@ const _sfc_main = {
     },
     // 增加留言
     addComment() {
-      console.log("增加留言");
       this.show = true;
     },
     // 确认增加
     handleConfirm() {
-      console.log(this.detailInfo);
       if (this.comment) {
         common_vendor.index.request({
           url: "https://www.aomue.cn/pro/rest/dbs/add/comment",
@@ -212,7 +205,6 @@ const _sfc_main = {
         method: "GET",
         success: (res) => {
           const data = res.data.data;
-          console.log(res);
           this.commentData.push(...data.content);
           this.commentLast = data.last;
           common_vendor.index.hideLoading();

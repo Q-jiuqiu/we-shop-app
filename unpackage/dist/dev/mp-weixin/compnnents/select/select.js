@@ -21,16 +21,11 @@ const _sfc_main = {
     };
   },
   created() {
-    console.log(this.selectName);
     const query = common_vendor.index.createSelectorQuery().in(this);
     query.select(".select-item").boundingClientRect((rect) => {
-      console.log("backTop:", rect);
       this.itemHeight = rect.height;
     }).exec();
   },
-  // beforeDestroy() {
-  // 	uni.$off('handleSelectShow', this.selecancelContainercName)
-  // },
   methods: {
     handleSelectClick() {
       this.$emit("fixedTo", { height: "100vh", overflow: "hidden" });
@@ -42,7 +37,6 @@ const _sfc_main = {
       const length = this.options.length > 8 ? 8 : this.options.length;
       this.height = `${this.itemHeight * length}px`;
     },
-    // cancelContainer(name) {
     cancelContainer() {
       this.$emit("fixedTo", {});
       this.showMask = false;

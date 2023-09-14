@@ -1,10 +1,15 @@
+<!--
+ * @Author: 何元鹏
+ * @Date: 2023-08-28 21:18:38
+ * @LastEditors: 何元鹏
+ * @LastEditTime: 2023-09-14 16:50:14
+-->
 <script>
 	export default {
 
 		onShow: function() {
 			uni.getSystemInfo({
-				success: result => {
-					console.log('result', result)
+				success: result => { 
 
 					// 获取手机系统的状态栏高度（不同手机的状态栏高度不同
 					let statusBarHeight = result.statusBarHeight + 'px'
@@ -18,8 +23,7 @@
 					//left:   胶囊左侧距离屏幕左侧的距离
 					//right:  胶囊右侧距离屏幕左侧的距离
 					//top:    胶囊顶部距离屏幕顶部的距离
-					//width:  胶囊宽度
-					// console.log('计算胶囊右侧距离屏幕右边距离', result.screenWidth - menuButtonInfo.right)
+					//width:  胶囊宽度 
 					let menuWidth = menuButtonInfo.width + 'px'
 					let menuHeight = menuButtonInfo.height + 'px'
 					let menuBorderRadius = menuButtonInfo.height / 2 + 'px'

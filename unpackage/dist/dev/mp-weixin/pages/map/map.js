@@ -70,8 +70,8 @@ const _sfc_main = {
             }
           }
         });
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        console.log(error);
       }
     }
   }

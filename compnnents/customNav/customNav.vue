@@ -53,14 +53,12 @@
 				uni.request({
 					url: 'https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/-1',
 					method: 'GET',
-					success: res => {
-						console.log('城市', res.data.data)
+					success: res => { 
 						this.cityData = res.data.data
 						res.data.data.forEach(item => {
 							this.columns.push(item.city)
 						})
-						this.columns = [this.columns]
-						console.log('城市1', this.columns)
+						this.columns = [this.columns] 
 						uni.setStorageSync('cityData', this.cityData)
 						uni.setStorageSync('cityList', this.columns)
 					},
@@ -83,13 +81,7 @@
 					index,
 					// 微信小程序无法将picker实例传出来，只能通过ref操作
 					picker = this.$refs.uPicker
-				} = e
-				console.log(
-					columnIndex,
-					value,
-					values, // values为当前变化列的数组内容
-					index
-				)
+				} = e 
 				// 当第一列值发生变化时，变化第二列(后一列)对应的选项
 				if (columnIndex === 0) {
 					const cityData = uni.getStorageSync('cityData')
@@ -141,8 +133,7 @@
 			async handleCityChange({ city }) {
 				if (this.city === city) {
 					return
-				}
-				console.log(city)
+				} 
 				// 清空胶囊处输入框
 				this.handleInputClear()
 				this.city = city
@@ -166,15 +157,13 @@
 					this.showPicker()
 				}
 			},
-			showPicker() {
-				console.log(this)
+			showPicker() { 
 				if (this.columns.length > 0) {
 					this.show = true
 				}
 			},
 			// picker选中
-			handleConfirm(info) {
-				console.log(info)
+			handleConfirm(info) { 
 				if (info.value[info.value.length - 1]) {
 					this.city = info.value[info.value.length - 1]
 				} else {

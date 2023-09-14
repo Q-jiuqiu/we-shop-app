@@ -158,7 +158,7 @@
 		data() {
 			return {
 				tabList: ['简介', '推荐', '探店', '评价'],
-				tabSenseList: ['简介', '票价', '推荐', '评价'],
+				tabSenseList: ['1简介', '推荐', '票价',  '评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -183,8 +183,7 @@
 				// 44为自定义顶部导航栏高度
 				return height + 44 + 'px'
 			},
-			isSense() {
-				console.log(this.detailInfo);
+			isSense() { 
 				return this.detailInfo.type === '风景'
 			}
 		},
@@ -192,8 +191,7 @@
 			this.isOpen = this.judgeOpen(this.detailInfo.workTime)
 		},
 		watch: {
-			activeTab(newVal) {
-				console.log('新的', newVal)
+			activeTab(newVal) { 
 				if (newVal === 3) {
 					this.$nextTick(() => {
 						setTimeout(() => {
@@ -234,9 +232,7 @@
 					const start = date.setHours(startTimes[0], startTimes[1])
 					const end = date.setHours(endTimes[0], endTimes[1])
 
-					if (startTimes[0] * 1 > endTimes[0] * 1) {
-						// 说明是到第二天
-						console.log('第二天')
+					if (startTimes[0] * 1 > endTimes[0] * 1) { 
 						return !this.judgeOpen(endTime + '-' + startTime)
 					}
 
@@ -246,22 +242,20 @@
 				}
 			},
 			// 点击tab
-			handleTabClick(index) {
-				console.log(index);
+			handleTabClick(index) { 
 				this.activeTab = index
 				switch (index) {
 					// 推荐
 					case 1:
-						if (this.isSense) {
-							this.getFaresData()
-						} else {
-							this.getRecommendData()
-						}
-
+						this.getRecommendData()
 						break
 						// 主播
 					case 2:
-						this.getExploreShopData()
+						if (this.isSense) {
+							this.getFaresData()
+						} else {
+							this.getExploreShopData()
+						}
 						break
 						// 评价
 					case 3:
@@ -293,8 +287,7 @@
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
-					success: res => {
-						console.log(res.data);
+					success: res => { 
 						const data = res.data.data
 						this.faresData = data
 						uni.hideLoading()
@@ -321,13 +314,11 @@
 				})
 			},
 			// 增加留言
-			addComment() {
-				console.log('增加留言')
+			addComment() { 
 				this.show = true
 			},
 			// 确认增加
-			handleConfirm() {
-				console.log(this.detailInfo)
+			handleConfirm() { 
 				if (this.comment) {
 					uni.request({
 						url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
@@ -370,8 +361,7 @@
 					url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 					method: 'GET',
 					success: res => {
-						const data = res.data.data
-						console.log(res)
+						const data = res.data.data 
 						this.commentData.push(...data.content)
 						this.commentLast = data.last
 						uni.hideLoading()

@@ -14,7 +14,6 @@ const _sfc_main = {
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("cityInfo", ({ cityInfo }) => {
-      console.log(cityInfo);
       this.cityDes = cityInfo.cityDes;
       this.imageList = cityInfo.imageList;
     });

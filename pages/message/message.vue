@@ -2,7 +2,7 @@
  * @Author: 何元鹏
  * @Date: 2023-08-28 21:18:38
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-09-06 21:18:21
+ * @LastEditTime: 2023-09-14 16:18:39
 -->
 <template>
 	<div class="message">
@@ -59,8 +59,7 @@
 							this.handleInputClear()
 
 						},
-						fail: err => {
-							console.log(err)
+						fail: err => { 
 							this.$refs.uNotify.show({
 								type: 'warning',
 								message: '留言失败',
@@ -72,8 +71,7 @@
 							this.btnLoading = false
 						}
 					})
-				}
-				console.log(this.value)
+				} 
 			}
 		}
 	}

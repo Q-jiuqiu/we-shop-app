@@ -62,7 +62,6 @@ const _sfc_main = {
   },
   // 页面上拉触底事件
   onReachBottom: async function() {
-    console.log("到底部啦", this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage);
     if (this.showDetail) {
       this.$refs.detail && this.$refs.detail.getLastComment();
     } else {
@@ -87,7 +86,6 @@ const _sfc_main = {
       common_vendor.index.navigateTo({
         url: "/pages/cityInfo/cityInfo",
         success: (res) => {
-          console.log(res);
           res.eventChannel.emit("cityInfo", {
             cityInfo: {
               imageList: this.imageList,
@@ -130,7 +128,6 @@ const _sfc_main = {
         if (this.secondType) {
           params.secondType = this.secondType;
         }
-        console.log(params);
         await this.getThreeData(params);
         this.getCityInfo();
       }
@@ -140,7 +137,6 @@ const _sfc_main = {
      * @param {string} city
      */
     getCityInfo() {
-      console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
@@ -182,7 +178,6 @@ const _sfc_main = {
      */
     async handleTypeSelect(index) {
       const { name } = this.typeList[index];
-      console.log("type", index);
       this.isShowTwo = true;
       const params = { city: this.city, type: "风景" };
       if (index !== 0) {
@@ -240,11 +235,9 @@ const _sfc_main = {
      * @param {Object} item
      */
     async handleTowData(item) {
-      console.log(item, this.city);
       if (this.city) {
         this.threeContent = [];
         this.secondType = item.name;
-        console.log("this.city", this.city);
         await this.getThreeData({ secondType: item.name, city: this.city });
       } else {
         utils_authorize.authorize.authorizeAgain();
@@ -287,7 +280,6 @@ const _sfc_main = {
           url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2",
           method: "GET",
           success: (res) => {
-            console.log("res", res);
             const data = res.data.data;
             common_vendor.index.hideLoading();
             resolve(data);
@@ -330,7 +322,6 @@ const _sfc_main = {
             });
           }
         }
-        console.log("toList", toList);
         if (toList.length > 0) {
           const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
           qqmapsdk.calculateDistance({
@@ -343,7 +334,6 @@ const _sfc_main = {
             to: toList,
             success: ({ result }) => {
               const distanceInfo = result.elements;
-              console.log("result", result, distanceInfo);
               for (let i = 0; i < distanceInfo.length; i++) {
                 const distance = distanceInfo[i].distance;
                 if (distance === -1) {
@@ -353,7 +343,6 @@ const _sfc_main = {
                 }
               }
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
-              console.log("距离", this.threeContent);
             },
             fail: function(error) {
               console.error(error);
