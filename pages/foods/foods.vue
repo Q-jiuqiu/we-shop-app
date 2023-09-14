@@ -59,8 +59,8 @@
 							<div class="value line2">{{ item.introduction }}</div>
 						</div>
 						<div class="value capitaConsumption">
-							<span>拥挤度:{{ item.queue }}</span>
-							<span>卫生度:{{ item.environment }}</span>
+							<span>拥挤度:{{ item.environment }}</span>
+							<span>卫生度:{{ item.queue}}</span>
 							<span>人均:{{ item.capitaConsumption }}</span>
 
 						</div>
@@ -331,8 +331,7 @@
 					method: 'GET',
 					success: async res => {
 						const data = res.data.data
-						const { content, last } = data
-						console.log('content', content)
+						const { content, last } = data 
 						this.threeContent.push(...content)
 						this.isThreeLastPage = last
 						this.isShowTwo = false
@@ -369,7 +368,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2',
+						url: 'https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2',
 						method: 'GET',
 						success: res => {
 							const data = res.data.data

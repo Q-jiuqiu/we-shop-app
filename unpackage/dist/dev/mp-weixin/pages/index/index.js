@@ -79,7 +79,6 @@ const _sfc_main = {
       const detail = event.detail;
       if (detail && !isNaN(detail.markerId)) {
         const detailInfo = this.dataList[detail.markerId];
-        console.log(detailInfo);
         common_vendor.index.navigateTo({
           url: "/pages/detail/detail",
           success: (res) => {

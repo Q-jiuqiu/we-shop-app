@@ -212,7 +212,6 @@ const _sfc_main = {
     },
     // 设置整体各列的columns的值
     setColumns(columns) {
-      console.log(columns);
       this.innerColumns = common_vendor.index.$u.deepClone(columns);
       if (this.innerIndex.length === 0) {
         this.innerIndex = new Array(columns.length).fill(0);

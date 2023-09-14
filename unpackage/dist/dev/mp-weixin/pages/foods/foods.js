@@ -259,7 +259,6 @@ const _sfc_main = {
         success: async (res) => {
           const data = res.data.data;
           const { content, last } = data;
-          console.log("content", content);
           this.threeContent.push(...content);
           this.isThreeLastPage = last;
           this.isShowTwo = false;
@@ -296,7 +295,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=美食&level=2",
+          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2",
           method: "GET",
           success: (res) => {
             const data = res.data.data;
@@ -471,8 +470,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),
-        e: common_vendor.t(item.queue),
-        f: common_vendor.t(item.environment),
+        e: common_vendor.t(item.environment),
+        f: common_vendor.t(item.queue),
         g: common_vendor.t(item.capitaConsumption),
         h: index,
         i: common_vendor.o(($event) => $options.handleDetailShow(item), index)

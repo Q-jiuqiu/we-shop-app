@@ -68,8 +68,24 @@
 			</div>
 			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-购票 -->
+				<div class="explore-shop" >
+						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
+							<div class="explore-shop-item-center">
+								<img class="explore-shop-item-center-image"
+								:src="item.image">
+								<div class="explore-shop-item-center-name">
+									{{item.foodName}}
+								</div> 
+							</div> 
+						</div>	
+					</div>  
+			</div>
+			<!-- 探店 -->
+				<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
+					<div class="table-title" >点击购票
+						  <image style="width: 200rpx; height: 200rpx;" 	:show-menu-by-longpress="true" src="../../mixin/cs.webp"></image>
+					</div>
 					<div class="table-header">
 						<div class="tr">
 							<div class="th">人群类型</div>
@@ -85,24 +101,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- 美食-推荐 -->
-				<div v-else>
-					<div class="explore-shop" >
-						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
-							<div class="explore-shop-item-center">
-								<img class="explore-shop-item-center-image"
-								:src="item.image">
-								<div class="explore-shop-item-center-name">
-									{{item.foodName}}
-								</div> 
-							</div> 
-						</div>	
-					</div> 
-				</div>
-			</div>
-			<!-- 探店 -->
-			<div class="anchor tab-container" v-show="activeTab === 2"> 
-				 <div class="explore-shop" >
+				<div class="explore-shop" v-else >
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
@@ -110,8 +109,7 @@
 							<div class="explore-shop-item-center-name">
 								{{item.name}}
 							</div> 
-						</div>
-						
+						</div> 
 					</div>	
 				</div> 
 			</div>
@@ -158,7 +156,7 @@
 		data() {
 			return {
 				tabList: ['简介', '推荐', '探店', '评价'],
-				tabSenseList: ['简介', '购票', '探店', '评价'],
+				tabSenseList: ['1简介', '推荐', '票价',  '评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -183,8 +181,7 @@
 				// 44为自定义顶部导航栏高度
 				return height + 44 + 'px'
 			},
-			isSense() {
-				console.log(this.detailInfo);
+			isSense() { 
 				return this.detailInfo.type === '风景'
 			}
 		},
@@ -192,8 +189,7 @@
 			this.isOpen = this.judgeOpen(this.detailInfo.workTime)
 		},
 		watch: {
-			activeTab(newVal) {
-				console.log('新的', newVal)
+			activeTab(newVal) { 
 				if (newVal === 3) {
 					this.$nextTick(() => {
 						setTimeout(() => {
@@ -234,9 +230,7 @@
 					const start = date.setHours(startTimes[0], startTimes[1])
 					const end = date.setHours(endTimes[0], endTimes[1])
 
-					if (startTimes[0] * 1 > endTimes[0] * 1) {
-						// 说明是到第二天
-						console.log('第二天')
+					if (startTimes[0] * 1 > endTimes[0] * 1) { 
 						return !this.judgeOpen(endTime + '-' + startTime)
 					}
 
@@ -246,22 +240,20 @@
 				}
 			},
 			// 点击tab
-			handleTabClick(index) {
-				console.log(index);
+			handleTabClick(index) { 
 				this.activeTab = index
 				switch (index) {
 					// 推荐
 					case 1:
-						if (this.isSense) {
-							this.getFaresData()
-						} else {
-							this.getRecommendData()
-						}
-
+						this.getRecommendData()
 						break
 						// 主播
 					case 2:
-						this.getExploreShopData()
+						if (this.isSense) {
+							this.getFaresData()
+						} else {
+							this.getExploreShopData()
+						}
 						break
 						// 评价
 					case 3:
@@ -293,8 +285,7 @@
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
-					success: res => {
-						console.log(res.data);
+					success: res => { 
 						const data = res.data.data
 						this.faresData = data
 						uni.hideLoading()
@@ -321,13 +312,11 @@
 				})
 			},
 			// 增加留言
-			addComment() {
-				console.log('增加留言')
+			addComment() { 
 				this.show = true
 			},
 			// 确认增加
-			handleConfirm() {
-				console.log(this.detailInfo)
+			handleConfirm() { 
 				if (this.comment) {
 					uni.request({
 						url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
@@ -370,8 +359,7 @@
 					url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 					method: 'GET',
 					success: res => {
-						const data = res.data.data
-						console.log(res)
+						const data = res.data.data 
 						this.commentData.push(...data.content)
 						this.commentLast = data.last
 						uni.hideLoading()
@@ -603,12 +591,12 @@
 					flex-wrap: wrap;
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
-					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					gap: 10rpx; /* 元素之间的间距 */
+					 
 						&-item {
-						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						width: calc(25% - 10rpx); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
-						padding: 10px; /* 内边距，根据需要调整 */
+						padding: 10rpx; /* 内边距，根据需要调整 */
 						box-sizing: border-box;
 						&-center{
 							display: flex;
@@ -618,8 +606,7 @@
 							height: 100%; /* 让内容居中 */
 							&-image {
 								width: 100rpx;
-								height: 100rpx;
-								border-radius: 50%;
+								height: 100rpx; 
 							}
 							&-name{
 								width: 100rpx;
@@ -641,12 +628,12 @@
 					flex-wrap: wrap;
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
-					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					gap: 10rpx; /* 元素之间的间距 */
+					 
 						&-item {
-						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
+						width: calc(25% - 10rpx); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
-						padding: 10px; /* 内边距，根据需要调整 */
+						padding: 10rpx; /* 内边距，根据需要调整 */
 						box-sizing: border-box;
 						&-center{
 							display: flex;

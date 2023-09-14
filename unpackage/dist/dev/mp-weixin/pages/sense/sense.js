@@ -40,8 +40,9 @@ const _sfc_main = {
       showInput: true,
       // 是否展示搜索框
       fixedStyle: {},
-      secondType: ""
+      secondType: "",
       // 二级类型
+      threeContentKb: []
     };
   },
   // 监听页面加载
@@ -61,7 +62,6 @@ const _sfc_main = {
   },
   // 页面上拉触底事件
   onReachBottom: async function() {
-    console.log("到底部啦", this.isShowTwo, this.isTwoLastPage, this.isThreeLastPage);
     if (this.showDetail) {
       this.$refs.detail && this.$refs.detail.getLastComment();
     } else {
@@ -86,7 +86,6 @@ const _sfc_main = {
       common_vendor.index.navigateTo({
         url: "/pages/cityInfo/cityInfo",
         success: (res) => {
-          console.log(res);
           res.eventChannel.emit("cityInfo", {
             cityInfo: {
               imageList: this.imageList,
@@ -109,7 +108,6 @@ const _sfc_main = {
       if (this.secondType) {
         params.secondType = this.secondType;
       }
-      console.log(params);
       this.getThreeData(params);
     },
     // 城市改变
@@ -130,7 +128,6 @@ const _sfc_main = {
         if (this.secondType) {
           params.secondType = this.secondType;
         }
-        console.log(params);
         await this.getThreeData(params);
         this.getCityInfo();
       }
@@ -140,7 +137,6 @@ const _sfc_main = {
      * @param {string} city
      */
     getCityInfo() {
-      console.log("根据城市名称获取城市详细数据", this.city);
       common_vendor.index.request({
         url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
@@ -151,8 +147,6 @@ const _sfc_main = {
             const keys = Object.keys(info);
             for (let key of keys) {
               if (key.indexOf("image") >= 0 && info[key]) {
-                console.log("图片信息", key);
-                console.log(info[key]);
                 this.imageList.push(info[key]);
               }
             }
@@ -184,7 +178,6 @@ const _sfc_main = {
      */
     async handleTypeSelect(index) {
       const { name } = this.typeList[index];
-      console.log("type", index);
       this.isShowTwo = true;
       const params = { city: this.city, type: "风景" };
       if (index !== 0) {
@@ -198,19 +191,30 @@ const _sfc_main = {
      * @param {number} index 选中下标
      */
     handleSortSelect(index) {
-      console.log("Sort", index);
       if (index === 2) {
-        for (let i = 0; i < this.threeContent.length; i++) {
-          let itemI = this.threeContent[i];
-          for (let j = i + 1; j < this.threeContent.length; j++) {
-            let itemJ = this.threeContent[j];
-            const tmep = this.threeContent[j];
-            if (itemI.distance >= itemJ.distance) {
-              this.threeContent[j] = this.threeContent[i];
-              this.threeContent[i] = tmep;
-            }
+        this.threeContent.sort(function(a, b) {
+          var distanceA = parseFloat(a.distance);
+          var distanceB = parseFloat(b.distance);
+          if (distanceA < distanceB) {
+            return -1;
           }
-        }
+          if (distanceA > distanceB) {
+            return 1;
+          }
+          return 0;
+        });
+      } else if (index === 1) {
+        this.threeContent.sort(function(a, b) {
+          var distanceA = parseFloat(a.heat);
+          var distanceB = parseFloat(b.heat);
+          if (distanceA > distanceB) {
+            return -1;
+          }
+          if (distanceA < distanceB) {
+            return 1;
+          }
+          return 0;
+        });
       } else {
         this.threeContent = this.threeContentCopy;
       }
@@ -220,33 +224,32 @@ const _sfc_main = {
      * @param {number} index 
      */
     handleFreeSelect(index) {
-      console.log("Free", index, this.freeList[index]);
+      if (index === 2) {
+        this.threeContent = this.threeContentKb.filter((item) => item.capitaConsumption === "0");
+      } else if (index === 1) {
+        this.threeContent = this.threeContentKb.filter((item) => item.capitaConsumption !== "0");
+      }
     },
     /**
      * @description 获取指定分类数据
      * @param {Object} item
      */
     async handleTowData(item) {
-      console.log(item, this.city);
       if (this.city) {
         this.threeContent = [];
         this.secondType = item.name;
-        console.log("this.city", this.city);
         await this.getThreeData({ secondType: item.name, city: this.city });
       } else {
         utils_authorize.authorize.authorizeAgain();
       }
     },
-    // 点击页面监听
-    // handlePageClick() {
-    // 	uni.$emit('handleSelectShow', false)
-    // },
     // 获取三级数据
     async getThreeData(params = {}) {
       common_vendor.index.showLoading({ title: "获取数据中" });
       const res = await this.getSenseData(params);
       this.threeContent.push(...res.content);
       this.isThreeLastPage = res.last;
+      this.threeContentKb = JSON.parse(JSON.stringify(this.threeContent));
       this.isShowTwo = false;
       await this.getDistance({
         longitude: this.location.longitude,
@@ -256,7 +259,6 @@ const _sfc_main = {
     },
     // 详情
     handleDetailShow(detail) {
-      console.log(detail);
       this.detail = detail;
       this.showDetail = true;
       this.showInput = false;
@@ -275,10 +277,9 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/dict/one/1/999999?type=风景&level=2",
+          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2",
           method: "GET",
           success: (res) => {
-            console.log("res", res);
             const data = res.data.data;
             common_vendor.index.hideLoading();
             resolve(data);
@@ -321,7 +322,6 @@ const _sfc_main = {
             });
           }
         }
-        console.log("toList", toList);
         if (toList.length > 0) {
           const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
           qqmapsdk.calculateDistance({
@@ -334,7 +334,6 @@ const _sfc_main = {
             to: toList,
             success: ({ result }) => {
               const distanceInfo = result.elements;
-              console.log("result", result, distanceInfo);
               for (let i = 0; i < distanceInfo.length; i++) {
                 const distance = distanceInfo[i].distance;
                 if (distance === -1) {
@@ -344,7 +343,6 @@ const _sfc_main = {
                 }
               }
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
-              console.log("距离", this.threeContent);
             },
             fail: function(error) {
               console.error(error);

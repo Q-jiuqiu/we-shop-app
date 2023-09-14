@@ -34,24 +34,17 @@ export default {
 			showMask: false
 		}
 	},
-	created() {
-		console.log(this.selectName)
-		// uni.$on('handleSelectShow', this.cancelContainer)
+	created() { 
 		const query = uni.createSelectorQuery().in(this)
 		query
 			.select('.select-item')
-			.boundingClientRect(rect => {
-				console.log('backTop:', rect)
+			.boundingClientRect(rect => { 
 				this.itemHeight = rect.height
 			})
 			.exec()
-	},
-	// beforeDestroy() {
-	// 	uni.$off('handleSelectShow', this.selecancelContainercName)
-	// },
+	}, 
 	methods: {
-		handleSelectClick() {
-			// uni.$emit('handleSelectShow', this.selectName)
+		handleSelectClick() { 
 			this.$emit('fixedTo', { height: '100vh', overflow: 'hidden' })
 			// 页面回到顶部
 			uni.pageScrollTo({
@@ -61,15 +54,11 @@ export default {
 			this.showMask = true
 			const length = this.options.length > 8 ? 8 : this.options.length
 			this.height = `${this.itemHeight * length}px`
-		},
-		// cancelContainer(name) {
-		cancelContainer() {
-			// console.log('name', name)
-			// if (!name || this.selectName !== name) {
+		}, 
+		cancelContainer() { 
 			this.$emit('fixedTo', {})
 			this.showMask = false
-			this.height = '0px'
-			//
+			this.height = '0px' 
 		},
 		handleItemSelect(index) {
 			this.selectIndex = index

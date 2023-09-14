@@ -28,7 +28,7 @@
 					<p>	
 						<span class="label" v-if="isSense">预约：</span>
 						<span class="label" v-else>卫生度：</span>
-					  <span class="text">{{detailInfo.environment}}</span>
+					  <span class="text">{{detailInfo.environment }}</span>
 					</p>
 					<p class="queue">
 						<span class="label" v-if="isSense">拥挤指数：</span> 
@@ -69,7 +69,21 @@
 			</div>
 			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-购票 -->
+					<div class="explore-shop" >
+						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
+							<div class="explore-shop-item-center">
+								<img class="explore-shop-item-center-image"
+								:src="item.image">
+								<div class="explore-shop-item-center-name">
+									{{item.foodName}}
+								</div> 
+							</div> 
+						</div>	
+					</div> 
+			 
+			</div>
+			<!-- 探店 -->
+			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
 					<div class="table-header">
 						<div class="tr">
@@ -86,24 +100,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- 美食-推荐 -->
-				<div v-else>
-					<div class="explore-shop" >
-						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
-							<div class="explore-shop-item-center">
-								<img class="explore-shop-item-center-image"
-								:src="item.image">
-								<div class="explore-shop-item-center-name">
-									{{item.foodName}}
-								</div> 
-							</div> 
-						</div>	
-					</div>
-				</div>
-			</div>
-			<!-- 探店 -->
-			<div class="anchor tab-container" v-show="activeTab === 2">
-				<div class="explore-shop" >
+				<div class="explore-shop" v-else >
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
@@ -153,7 +150,7 @@ export default {
 	data() {
 		return {
 			tabList: ['简介', '推荐', '探店', '评价'],
-			tabSenseList:['简介', '票价','探店','评价'],
+			tabSenseList:['简介','推荐', '票价','评价'],
 			activeTab: 0,
 			recommendData: [],
 			commentData: [],
@@ -186,8 +183,7 @@ export default {
 		this.eventChannel = eventChannel
 		eventChannel.on('detailPage', ({ detail }) => { 
 			this.detailInfo = detail
-			const type = this.detailInfo.type
-				console.log(type);
+			const type = this.detailInfo.type 
 			if(type === '风景'){
 				this.isSense = true
 			}else{
@@ -256,21 +252,19 @@ export default {
 		},
 		// 点击tab
 		handleTabClick(index) {
-			this.activeTab = index
-			console.log(index);
+			this.activeTab = index 
 			switch (index) {
 				// 推荐
 				case 1:
-						if (this.isSense) {
-							this.getFaresData()
-						} else {
-							this.getRecommendData()
-						}
-
+				this.getRecommendData()
 					break
 				// 主播
 				case 2: 
-					this.getExploreShopData()
+				if (this.isSense) {
+							this.getFaresData()
+						} else {
+							this.getExploreShopData()
+						} 
 					break
 				// 评价
 				case 3:
@@ -282,14 +276,13 @@ export default {
 			}
 		},
 		// 获取票价数据
-			getFaresData() {
+		getFaresData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
-					success: res => {
-						console.log(res.data);
-						const data = res.data.data
+					success: res => { 
+						const data = res.data.data 
 						this.faresData = data
 						uni.hideLoading()
 					},
@@ -331,13 +324,11 @@ export default {
 				})
 			},
 		// 增加留言
-		addComment() {
-			console.log('增加留言')
+		addComment() { 
 			this.show = true
 		},
 		// 确认增加
-		handleConfirm() {
-			console.log(this.detailInfo)
+		handleConfirm() { 
 			if (this.comment) {
 				uni.request({
 					url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
@@ -380,8 +371,7 @@ export default {
 				url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 				method: 'GET',
 				success: res => {
-					const data = res.data.data
-					console.log(res)
+					const data = res.data.data 
 					this.commentData.push(...data.content)
 					this.commentLast = data.last
 					uni.hideLoading()
@@ -608,7 +598,7 @@ export default {
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
 					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					 
 						&-item {
 						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */
@@ -622,8 +612,7 @@ export default {
 							height: 100%; /* 让内容居中 */
 							&-image {
 								width: 100rpx;
-								height: 100rpx;
-								border-radius: 50%;
+								height: 100rpx; 
 							}
 							&-name{
 								width: 100rpx;
@@ -646,7 +635,7 @@ export default {
 					justify-content: flex-start; /* 从左往右排列 */
 					align-items: center; /* 垂直居中 */
 					gap: 10px; /* 元素之间的间距 */
-					width: 400px; /* 设置容器宽度，根据需要调整 */
+					 
 						&-item {
 						width: calc(25% - 10px); /* 每列宽度为25%，减去间距 */
 						text-align: center; /* 文本水平居中 */

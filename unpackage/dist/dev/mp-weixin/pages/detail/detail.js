@@ -8,7 +8,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["简介", "票价", "探店", "评价"],
+      tabSenseList: ["简介", "推荐", "票价", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -41,7 +41,6 @@ const _sfc_main = {
     eventChannel.on("detailPage", ({ detail }) => {
       this.detailInfo = detail;
       const type = this.detailInfo.type;
-      console.log(type);
       if (type === "风景") {
         this.isSense = true;
       } else {
@@ -98,17 +97,16 @@ const _sfc_main = {
     // 点击tab
     handleTabClick(index) {
       this.activeTab = index;
-      console.log(index);
       switch (index) {
         case 1:
+          this.getRecommendData();
+          break;
+        case 2:
           if (this.isSense) {
             this.getFaresData();
           } else {
-            this.getRecommendData();
+            this.getExploreShopData();
           }
-          break;
-        case 2:
-          this.getExploreShopData();
           break;
         case 3:
           this.commentCur = 1;
@@ -124,7 +122,6 @@ const _sfc_main = {
         url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
-          console.log(res.data);
           const data = res.data.data;
           this.faresData = data;
           common_vendor.index.hideLoading();
@@ -168,12 +165,10 @@ const _sfc_main = {
     },
     // 增加留言
     addComment() {
-      console.log("增加留言");
       this.show = true;
     },
     // 确认增加
     handleConfirm() {
-      console.log(this.detailInfo);
       if (this.comment) {
         common_vendor.index.request({
           url: "https://www.aomue.cn/pro/rest/dbs/add/comment",
@@ -217,7 +212,6 @@ const _sfc_main = {
         method: "GET",
         success: (res) => {
           const data = res.data.data;
-          console.log(res);
           this.commentData.push(...data.content);
           this.commentLast = data.last;
           common_vendor.index.hideLoading();
@@ -321,9 +315,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     z: $data.detailInfo.remark,
     A: $data.activeTab === 0,
-    B: $data.isSense && $data.faresData.length
+    B: common_vendor.f($data.recommendData, (item, index, i0) => {
+      return {
+        a: item.image,
+        b: common_vendor.t(item.foodName),
+        c: index
+      };
+    }),
+    C: $data.activeTab === 1,
+    D: $data.isSense && $data.faresData.length
   }, $data.isSense && $data.faresData.length ? {
-    C: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -332,22 +334,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    D: common_vendor.f($data.recommendData, (item, index, i0) => {
-      return {
-        a: item.image,
-        b: common_vendor.t(item.foodName),
-        c: index
-      };
-    })
-  }, {
-    E: $data.activeTab === 1,
     F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
-    }),
+    })
+  }, {
     G: $data.activeTab === 2,
     H: common_vendor.f($data.commentData, (item, index, i0) => {
       return {

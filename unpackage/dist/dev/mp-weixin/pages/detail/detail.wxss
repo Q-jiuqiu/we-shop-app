@@ -199,8 +199,6 @@
   /* 垂直居中 */
   gap: 10px;
   /* 元素之间的间距 */
-  width: 400px;
-  /* 设置容器宽度，根据需要调整 */
 }
 .detail .container .recommend .explore-shop-item.data-v-eca06f3c {
   width: calc(25% - 10px);
@@ -224,7 +222,6 @@
 .detail .container .recommend .explore-shop-item-center-image.data-v-eca06f3c {
   width: 100rpx;
   height: 100rpx;
-  border-radius: 50%;
 }
 .detail .container .recommend .explore-shop-item-center-name.data-v-eca06f3c {
   width: 100rpx;
@@ -243,8 +240,6 @@
   /* 垂直居中 */
   gap: 10px;
   /* 元素之间的间距 */
-  width: 400px;
-  /* 设置容器宽度，根据需要调整 */
 }
 .detail .container .anchor .explore-shop-item.data-v-eca06f3c {
   width: calc(25% - 10px);

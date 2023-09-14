@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 const NoData = () => "../noData/noData.js";
 const _sfc_main = {
   name: "detailCom",
@@ -14,7 +15,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["简介", "购票", "探店", "评价"],
+      tabSenseList: ["1简介", "推荐", "票价", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -38,7 +39,6 @@ const _sfc_main = {
       return height + 44 + "px";
     },
     isSense() {
-      console.log(this.detailInfo);
       return this.detailInfo.type === "风景";
     }
   },
@@ -47,7 +47,6 @@ const _sfc_main = {
   },
   watch: {
     activeTab(newVal) {
-      console.log("新的", newVal);
       if (newVal === 3) {
         this.$nextTick(() => {
           setTimeout(() => {
@@ -82,7 +81,6 @@ const _sfc_main = {
         const start = date.setHours(startTimes[0], startTimes[1]);
         const end = date.setHours(endTimes[0], endTimes[1]);
         if (startTimes[0] * 1 > endTimes[0] * 1) {
-          console.log("第二天");
           return !this.judgeOpen(endTime + "-" + startTime);
         }
         return start < dqdq && dqdq < end;
@@ -92,18 +90,17 @@ const _sfc_main = {
     },
     // 点击tab
     handleTabClick(index) {
-      console.log(index);
       this.activeTab = index;
       switch (index) {
         case 1:
+          this.getRecommendData();
+          break;
+        case 2:
           if (this.isSense) {
             this.getFaresData();
           } else {
-            this.getRecommendData();
+            this.getExploreShopData();
           }
-          break;
-        case 2:
-          this.getExploreShopData();
           break;
         case 3:
           this.commentCur = 1;
@@ -135,7 +132,6 @@ const _sfc_main = {
         url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
-          console.log(res.data);
           const data = res.data.data;
           this.faresData = data;
           common_vendor.index.hideLoading();
@@ -163,12 +159,10 @@ const _sfc_main = {
     },
     // 增加留言
     addComment() {
-      console.log("增加留言");
       this.show = true;
     },
     // 确认增加
     handleConfirm() {
-      console.log(this.detailInfo);
       if (this.comment) {
         common_vendor.index.request({
           url: "https://www.aomue.cn/pro/rest/dbs/add/comment",
@@ -212,7 +206,6 @@ const _sfc_main = {
         method: "GET",
         success: (res) => {
           const data = res.data.data;
-          console.log(res);
           this.commentData.push(...data.content);
           this.commentLast = data.last;
           common_vendor.index.hideLoading();
@@ -315,9 +308,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     z: $props.detailInfo.remark,
     A: $data.activeTab === 0,
-    B: $options.isSense && $data.faresData.length
+    B: common_vendor.f($data.recommendData, (item, index, i0) => {
+      return {
+        a: item.image,
+        b: common_vendor.t(item.foodName),
+        c: index
+      };
+    }),
+    C: $data.activeTab === 1,
+    D: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    C: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_assets._imports_0,
+    F: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -326,53 +328,45 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    D: common_vendor.f($data.recommendData, (item, index, i0) => {
-      return {
-        a: item.image,
-        b: common_vendor.t(item.foodName),
-        c: index
-      };
-    })
-  }, {
-    E: $data.activeTab === 1,
-    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
-    }),
-    G: $data.activeTab === 2,
-    H: common_vendor.f($data.commentData, (item, index, i0) => {
+    })
+  }, {
+    H: $data.activeTab === 2,
+    I: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.comment),
         b: index
       };
     }),
-    I: $data.commentData.length === 0
+    J: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    J: !$data.commentLast
+    K: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    K: $data.activeTab === 3,
-    L: common_vendor.o(($event) => $data.comment = $event),
-    M: common_vendor.p({
+    L: $data.activeTab === 3,
+    M: common_vendor.o(($event) => $data.comment = $event),
+    N: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    N: common_vendor.o($options.close),
-    O: common_vendor.p({
+    O: common_vendor.o($options.close),
+    P: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    P: common_vendor.o($options.handleConfirm),
-    Q: common_vendor.p({
+    Q: common_vendor.o($options.handleConfirm),
+    R: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    R: common_vendor.o($options.close),
-    S: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       show: $data.show
     })
   });

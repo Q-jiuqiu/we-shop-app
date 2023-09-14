@@ -26,7 +26,6 @@ const _sfc_main = {
   },
   // 页面上拉触底事件
   onReachBottom: async function() {
-    console.log("到底部啦");
     if (this.curNow === 0) {
       if (this.foodLast) {
         common_vendor.index.showToast({
@@ -97,7 +96,6 @@ const _sfc_main = {
             this.senseData.push(...result.content);
             this.senseLast = result.last;
           }
-          console.log(this.foodData, this.senseData);
         },
         fail: (err) => {
           console.log(err);

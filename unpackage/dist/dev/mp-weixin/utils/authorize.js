@@ -14,7 +14,6 @@ function authorizeAgain(callBack) {
             if (tip.confirm) {
               common_vendor.index.openSetting({
                 success: async ({ authSetting }) => {
-                  console.log("authSetting", authSetting);
                   const isLocation = authSetting && authSetting["scope.userLocation"];
                   if (isLocation) {
                     await getLocationInfo();
@@ -65,7 +64,6 @@ function getLocationInfo(callBack) {
     common_vendor.index.getLocation({
       type: "gcj02",
       success(res) {
-        console.log(res, "==");
         common_vendor.index.showLoading({ title: "获取位置信息" });
         location.longitude = res.longitude;
         location.latitude = res.latitude;
@@ -74,13 +72,17 @@ function getLocationInfo(callBack) {
           location,
           success(response) {
             let info = response.result;
-            console.log(info);
-            location.province = info.address_component.province;
-            if (info.address_component.district.includes("区")) {
-              location.city = info.address_component.city;
-            } else {
+            const specialRegion = ["青白江区", "合川区", "江津区", "永川区", "长寿区", "涪陵区", "南川区", "潼南区", "铜梁区", "大足区", "荣昌区", "綦江区", "璧山区"];
+            if (specialRegion.includes(info.address_component.district)) {
               location.city = info.address_component.district;
+            } else {
+              if (info.address_component.district.includes("区")) {
+                location.city = info.address_component.city;
+              } else {
+                location.city = info.address_component.district;
+              }
             }
+            location.province = info.address_component.province;
             location.district = info.address_component.district;
             location.street = info.address_component.street;
             location.address = info.address;
