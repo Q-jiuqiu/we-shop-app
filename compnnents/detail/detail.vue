@@ -68,8 +68,24 @@
 			</div>
 			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-购票 -->
+				<div class="explore-shop" >
+						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
+							<div class="explore-shop-item-center">
+								<img class="explore-shop-item-center-image"
+								:src="item.image">
+								<div class="explore-shop-item-center-name">
+									{{item.foodName}}
+								</div> 
+							</div> 
+						</div>	
+					</div>  
+			</div>
+			<!-- 探店 -->
+				<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
+					<div class="table-title" >点击购票
+						  <image style="width: 200rpx; height: 200rpx;" 	:show-menu-by-longpress="true" src="../../mixin/cs.webp"></image>
+					</div>
 					<div class="table-header">
 						<div class="tr">
 							<div class="th">人群类型</div>
@@ -85,24 +101,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- 美食-推荐 -->
-				<div v-else>
-					<div class="explore-shop" >
-						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
-							<div class="explore-shop-item-center">
-								<img class="explore-shop-item-center-image"
-								:src="item.image">
-								<div class="explore-shop-item-center-name">
-									{{item.foodName}}
-								</div> 
-							</div> 
-						</div>	
-					</div> 
-				</div>
-			</div>
-			<!-- 探店 -->
-			<div class="anchor tab-container" v-show="activeTab === 2"> 
-				 <div class="explore-shop" >
+				<div class="explore-shop" v-else >
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
@@ -110,8 +109,7 @@
 							<div class="explore-shop-item-center-name">
 								{{item.name}}
 							</div> 
-						</div>
-						
+						</div> 
 					</div>	
 				</div> 
 			</div>

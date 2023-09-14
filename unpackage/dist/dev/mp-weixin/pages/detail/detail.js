@@ -315,9 +315,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     z: $data.detailInfo.remark,
     A: $data.activeTab === 0,
-    B: $data.isSense && $data.faresData.length
+    B: common_vendor.f($data.recommendData, (item, index, i0) => {
+      return {
+        a: item.image,
+        b: common_vendor.t(item.foodName),
+        c: index
+      };
+    }),
+    C: $data.activeTab === 1,
+    D: $data.isSense && $data.faresData.length
   }, $data.isSense && $data.faresData.length ? {
-    C: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -326,22 +334,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    D: common_vendor.f($data.recommendData, (item, index, i0) => {
-      return {
-        a: item.image,
-        b: common_vendor.t(item.foodName),
-        c: index
-      };
-    })
-  }, {
-    E: $data.activeTab === 1,
     F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
-    }),
+    })
+  }, {
     G: $data.activeTab === 2,
     H: common_vendor.f($data.commentData, (item, index, i0) => {
       return {

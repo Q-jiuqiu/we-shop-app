@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 const NoData = () => "../noData/noData.js";
 const _sfc_main = {
   name: "detailCom",
@@ -307,9 +308,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     z: $props.detailInfo.remark,
     A: $data.activeTab === 0,
-    B: $options.isSense && $data.faresData.length
+    B: common_vendor.f($data.recommendData, (item, index, i0) => {
+      return {
+        a: item.image,
+        b: common_vendor.t(item.foodName),
+        c: index
+      };
+    }),
+    C: $data.activeTab === 1,
+    D: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    C: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_assets._imports_0,
+    F: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -318,53 +328,45 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    D: common_vendor.f($data.recommendData, (item, index, i0) => {
-      return {
-        a: item.image,
-        b: common_vendor.t(item.foodName),
-        c: index
-      };
-    })
-  }, {
-    E: $data.activeTab === 1,
-    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.headSculpture,
         b: common_vendor.t(item.name),
         c: index
       };
-    }),
-    G: $data.activeTab === 2,
-    H: common_vendor.f($data.commentData, (item, index, i0) => {
+    })
+  }, {
+    H: $data.activeTab === 2,
+    I: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.comment),
         b: index
       };
     }),
-    I: $data.commentData.length === 0
+    J: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    J: !$data.commentLast
+    K: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    K: $data.activeTab === 3,
-    L: common_vendor.o(($event) => $data.comment = $event),
-    M: common_vendor.p({
+    L: $data.activeTab === 3,
+    M: common_vendor.o(($event) => $data.comment = $event),
+    N: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    N: common_vendor.o($options.close),
-    O: common_vendor.p({
+    O: common_vendor.o($options.close),
+    P: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    P: common_vendor.o($options.handleConfirm),
-    Q: common_vendor.p({
+    Q: common_vendor.o($options.handleConfirm),
+    R: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    R: common_vendor.o($options.close),
-    S: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       show: $data.show
     })
   });

@@ -69,7 +69,21 @@
 			</div>
 			<!-- 推荐/购票 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
-				<!-- 风景-购票 -->
+					<div class="explore-shop" >
+						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
+							<div class="explore-shop-item-center">
+								<img class="explore-shop-item-center-image"
+								:src="item.image">
+								<div class="explore-shop-item-center-name">
+									{{item.foodName}}
+								</div> 
+							</div> 
+						</div>	
+					</div> 
+			 
+			</div>
+			<!-- 探店 -->
+			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
 					<div class="table-header">
 						<div class="tr">
@@ -86,24 +100,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- 美食-推荐 -->
-				<div v-else>
-					<div class="explore-shop" >
-						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
-							<div class="explore-shop-item-center">
-								<img class="explore-shop-item-center-image"
-								:src="item.image">
-								<div class="explore-shop-item-center-name">
-									{{item.foodName}}
-								</div> 
-							</div> 
-						</div>	
-					</div>
-				</div>
-			</div>
-			<!-- 探店 -->
-			<div class="anchor tab-container" v-show="activeTab === 2">
-				<div class="explore-shop" >
+				<div class="explore-shop" v-else >
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
@@ -279,13 +276,13 @@ export default {
 			}
 		},
 		// 获取票价数据
-			getFaresData() {
+		getFaresData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
 					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => { 
-						const data = res.data.data
+						const data = res.data.data 
 						this.faresData = data
 						uni.hideLoading()
 					},
