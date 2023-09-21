@@ -51,7 +51,7 @@
 				this.columns = cityList
 			} else {
 				uni.request({
-					url: 'https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/-1',
+					url: 'https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/-1',
 					method: 'GET',
 					success: res => { 
 						this.cityData = res.data.data
@@ -88,7 +88,7 @@
 					cityData.forEach(item => {
 						if (item.city === value[0]) {
 							uni.request({
-								url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+								url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
 								method: 'GET',
 								success: res => {
 									const colums = []
@@ -110,7 +110,7 @@
 					cityData1.forEach(item => {
 						if (item.city === value[1]) {
 							uni.request({
-								url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+								url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
 								method: 'GET',
 								success: res => {
 									const colums = []

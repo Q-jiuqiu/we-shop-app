@@ -20,7 +20,7 @@ const _sfc_main = {
       if (this.value) {
         this.btnLoading = true;
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/add/leave/word",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/add/leave/word",
           method: "POST",
           data: { leaveWord: this.value },
           success: (res) => {

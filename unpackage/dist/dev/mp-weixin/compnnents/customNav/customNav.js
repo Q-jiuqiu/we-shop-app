@@ -30,7 +30,7 @@ const _sfc_main = {
       this.columns = cityList;
     } else {
       common_vendor.index.request({
-        url: "https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/-1",
+        url: "https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/-1",
         method: "GET",
         success: (res) => {
           this.cityData = res.data.data;
@@ -67,7 +67,7 @@ const _sfc_main = {
         cityData.forEach((item) => {
           if (item.city === value[0]) {
             common_vendor.index.request({
-              url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+              url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
               method: "GET",
               success: (res) => {
                 const colums = [];
@@ -89,7 +89,7 @@ const _sfc_main = {
         cityData1.forEach((item) => {
           if (item.city === value[1]) {
             common_vendor.index.request({
-              url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+              url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
               method: "GET",
               success: (res) => {
                 const colums = [];

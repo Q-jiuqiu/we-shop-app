@@ -112,7 +112,7 @@
 					curPage = this.senseCur
 				}
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/escape/pit/${curPage}/10`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/escape/pit/${curPage}/10`,
 					data: params,
 					method: 'GET',
 					success: ({ data }) => {

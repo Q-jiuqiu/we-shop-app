@@ -7,7 +7,7 @@
 		</div>
 		<div v-else>
 			<div class="image-container">
-				<div class="image-list"  @click="navigateCityInfo">
+				<div class="image-list"  @click="navigateCityInfo" v-if="imageList.length">
 					<u-swiper :list="[imageList[0]]" style="height: 100%;"></u-swiper>
 				</div>
 				 
@@ -225,9 +225,9 @@
 			 * @description 根据城市名称获取城市详细数据
 			 * @param {string} city
 			 */
-			getCityInfo() {
+		async	getCityInfo() {
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
 					method: 'GET',
 					success: ({ data }) => {
 						const info = data.data
@@ -239,6 +239,7 @@
 									this.imageList.push(info[key])
 								}
 							}
+							console.log(this.imageList);
 							this.cityDes = info.remark
 						}
 					},
@@ -326,7 +327,7 @@
 			getThreeData(params = {}) {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
 					data: params,
 					method: 'GET',
 					success: async res => {
@@ -368,7 +369,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2',
+						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2',
 						method: 'GET',
 						success: res => {
 							const data = res.data.data
@@ -388,7 +389,7 @@
 			getTwoDatas(params = {}) {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3&city=${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
 					data: params,
 					method: 'GET',
 					success: res => {
@@ -407,7 +408,7 @@
 			getFoodsData(params = {}) {
 				return new Promise(resolve => {
 					uni.request({
-						url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+						url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
 						data: params,
 						method: 'GET',
 						success: res => {

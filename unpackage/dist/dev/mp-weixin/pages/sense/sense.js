@@ -138,7 +138,7 @@ const _sfc_main = {
      */
     getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -277,7 +277,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2",
           method: "GET",
           success: (res) => {
             const data = res.data.data;
@@ -294,7 +294,7 @@ const _sfc_main = {
     getSenseData(params = {}) {
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+          url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
           data: params,
           method: "GET",
           success: (res) => {

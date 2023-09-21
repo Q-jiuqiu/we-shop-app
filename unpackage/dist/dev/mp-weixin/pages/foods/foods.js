@@ -154,9 +154,9 @@ const _sfc_main = {
      * @description 根据城市名称获取城市详细数据
      * @param {string} city
      */
-    getCityInfo() {
+    async getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -168,6 +168,7 @@ const _sfc_main = {
                 this.imageList.push(info[key]);
               }
             }
+            console.log(this.imageList);
             this.cityDes = info.remark;
           }
         },
@@ -253,7 +254,7 @@ const _sfc_main = {
     getThreeData(params = {}) {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
         data: params,
         method: "GET",
         success: async (res) => {
@@ -295,7 +296,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2",
           method: "GET",
           success: (res) => {
             const data = res.data.data;
@@ -315,7 +316,7 @@ const _sfc_main = {
     getTwoDatas(params = {}) {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3&city=${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
         data: params,
         method: "GET",
         success: (res) => {
@@ -334,7 +335,7 @@ const _sfc_main = {
     getFoodsData(params = {}) {
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+          url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
           data: params,
           method: "GET",
           success: (res) => {
@@ -428,30 +429,33 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       detailInfo: $data.detail
     })
   } : common_vendor.e({
-    j: common_vendor.p({
+    j: $data.imageList.length
+  }, $data.imageList.length ? {
+    k: common_vendor.p({
       list: [$data.imageList[0]]
     }),
-    k: common_vendor.o((...args) => $options.navigateCityInfo && $options.navigateCityInfo(...args)),
-    l: common_vendor.o($options.handleTypeSelect),
-    m: common_vendor.o($options.handleFixStyle),
-    n: common_vendor.p({
+    l: common_vendor.o((...args) => $options.navigateCityInfo && $options.navigateCityInfo(...args))
+  } : {}, {
+    m: common_vendor.o($options.handleTypeSelect),
+    n: common_vendor.o($options.handleFixStyle),
+    o: common_vendor.p({
       options: $data.filterData
     }),
-    o: !$data.isShowTwo
+    p: !$data.isShowTwo
   }, !$data.isShowTwo ? {
-    p: common_vendor.o($options.handleSortSelect),
-    q: common_vendor.o($options.handleFixStyle),
-    r: common_vendor.p({
+    q: common_vendor.o($options.handleSortSelect),
+    r: common_vendor.o($options.handleFixStyle),
+    s: common_vendor.p({
       options: $data.sortList
     })
   } : {}, {
-    s: !$data.isShowTwo
+    t: !$data.isShowTwo
   }, !$data.isShowTwo ? {
-    t: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args))
+    v: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args))
   } : {}, {
-    v: $data.isShowTwo
+    w: $data.isShowTwo
   }, $data.isShowTwo ? common_vendor.e({
-    w: common_vendor.f($data.twoContent, (item, index, i0) => {
+    x: common_vendor.f($data.twoContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
@@ -460,11 +464,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         e: common_vendor.o(($event) => $options.handleTwoDetails(item), index)
       };
     }),
-    x: $data.twoContent.length === 0
+    y: $data.twoContent.length === 0
   }, $data.twoContent.length === 0 ? {} : {}, {
-    y: !$data.isTwoLastPage
+    z: !$data.isTwoLastPage
   }, !$data.isTwoLastPage ? {} : {}) : common_vendor.e({
-    z: common_vendor.f($data.threeContent, (item, index, i0) => {
+    A: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
@@ -477,15 +481,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         i: common_vendor.o(($event) => $options.handleDetailShow(item), index)
       };
     }),
-    A: $data.threeContent.length === 0
+    B: $data.threeContent.length === 0
   }, $data.threeContent.length === 0 ? {
-    B: common_vendor.p({
+    C: common_vendor.p({
       tips: "当前城市暂无数据"
     })
   } : {}, {
-    C: !$data.isThreeLastPage
+    D: !$data.isThreeLastPage
   }, !$data.isThreeLastPage ? {} : {})), {
-    D: common_vendor.s($data.fixedStyle)
+    E: common_vendor.s($data.fixedStyle)
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/foods/foods.vue"]]);
