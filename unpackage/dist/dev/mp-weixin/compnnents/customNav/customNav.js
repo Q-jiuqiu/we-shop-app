@@ -63,6 +63,7 @@ const _sfc_main = {
         picker = this.$refs.uPicker
       } = e;
       if (columnIndex === 0) {
+        console.log(values, index);
         const cityData = common_vendor.index.getStorageSync("cityData");
         cityData.forEach((item) => {
           if (item.city === value[0]) {

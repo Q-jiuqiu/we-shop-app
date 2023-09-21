@@ -104,9 +104,9 @@
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
-							:src="item.headSculpture">
+							:src="item.pictrue">
 							<div class="explore-shop-item-center-name">
-								{{item.name}}
+								{{item.entName}}
 							</div> 
 						</div> 
 					</div>	
@@ -295,7 +295,7 @@ export default {
 		getExploreShopData() {
 			uni.showLoading({ title: '获取数据中' })
 			uni.request({
-				url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+				url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find/${this.detailInfo.id}`,
 				method: 'GET',
 				success: res => {
 					const data = res.data.data

@@ -84,6 +84,7 @@
 				} = e 
 				// 当第一列值发生变化时，变化第二列(后一列)对应的选项
 				if (columnIndex === 0) {
+					console.log(values,index);
 					const cityData = uni.getStorageSync('cityData')
 					cityData.forEach(item => {
 						if (item.city === value[0]) {

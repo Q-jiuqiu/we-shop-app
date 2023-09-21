@@ -7,7 +7,7 @@
 		</div>
 		<div v-else>
 			<div class="image-container">
-				<div class="image-list"  @click="navigateCityInfo" v-if="imageList.length">
+				<div class="image-list"  @click="navigateCityInfo">
 					<u-swiper :list="[imageList[0]]" style="height: 100%;"></u-swiper>
 				</div>
 				 
@@ -46,7 +46,7 @@
 			<div class="content" v-else>
 				<div class="content-item" v-for="(item, index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
-					<img class="image" :src="item.image" />
+					<img class="image" :src="item.image1" />
 					<div class="text">
 						<div class="text-item name">
 							<div class="value">{{ item.name }}</div>
@@ -146,10 +146,11 @@
 					})
 				} else {
 					this.twoCur++
-					const params = {}
+					let params = {}
 					if (this.secondType) {
 						params = { parentName: this.secondType }
 					}
+					console.log('页面上拉触底事件',params);
 					this.getTwoDatas(params)
 				}
 			} else {
@@ -280,10 +281,13 @@
 				this.twoContent = []
 				let params = {}
 				this.secondType = ''
-				if (index !== 0) {
+				this.twoCur = 1
+				if (index !== 0) { 
 					params = { parentName: name }
 					this.secondType = name
 				}
+				console.log(params);
+
 				this.getTwoDatas(params)
 			},
 			/**
@@ -327,7 +331,7 @@
 			getThreeData(params = {}) {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
 					data: params,
 					method: 'GET',
 					success: async res => {
@@ -369,7 +373,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2',
+						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=美食&level=2',
 						method: 'GET',
 						success: res => {
 							const data = res.data.data
@@ -387,6 +391,7 @@
 			 * @param {Object} params 请求条件
 			 */
 			getTwoDatas(params = {}) {
+				console.log("城市数据",this.city);
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
 					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
@@ -408,7 +413,7 @@
 			getFoodsData(params = {}) {
 				return new Promise(resolve => {
 					uni.request({
-						url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/10`,
+						url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
 						data: params,
 						method: 'GET',
 						success: res => {

@@ -84,7 +84,7 @@ const _sfc_main = {
         curPage = this.senseCur;
       }
       common_vendor.index.request({
-        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/escape/pit/${curPage}/10`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/escape/pit/${curPage}/6`,
         data: params,
         method: "GET",
         success: ({ data }) => {

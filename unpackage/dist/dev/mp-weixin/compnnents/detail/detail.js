@@ -112,9 +112,10 @@ const _sfc_main = {
     getExploreShopData() {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
+          console.log(res.data);
           const data = res.data.data;
           this.exploreShopData = data;
           common_vendor.index.hideLoading();
@@ -329,8 +330,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {
     G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
-        a: item.headSculpture,
-        b: common_vendor.t(item.name),
+        a: item.pictrue,
+        b: common_vendor.t(item.entName),
         c: index
       };
     })
