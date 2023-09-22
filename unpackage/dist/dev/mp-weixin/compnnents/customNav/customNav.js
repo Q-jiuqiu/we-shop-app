@@ -19,7 +19,8 @@ const _sfc_main = {
       columns: [],
       show: false,
       columnData: [],
-      cityData: []
+      cityData: [],
+      pickerLoading: false
     };
   },
   created() {
@@ -52,21 +53,28 @@ const _sfc_main = {
     common_vendor.index.$off("locationChange", this.handleCityChange);
   },
   methods: {
+    /**
+    	* @description: 选择行政区划
+    	* @param {*} e
+    	* @return {*}
+    	*/
     changeHandler(e) {
       const {
         columnIndex,
         value,
         values,
-        // values为当前变化列的数组内容
         index,
-        // 微信小程序无法将picker实例传出来，只能通过ref操作
         picker = this.$refs.uPicker
       } = e;
+      console.log("columnIndex", columnIndex);
+      console.log("value", value);
+      console.log("values", values);
+      console.log("index", index);
       if (columnIndex === 0) {
-        console.log(values, index);
         const cityData = common_vendor.index.getStorageSync("cityData");
         cityData.forEach((item) => {
           if (item.city === value[0]) {
+            this.pickerLoading = true;
             common_vendor.index.request({
               url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
               method: "GET",
@@ -77,6 +85,7 @@ const _sfc_main = {
                 });
                 common_vendor.index.setStorageSync("cityData1", res.data.data);
                 picker.setColumnValues(1, colums);
+                this.pickerLoading = false;
               },
               fail: (err) => {
                 console.log(err);
@@ -89,6 +98,7 @@ const _sfc_main = {
         const cityData1 = common_vendor.index.getStorageSync("cityData1");
         cityData1.forEach((item) => {
           if (item.city === value[1]) {
+            this.pickerLoading = true;
             common_vendor.index.request({
               url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
               method: "GET",
@@ -100,6 +110,7 @@ const _sfc_main = {
                 if (colums.length) {
                   picker.setColumnValues(2, colums);
                 }
+                this.pickerLoading = false;
               },
               fail: (err) => {
                 console.log(err);
@@ -143,6 +154,7 @@ const _sfc_main = {
     },
     // picker选中
     handleConfirm(info) {
+      console.log("picker选中", info);
       if (info.value[info.value.length - 1]) {
         this.city = info.value[info.value.length - 1];
       } else {
@@ -154,6 +166,10 @@ const _sfc_main = {
       common_vendor.index.setStorageSync("location", location);
       common_vendor.index.$emit("locationChange", location);
     },
+    /**
+    * @description: 关闭
+    * @return {*}
+    */
     handleCancel() {
       this.show = false;
     }
@@ -174,12 +190,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.sr("uPicker", "d0fa9484-0"),
     b: common_vendor.o($options.handleConfirm),
     c: common_vendor.o($options.handleCancel),
-    d: common_vendor.o(($event) => $data.show = false),
+    d: common_vendor.o($options.handleCancel),
     e: common_vendor.o($options.changeHandler),
     f: common_vendor.p({
       show: $data.show,
       columns: $data.columns,
-      closeOnClickOverlay: true
+      closeOnClickOverlay: true,
+      loading: $data.pickerLoading
     }),
     g: common_vendor.t($data.city),
     h: common_vendor.o((...args) => $options.handlePickerShow && $options.handlePickerShow(...args)),
