@@ -33,7 +33,7 @@
 			<div class="content">
 				<div class="content-item" v-for="(item, index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
-					<img class="image" :src="item.image" />
+					<img class="image" :src="item.image1" />
 					<div class="text">
 						<div class="text-item name">
 							<div class="value">{{ item.name }}</div>
@@ -124,7 +124,7 @@
 			} else {
 				if (!this.isThreeLastPage) {
 					this.threeCur++
-					await this.getThreeData({ secondType: this.secondType, city: this.city })
+					await this.getThreeData({ secondType: this.secondType, city: this.city,type: '风景' })
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -197,7 +197,7 @@
 			 */
 			getCityInfo() { 
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
 					method: 'GET',
 					success: ({ data }) => {
 						const info = data.data
@@ -239,6 +239,7 @@
 				const { name } = this.typeList[index] 
 				this.isShowTwo = true
 				const params = { city: this.city, type: '风景' }
+				this.twoCur = 1
 				if (index !== 0) {
 					params.secondType = name
 				}
@@ -303,7 +304,7 @@
 				if (this.city) { 
 					this.threeContent = []
 					this.secondType = item.name 
-					await this.getThreeData({ secondType: item.name, city: this.city })
+					await this.getThreeData({ secondType: item.name, city: this.city ,type:'风景'})
 				} else {
 					authorize.authorizeAgain()
 				}
@@ -342,7 +343,7 @@
 				uni.showLoading({ title: '获取数据中' })
 				return new Promise(resolve => {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2',
+						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=风景&level=2',
 						method: 'GET',
 						success: res => { 
 							const data = res.data.data
@@ -359,7 +360,7 @@
 			getSenseData(params = {}) {
 				return new Promise(resolve => {
 					uni.request({
-						url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+						url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
 						data: params,
 						method: 'GET',
 						success: res => {

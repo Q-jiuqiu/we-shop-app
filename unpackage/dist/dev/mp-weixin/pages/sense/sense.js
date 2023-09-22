@@ -67,7 +67,7 @@ const _sfc_main = {
     } else {
       if (!this.isThreeLastPage) {
         this.threeCur++;
-        await this.getThreeData({ secondType: this.secondType, city: this.city });
+        await this.getThreeData({ secondType: this.secondType, city: this.city, type: "风景" });
       } else {
         common_vendor.index.showToast({
           icon: "none",
@@ -138,7 +138,7 @@ const _sfc_main = {
      */
     getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -180,6 +180,7 @@ const _sfc_main = {
       const { name } = this.typeList[index];
       this.isShowTwo = true;
       const params = { city: this.city, type: "风景" };
+      this.twoCur = 1;
       if (index !== 0) {
         params.secondType = name;
       }
@@ -238,7 +239,7 @@ const _sfc_main = {
       if (this.city) {
         this.threeContent = [];
         this.secondType = item.name;
-        await this.getThreeData({ secondType: item.name, city: this.city });
+        await this.getThreeData({ secondType: item.name, city: this.city, type: "风景" });
       } else {
         utils_authorize.authorize.authorizeAgain();
       }
@@ -277,7 +278,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=风景&level=2",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=风景&level=2",
           method: "GET",
           success: (res) => {
             const data = res.data.data;
@@ -294,7 +295,7 @@ const _sfc_main = {
     getSenseData(params = {}) {
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+          url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
           data: params,
           method: "GET",
           success: (res) => {
@@ -413,7 +414,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args)),
     w: common_vendor.f($data.threeContent, (item, index, i0) => {
       return common_vendor.e({
-        a: item.image,
+        a: item.image1,
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),

@@ -104,9 +104,9 @@
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
-							:src="item.headSculpture">
+							:src="item.pictrue">
 							<div class="explore-shop-item-center-name">
-								{{item.name}}
+								{{item.entName}}
 							</div> 
 						</div> 
 					</div>	
@@ -279,7 +279,7 @@ export default {
 		getFaresData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => { 
 						const data = res.data.data 
@@ -295,7 +295,7 @@ export default {
 		getExploreShopData() {
 			uni.showLoading({ title: '获取数据中' })
 			uni.request({
-				url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+				url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find/${this.detailInfo.id}`,
 				method: 'GET',
 				success: res => {
 					const data = res.data.data
@@ -311,7 +311,7 @@ export default {
 			getRecommendData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => {
 						const data = res.data.data
@@ -331,7 +331,7 @@ export default {
 		handleConfirm() { 
 			if (this.comment) {
 				uni.request({
-					url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
+					url: 'https://www.aomue.cn/dbs/pro/rest/dbs/add/comment',
 					data: {
 						productId: this.detailInfo.id,
 						comment: this.comment
@@ -368,7 +368,7 @@ export default {
 		getCommentData() {
 			uni.showLoading({ title: '获取数据中' })
 			uni.request({
-				url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
+				url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 				method: 'GET',
 				success: res => {
 					const data = res.data.data 

@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 const NoData = () => "../noData/noData.js";
 const _sfc_main = {
   name: "detailCom",
@@ -15,7 +14,7 @@ const _sfc_main = {
   data() {
     return {
       tabList: ["简介", "推荐", "探店", "评价"],
-      tabSenseList: ["1简介", "推荐", "票价", "评价"],
+      tabSenseList: ["简介", "推荐", "票价", "评价"],
       activeTab: 0,
       recommendData: [],
       commentData: [],
@@ -113,9 +112,10 @@ const _sfc_main = {
     getExploreShopData() {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
+          console.log(res.data);
           const data = res.data.data;
           this.exploreShopData = data;
           common_vendor.index.hideLoading();
@@ -129,7 +129,7 @@ const _sfc_main = {
     getFaresData() {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
           const data = res.data.data;
@@ -145,7 +145,7 @@ const _sfc_main = {
     getRecommendData() {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
         method: "GET",
         success: (res) => {
           const data = res.data.data;
@@ -165,7 +165,7 @@ const _sfc_main = {
     handleConfirm() {
       if (this.comment) {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/add/comment",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/add/comment",
           data: {
             productId: this.detailInfo.id,
             comment: this.comment
@@ -202,7 +202,7 @@ const _sfc_main = {
     getCommentData() {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
         method: "GET",
         success: (res) => {
           const data = res.data.data;
@@ -318,7 +318,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     C: $data.activeTab === 1,
     D: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    E: common_assets._imports_0,
+    E: $props.detailInfo.region,
     F: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
@@ -330,8 +330,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {
     G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
-        a: item.headSculpture,
-        b: common_vendor.t(item.name),
+        a: item.pictrue,
+        b: common_vendor.t(item.entName),
         c: index
       };
     })

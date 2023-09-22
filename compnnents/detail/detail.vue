@@ -81,10 +81,10 @@
 					</div>  
 			</div>
 			<!-- 探店 -->
-				<div class="anchor tab-container" v-show="activeTab === 2">
+			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
-					<div class="table-title" >点击购票
-						  <image style="width: 200rpx; height: 200rpx;" 	:show-menu-by-longpress="true" src="../../mixin/cs.webp"></image>
+					<div class="table-title">
+						 <navigator target="miniProgram" open-type="navigate" :app-id="detailInfo.region" path="" extra-data="" version="release">点击跳转购票</navigator>
 					</div>
 					<div class="table-header">
 						<div class="tr">
@@ -105,9 +105,9 @@
 					<div class="explore-shop-item" v-for="(item, index) in exploreShopData" :key="index">
 						<div class="explore-shop-item-center">
 							<img class="explore-shop-item-center-image"
-							:src="item.headSculpture">
+							:src="item.pictrue">
 							<div class="explore-shop-item-center-name">
-								{{item.name}}
+								{{item.entName}}
 							</div> 
 						</div> 
 					</div>	
@@ -156,7 +156,7 @@
 		data() {
 			return {
 				tabList: ['简介', '推荐', '探店', '评价'],
-				tabSenseList: ['1简介', '推荐', '票价',  '评价'],
+				tabSenseList: ['简介', '推荐', '票价',  '评价'],
 				activeTab: 0,
 				recommendData: [],
 				commentData: [],
@@ -167,7 +167,7 @@
 				commentCur: 1,
 				commentLast: true,
 				exploreShopData: [],
-				faresData: []
+				faresData: [], 
 			}
 		},
 		computed: {
@@ -208,7 +208,7 @@
 				}
 			}
 		},
-		methods: {
+		methods: { 
 			// 关闭新增评论弹框
 			close() {
 				this.show = false
@@ -267,9 +267,10 @@
 			getExploreShopData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/exp/find//${this.detailInfo.id}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/exp/find/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => {
+						console.log(res.data);
 						const data = res.data.data
 						this.exploreShopData = data
 						uni.hideLoading()
@@ -283,7 +284,7 @@
 			getFaresData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/fares/find/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => { 
 						const data = res.data.data
@@ -299,7 +300,7 @@
 			getRecommendData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/recommend/${this.detailInfo.id}`,
 					method: 'GET',
 					success: res => {
 						const data = res.data.data
@@ -319,7 +320,7 @@
 			handleConfirm() { 
 				if (this.comment) {
 					uni.request({
-						url: 'https://www.aomue.cn/pro/rest/dbs/add/comment',
+						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/add/comment',
 						data: {
 							productId: this.detailInfo.id,
 							comment: this.comment
@@ -356,7 +357,7 @@
 			getCommentData() {
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/comment/${this.detailInfo.id}/${this.commentCur}/10`,
 					method: 'GET',
 					success: res => {
 						const data = res.data.data 
@@ -525,6 +526,13 @@
 					font-size: 15rpx;
 					width: 98%;
 					margin: 20rpx 1%;
+					&-title{
+						padding: 10rpx 20rpx;
+						width: 50%;
+						margin: 0 auto 20rpx;
+						text-align: center;
+						background-color: #fdc307;
+					}
 
 					.tr {
 						display: grid;

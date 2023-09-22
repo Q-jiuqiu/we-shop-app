@@ -77,10 +77,11 @@ const _sfc_main = {
         });
       } else {
         this.twoCur++;
-        const params = {};
+        let params = {};
         if (this.secondType) {
           params = { parentName: this.secondType };
         }
+        console.log("页面上拉触底事件", params);
         this.getTwoDatas(params);
       }
     } else {
@@ -154,9 +155,9 @@ const _sfc_main = {
      * @description 根据城市名称获取城市详细数据
      * @param {string} city
      */
-    getCityInfo() {
+    async getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -168,6 +169,7 @@ const _sfc_main = {
                 this.imageList.push(info[key]);
               }
             }
+            console.log(this.imageList);
             this.cityDes = info.remark;
           }
         },
@@ -207,10 +209,12 @@ const _sfc_main = {
       this.twoContent = [];
       let params = {};
       this.secondType = "";
+      this.twoCur = 1;
       if (index !== 0) {
         params = { parentName: name };
         this.secondType = name;
       }
+      console.log(params);
       this.getTwoDatas(params);
     },
     /**
@@ -253,7 +257,7 @@ const _sfc_main = {
     getThreeData(params = {}) {
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
         data: params,
         method: "GET",
         success: async (res) => {
@@ -295,7 +299,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "获取数据中" });
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find/levelDist/one/1/1000?type=美食&level=2",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=美食&level=2",
           method: "GET",
           success: (res) => {
             const data = res.data.data;
@@ -313,9 +317,10 @@ const _sfc_main = {
      * @param {Object} params 请求条件
      */
     getTwoDatas(params = {}) {
+      console.log("城市数据", this.city);
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/pro/rest/dbs/find/dict/one/${this.twoCur}/10?type=美食&level=3&city=${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
         data: params,
         method: "GET",
         success: (res) => {
@@ -334,7 +339,7 @@ const _sfc_main = {
     getFoodsData(params = {}) {
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: `https://www.aomue.cn/pro/rest/dbs/find/${this.threeCur}/10`,
+          url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
           data: params,
           method: "GET",
           success: (res) => {
@@ -466,7 +471,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isTwoLastPage ? {} : {}) : common_vendor.e({
     z: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
-        a: item.image,
+        a: item.image1,
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.distance),
         d: common_vendor.t(item.introduction),

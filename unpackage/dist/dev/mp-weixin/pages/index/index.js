@@ -37,7 +37,7 @@ const _sfc_main = {
     getFoodsDatas(params = {}) {
       return new Promise((resolve) => {
         common_vendor.index.request({
-          url: "https://www.aomue.cn/pro/rest/dbs/find",
+          url: "https://www.aomue.cn/dbs/pro/rest/dbs/find",
           data: params,
           method: "GET",
           success: function(res) {

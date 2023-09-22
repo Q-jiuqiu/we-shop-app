@@ -1,7 +1,15 @@
 <template>
 	<div :style="{ paddingTop: statusBarHeight, height: '44px' }">
-		<u-picker ref="uPicker" :show="show" :columns="columns" @confirm="handleConfirm" @cancel="handleCancel"
-			:closeOnClickOverlay="true" @close="show = false" @change="changeHandler"></u-picker>
+		<u-picker ref="uPicker" 
+			:show="show" 
+			:columns="columns"
+			:closeOnClickOverlay="true"
+			:loading="pickerLoading"
+			@confirm="handleConfirm" 
+			@cancel="handleCancel"
+			@close="handleCancel" 
+			@change="changeHandler">
+		</u-picker>
 		<div class="custom-nav" :style="{ paddingTop: statusBarHeight, height: '44px' }">
 			<div class="container" :style="{ width: surplusWidth }">
 				<div class="locate" @click="handlePickerShow">
@@ -40,7 +48,8 @@
 				columns: [],
 				show: false,
 				columnData: [],
-				cityData: []
+				cityData: [],
+				pickerLoading:false
 			}
 		},
 		created() {
@@ -51,7 +60,7 @@
 				this.columns = cityList
 			} else {
 				uni.request({
-					url: 'https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/-1',
+					url: 'https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/-1',
 					method: 'GET',
 					success: res => { 
 						this.cityData = res.data.data
@@ -60,7 +69,7 @@
 						})
 						this.columns = [this.columns] 
 						uni.setStorageSync('cityData', this.cityData)
-						uni.setStorageSync('cityList', this.columns)
+						uni.setStorageSync('cityList', this.columns) 
 					},
 					fail: err => {
 						console.log(err)
@@ -73,22 +82,30 @@
 			uni.$off('locationChange', this.handleCityChange)
 		},
 		methods: {
+		/**
+			* @description: 选择行政区划
+			* @param {*} e
+			* @return {*}
+			*/			
 			changeHandler(e) {
 				const {
 					columnIndex,
 					value,
-					values, // values为当前变化列的数组内容
+					values,
 					index,
-					// 微信小程序无法将picker实例传出来，只能通过ref操作
 					picker = this.$refs.uPicker
 				} = e 
-				// 当第一列值发生变化时，变化第二列(后一列)对应的选项
-				if (columnIndex === 0) {
+				console.log('columnIndex',columnIndex,);
+				console.log('value',value,);
+				console.log('values',values, );
+				console.log('index',index,);
+				if (columnIndex === 0) { 
 					const cityData = uni.getStorageSync('cityData')
 					cityData.forEach(item => {
 						if (item.city === value[0]) {
+							this.pickerLoading = true
 							uni.request({
-								url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+								url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
 								method: 'GET',
 								success: res => {
 									const colums = []
@@ -97,6 +114,7 @@
 									})
 									uni.setStorageSync('cityData1', res.data.data)
 									picker.setColumnValues(1, colums)
+									this.pickerLoading = false
 								},
 								fail: err => {
 									console.log(err)
@@ -109,8 +127,9 @@
 					const cityData1 = uni.getStorageSync('cityData1')
 					cityData1.forEach(item => {
 						if (item.city === value[1]) {
+							this.pickerLoading = true
 							uni.request({
-								url: `https://www.aomue.cn/pro/rest/dbs/city/dict/find/tree/${item.id}`,
+								url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/tree/${item.id}`,
 								method: 'GET',
 								success: res => {
 									const colums = []
@@ -120,6 +139,7 @@
 									if (colums.length) {
 										picker.setColumnValues(2, colums)
 									}
+									this.pickerLoading = false
 								},
 								fail: err => {
 									console.log(err)
@@ -164,18 +184,22 @@
 			},
 			// picker选中
 			handleConfirm(info) { 
+				console.log("picker选中",info);
 				if (info.value[info.value.length - 1]) {
 					this.city = info.value[info.value.length - 1]
 				} else {
 					this.city = info.value[info.value.length - 2]
 				}
-
 				const location = uni.getStorageSync('location')
 				this.show = false
 				location.city = this.city
 				uni.setStorageSync('location', location)
 				uni.$emit('locationChange', location)
 			},
+			/**
+			* @description: 关闭
+			* @return {*}
+			*/			
 			handleCancel() {
 				this.show = false
 			}
