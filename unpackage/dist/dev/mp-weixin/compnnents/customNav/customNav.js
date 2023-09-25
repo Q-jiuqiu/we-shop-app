@@ -20,12 +20,14 @@ const _sfc_main = {
       show: false,
       columnData: [],
       cityData: [],
-      pickerLoading: false
+      pickerLoading: false,
+      pickerTitle: ""
     };
   },
   created() {
     common_vendor.index.$on("locationSave", this.setCity);
     common_vendor.index.$on("locationChange", this.handleCityChange);
+    console.log(common_vendor.index.getStorageSync("location").city);
     const cityList = common_vendor.index.getStorageSync("cityList");
     if (cityList) {
       this.columns = cityList;
@@ -63,13 +65,9 @@ const _sfc_main = {
         columnIndex,
         value,
         values,
-        index,
         picker = this.$refs.uPicker
       } = e;
-      console.log("columnIndex", columnIndex);
-      console.log("value", value);
-      console.log("values", values);
-      console.log("index", index);
+      this.pickerTitle = value[columnIndex];
       if (columnIndex === 0) {
         const cityData = common_vendor.index.getStorageSync("cityData");
         cityData.forEach((item) => {
@@ -85,6 +83,7 @@ const _sfc_main = {
                 });
                 common_vendor.index.setStorageSync("cityData1", res.data.data);
                 picker.setColumnValues(1, colums);
+                picker.setColumnValues(2, []);
                 this.pickerLoading = false;
               },
               fail: (err) => {
@@ -131,6 +130,7 @@ const _sfc_main = {
     // 设置城市名称
     setCity() {
       this.city = common_vendor.index.getStorageSync("location").city;
+      console.log(this.city);
     },
     // 输入改变
     handleInputChange() {
@@ -154,17 +154,19 @@ const _sfc_main = {
     },
     // picker选中
     handleConfirm(info) {
-      console.log("picker选中", info);
-      if (info.value[info.value.length - 1]) {
-        this.city = info.value[info.value.length - 1];
+      if (this.pickerTitle) {
+        this.city = this.pickerTitle;
+        const location = common_vendor.index.getStorageSync("location");
+        this.show = false;
+        location.city = this.city;
+        common_vendor.index.setStorageSync("location", location);
+        common_vendor.index.$emit("locationChange", location);
       } else {
-        this.city = info.value[info.value.length - 2];
+        common_vendor.index.showToast({
+          title: "未选择城市或者地区",
+          duration: 2e3
+        });
       }
-      const location = common_vendor.index.getStorageSync("location");
-      this.show = false;
-      location.city = this.city;
-      common_vendor.index.setStorageSync("location", location);
-      common_vendor.index.$emit("locationChange", location);
     },
     /**
     * @description: 关闭
@@ -194,6 +196,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_vendor.o($options.changeHandler),
     f: common_vendor.p({
       show: $data.show,
+      title: $data.pickerTitle,
       columns: $data.columns,
       closeOnClickOverlay: true,
       loading: $data.pickerLoading

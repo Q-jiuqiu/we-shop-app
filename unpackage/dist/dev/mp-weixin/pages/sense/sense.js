@@ -313,7 +313,7 @@ const _sfc_main = {
     getDistance({ longitude, latitude }) {
       if (this.threeContent.length > 0) {
         const toList = [];
-        const start = (this.threeCur - 1) * 10;
+        const start = (this.threeCur - 1) * 6;
         for (let i = start; i < this.threeContent.length; i++) {
           const item = this.threeContent[i];
           if (item.longitude && item.latitude && !item.distance) {

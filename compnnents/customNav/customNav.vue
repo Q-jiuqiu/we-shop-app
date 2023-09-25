@@ -2,6 +2,7 @@
 	<div :style="{ paddingTop: statusBarHeight, height: '44px' }">
 		<u-picker ref="uPicker" 
 			:show="show" 
+			:title="pickerTitle"
 			:columns="columns"
 			:closeOnClickOverlay="true"
 			:loading="pickerLoading"
@@ -49,12 +50,14 @@
 				show: false,
 				columnData: [],
 				cityData: [],
-				pickerLoading:false
+				pickerLoading:false,
+				pickerTitle:""
 			}
 		},
 		created() {
 			uni.$on('locationSave', this.setCity)
 			uni.$on('locationChange', this.handleCityChange)
+			console.log( uni.getStorageSync('location').city);
 			const cityList = uni.getStorageSync('cityList')
 			if (cityList) {
 				this.columns = cityList
@@ -90,15 +93,11 @@
 			changeHandler(e) {
 				const {
 					columnIndex,
-					value,
+					value, 
 					values,
-					index,
 					picker = this.$refs.uPicker
-				} = e 
-				console.log('columnIndex',columnIndex,);
-				console.log('value',value,);
-				console.log('values',values, );
-				console.log('index',index,);
+				} = e  
+				this.pickerTitle = value[columnIndex]
 				if (columnIndex === 0) { 
 					const cityData = uni.getStorageSync('cityData')
 					cityData.forEach(item => {
@@ -112,8 +111,9 @@
 									res.data.data.forEach(elements => {
 										colums.push(elements.city)
 									})
-									uni.setStorageSync('cityData1', res.data.data)
+									uni.setStorageSync('cityData1', res.data.data) 
 									picker.setColumnValues(1, colums)
+									picker.setColumnValues(2, [])
 									this.pickerLoading = false
 								},
 								fail: err => {
@@ -136,7 +136,7 @@
 									res.data.data.forEach(elements => {
 										colums.push(elements.city)
 									})
-									if (colums.length) {
+									if (colums.length) { 
 										picker.setColumnValues(2, colums)
 									}
 									this.pickerLoading = false
@@ -161,6 +161,7 @@
 			// 设置城市名称
 			setCity() {
 				this.city = uni.getStorageSync('location').city
+				console.log(this.city);
 			},
 			// 输入改变
 			handleInputChange() {
@@ -183,18 +184,21 @@
 				}
 			},
 			// picker选中
-			handleConfirm(info) { 
-				console.log("picker选中",info);
-				if (info.value[info.value.length - 1]) {
-					this.city = info.value[info.value.length - 1]
-				} else {
-					this.city = info.value[info.value.length - 2]
+			handleConfirm(info) {  
+				if(this.pickerTitle){
+					this.city = this.pickerTitle
+					const location = uni.getStorageSync('location')
+					this.show = false
+					location.city = this.city
+					uni.setStorageSync('location', location)
+					uni.$emit('locationChange', location)
+				}else{
+						uni.showToast({
+							title: '未选择城市或者地区',
+							duration: 2000
+						});
 				}
-				const location = uni.getStorageSync('location')
-				this.show = false
-				location.city = this.city
-				uni.setStorageSync('location', location)
-				uni.$emit('locationChange', location)
+				
 			},
 			/**
 			* @description: 关闭

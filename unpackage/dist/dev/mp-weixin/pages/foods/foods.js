@@ -128,13 +128,17 @@ const _sfc_main = {
      */
     async setCity() {
       this.city = common_vendor.index.getStorageSync("location").city;
+      console.log(this.city);
       this.getCityInfo();
+      this.twoContent = [];
+      this.getTwoDatas();
       this.isShowTwo = true;
     },
     /**
      * @description 城市改变
      */
     handleCityChange({ city }) {
+      console.log("再次获取城市", city);
       if (this.city === city) {
         return;
       }
@@ -214,7 +218,6 @@ const _sfc_main = {
         params = { parentName: name };
         this.secondType = name;
       }
-      console.log(params);
       this.getTwoDatas(params);
     },
     /**
@@ -223,15 +226,29 @@ const _sfc_main = {
      */
     handleSortSelect(index) {
       if (index === 2) {
-        for (let i = 0; i < this.threeContent.length; i++) {
-          for (let j = i + 1; j < this.threeContent.length; j++) {
-            const tmep = this.threeContent[j];
-            if (this.threeContent[i].distance >= this.threeContent[j].distance) {
-              this.threeContent[j] = this.threeContent[i];
-              this.threeContent[i] = tmep;
-            }
+        this.threeContent.sort(function(a, b) {
+          var distanceA = parseFloat(a.distance);
+          var distanceB = parseFloat(b.distance);
+          if (distanceA < distanceB) {
+            return -1;
           }
-        }
+          if (distanceA > distanceB) {
+            return 1;
+          }
+          return 0;
+        });
+      } else if (index === 1) {
+        this.threeContent.sort(function(a, b) {
+          var distanceA = parseFloat(a.heat);
+          var distanceB = parseFloat(b.heat);
+          if (distanceA > distanceB) {
+            return -1;
+          }
+          if (distanceA < distanceB) {
+            return 1;
+          }
+          return 0;
+        });
       } else {
         this.threeContent = this.threeContentCopy;
       }
@@ -320,7 +337,7 @@ const _sfc_main = {
       console.log("城市数据", this.city);
       common_vendor.index.showLoading({ title: "获取数据中" });
       common_vendor.index.request({
-        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
         data: params,
         method: "GET",
         success: (res) => {
@@ -355,10 +372,13 @@ const _sfc_main = {
     },
     // 获取距离
     getDistance({ longitude, latitude }) {
+      console.log(this.threeContent.length, this.threeContent);
       if (this.threeContent.length > 0) {
         const toList = [];
-        for (let item of this.threeContent) {
-          if (item.longitude && item.latitude) {
+        const start = (this.threeCur - 1) * 6;
+        for (let i = start; i < this.threeContent.length; i++) {
+          const item = this.threeContent[i];
+          if (item.longitude && item.latitude && !item.distance) {
             toList.push({
               longitude: Number(item.longitude),
               latitude: Number(item.latitude)
@@ -377,16 +397,15 @@ const _sfc_main = {
             to: toList,
             success: ({ result }) => {
               const distanceInfo = result.elements;
-              this.threeContent.forEach((item, index) => {
-                const distance = distanceInfo[index].distance;
+              for (let i = 0; i < distanceInfo.length; i++) {
+                const distance = distanceInfo[i].distance;
+                console.log(distance, this.threeContent[start + i].name);
                 if (distance === -1) {
-                  item.distance = "--";
+                  this.threeContent[start + i].distance = "--";
                 } else {
-                  item.distance = (distanceInfo[index].distance / 1e3).toFixed(
-                    1
-                  );
+                  this.threeContent[start + i].distance = (distance / 1e3).toFixed(1);
                 }
-              });
+              }
               this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent));
             },
             fail: function(error) {

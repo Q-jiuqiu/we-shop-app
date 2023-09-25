@@ -5,7 +5,7 @@
 			<div class="image-container">
 				<img class="image" :src="detailInfo.image2" />
 			</div>
-				<div class="info">
+			<div class="info">
 				<!-- 标题 -->
 				<div class="title">
 					<span class="name">{{ detailInfo.name }}</span>
@@ -194,7 +194,6 @@ export default {
 
 	created() {
 		this.isOpen = this.judgeOpen(this.detailInfo.workTime)
-	
 	},
 
 	watch: {
@@ -402,7 +401,7 @@ export default {
 <style lang="scss" scoped>
 	.detail {
 		height: 100vh;
-
+    background: #f4f4f4;
 		.header {
 			position: relative;
 
@@ -488,6 +487,7 @@ export default {
 		}
 
 		.container {
+			
 			.add {
 				background-color: rgba(253, 195, 7, 0.6);
 				position: fixed;
@@ -578,7 +578,7 @@ export default {
 				}
 			}
 
-			// 简介
+			// 简介有问题
 			.des {
 				text-indent: 2rem;
 				line-height: 50rpx;
@@ -590,7 +590,7 @@ export default {
     		max-height: 100%;
 			}
 
-		// 推荐
+			// 推荐
 			.recommend {
 				.explore-shop {
 					display: flex;

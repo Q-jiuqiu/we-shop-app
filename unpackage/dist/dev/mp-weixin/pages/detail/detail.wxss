@@ -26,6 +26,7 @@
 /* 文章场景相关 */
 .detail.data-v-eca06f3c {
   height: 100vh;
+  background: #f4f4f4;
 }
 .detail .header.data-v-eca06f3c {
   position: relative;

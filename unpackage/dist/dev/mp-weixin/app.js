@@ -120,10 +120,10 @@ require("./uni_modules/uview-plus/libs/function/platform.js");
 if (!Math) {
   "./pages/foods/foods.js";
   "./pages/sense/sense.js";
-  "./pages/index/index.js";
-  "./pages/avoidBad/avoidBad.js";
   "./pages/message/message.js";
   "./pages/detail/detail.js";
+  "./pages/index/index.js";
+  "./pages/avoidBad/avoidBad.js";
   "./pages/map/map.js";
   "./pages/cityInfo/cityInfo.js";
 }

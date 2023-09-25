@@ -2,10 +2,10 @@
   "pages": [
     "pages/foods/foods",
     "pages/sense/sense",
-    "pages/index/index",
-    "pages/avoidBad/avoidBad",
     "pages/message/message",
     "pages/detail/detail",
+    "pages/index/index",
+    "pages/avoidBad/avoidBad",
     "pages/map/map",
     "pages/cityInfo/cityInfo"
   ],
@@ -44,20 +44,11 @@
   "permission": {
     "scope.userLocation": {
       "desc": "为了您更好的体验， 请确认获取您的位置"
-    },
-    "scope.userFuzzyLocation": {
-      "desc": "你的位置信息将用于小程序定位"
     }
   },
   "requiredPrivateInfos": [
     "getLocation",
     "chooseLocation"
   ],
-  "usingComponents": {},
-  "plugins": {
-    "citySelector": {
-      "version": "1.0.2",
-      "provider": "wx63ffb7b7894e99ae"
-    }
-  }
+  "usingComponents": {}
 }

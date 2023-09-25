@@ -2,7 +2,7 @@
  * @Author: 何元鹏
  * @Date: 2023-08-21 18:14:53
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-09-14 16:51:07
+ * @LastEditTime: 2023-09-23 16:19:09
  */
 const QQMapWX = require('../static/qqmap-wx-jssdk.min.js')
 
@@ -95,6 +95,7 @@ function getLocationInfo(callBack) {
 									location.city = info.address_component.district
 								}
 							}
+							console.log('定位获取',info,"最终位置",location);
 							location.province = info.address_component.province
 							location.district = info.address_component.district
 							location.street = info.address_component.street

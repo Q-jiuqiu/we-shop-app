@@ -197,13 +197,17 @@
 			 */
 			async setCity() {
 				this.city = uni.getStorageSync('location').city
+				console.log(this.city);
 				this.getCityInfo()
+				this.twoContent = []
+				this.getTwoDatas()
 				this.isShowTwo = true
 			},
 			/**
 			 * @description 城市改变
 			 */
 			handleCityChange({ city }) {
+				console.log("再次获取城市",city);
 				if (this.city === city) {
 					return
 				}
@@ -285,8 +289,7 @@
 				if (index !== 0) { 
 					params = { parentName: name }
 					this.secondType = name
-				}
-				console.log(params);
+				} 
 
 				this.getTwoDatas(params)
 			},
@@ -295,20 +298,38 @@
 			 * @param {number} index 选中下标
 			 */
 			handleSortSelect(index) {
-				// 按距离排序
 				if (index === 2) {
-					for (let i = 0; i < this.threeContent.length; i++) {
-						for (let j = i + 1; j < this.threeContent.length; j++) {
-							const tmep = this.threeContent[j]
-							if (this.threeContent[i].distance >= this.threeContent[j].distance) {
-								this.threeContent[j] = this.threeContent[i]
-								this.threeContent[i] = tmep
-							}
+					this.threeContent.sort(function(a, b) { 
+						var distanceA = parseFloat(a.distance);
+						var distanceB = parseFloat(b.distance);
+
+						if (distanceA < distanceB) {
+							return -1;
 						}
-					}
-				} else {
+						if (distanceA > distanceB) {
+							return 1;
+						}
+						return 0;
+					}); 
+				}
+				else if(index ===1){
+					this.threeContent.sort(function(a, b) { 
+						var distanceA = parseFloat(a.heat);
+						var distanceB = parseFloat(b.heat);
+
+						if (distanceA > distanceB) {
+							return -1;
+						}
+						if (distanceA < distanceB) {
+							return 1;
+						}
+						return 0;
+					}); 
+				}
+				else {
 					this.threeContent = this.threeContentCopy
 				}
+				 
 			},
 			/**
 			 * @description 获取指定二级(小类)数据详情
@@ -394,7 +415,7 @@
 				console.log("城市数据",this.city);
 				uni.showLoading({ title: '获取数据中' })
 				uni.request({
-					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
 					data: params,
 					method: 'GET',
 					success: res => {
@@ -429,16 +450,19 @@
 			},
 			// 获取距离
 			getDistance({ longitude, latitude }) {
+				console.log(this.threeContent.length,this.threeContent);
 				if (this.threeContent.length > 0) {
 					const toList = []
-					for (let item of this.threeContent) {
-						if (item.longitude && item.latitude) {
+					const start = (this.threeCur - 1) * 6
+					for (let i = start; i < this.threeContent.length; i++) {
+						const item = this.threeContent[i]
+						if (item.longitude && item.latitude && !item.distance) {
 							toList.push({
 								longitude: Number(item.longitude),
 								latitude: Number(item.latitude)
 							})
 						}
-					}
+					} 
 					if (toList.length > 0) {
 						// 腾讯地图Api
 						const qqmapsdk = new QQMapWX({ key: 'NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7' })
@@ -449,18 +473,18 @@
 							},
 							to: toList,
 							success: ({ result }) => {
-								//成功后的回调 
-								const distanceInfo = result.elements
-								this.threeContent.forEach((item, index) => {
-									const distance = distanceInfo[index].distance
+								//成功后的回调
+								const distanceInfo = result.elements  
+								for (let i = 0; i < distanceInfo.length; i++) {
+									const distance = distanceInfo[i].distance
+									console.log(distance,this.threeContent[start + i].name);
 									if (distance === -1) {
-										item.distance = '--'
+										this.threeContent[start + i].distance = '--'
 									} else {
-										item.distance = (distanceInfo[index].distance / 1000).toFixed(
-											1)
+										this.threeContent[start + i].distance = (distance / 1000).toFixed(1)
 									}
-								})
-								this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent))
+								}
+								this.threeContentCopy = JSON.parse(JSON.stringify(this.threeContent)) 
 							},
 							fail: function(error) {
 								console.error(error)

@@ -82,6 +82,7 @@ function getLocationInfo(callBack) {
                 location.city = info.address_component.district;
               }
             }
+            console.log("定位获取", info, "最终位置", location);
             location.province = info.address_component.province;
             location.district = info.address_component.district;
             location.street = info.address_component.street;
