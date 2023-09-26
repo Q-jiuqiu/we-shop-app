@@ -22,7 +22,10 @@ const _sfc_main = {
         common_vendor.index.request({
           url: "https://www.aomue.cn/dbs/pro/rest/dbs/add/leave/word",
           method: "POST",
-          data: { leaveWord: this.value },
+          data: {
+            leaveWord: this.value,
+            city: common_vendor.index.getStorageSync("location").city
+          },
           success: (res) => {
             common_vendor.index.showToast({
               icon: "success",

@@ -48,7 +48,8 @@
 					uni.request({
 						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/add/leave/word',
 						method: 'POST',
-						data: { leaveWord: this.value },
+						data: { leaveWord: this.value,
+						city:	 uni.getStorageSync('location').city },
 						success: res => {
 
 							uni.showToast({
