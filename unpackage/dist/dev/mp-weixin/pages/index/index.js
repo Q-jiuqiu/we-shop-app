@@ -27,9 +27,38 @@ const _sfc_main = {
   onLoad: function() {
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
-    eventChannel.on("foodMap", ({ data }) => {
-      this.dataList = data;
-      this.setMarkers(data);
+    eventChannel.on("foodMap", ({ data, threeType, city, index, type }) => {
+      console.log("跳转数据", threeType, city, index, type);
+      let params = {};
+      if (type === "美食") {
+        params = {
+          threeType,
+          city,
+          type
+        };
+      } else {
+        params = {
+          secondType: threeType,
+          city,
+          type
+        };
+      }
+      common_vendor.index.showLoading({ title: "获取数据中", mask: true });
+      common_vendor.index.request({
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/1/${index}`,
+        data: params,
+        method: "GET",
+        success: async (res) => {
+          const data2 = res.data.data;
+          const { content } = data2;
+          this.dataList = content;
+          this.setMarkers(content);
+          common_vendor.index.hideLoading();
+        },
+        fail: (err) => {
+          console.log(err);
+        }
+      });
     });
   },
   methods: {

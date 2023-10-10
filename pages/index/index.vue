@@ -31,9 +31,39 @@ export default {
 	onLoad: function () {
 		const eventChannel = this.getOpenerEventChannel()
 		this.eventChannel = eventChannel
-		eventChannel.on('foodMap', ({ data }) => {
-			this.dataList = data
-			this.setMarkers(data)
+		eventChannel.on('foodMap', ({ data,threeType,city,index,type }) => {
+			console.log('跳转数据',threeType,city,index,type);
+			let params={}
+			if (type === '美食') {
+				params = {
+					threeType,
+					city,
+					type
+				}
+			} else {
+				params = { 
+					secondType:threeType,
+					city,type
+				}
+			}
+			
+			uni.showLoading({ title: '获取数据中',mask:true })
+				uni.request({
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/1/${index}`,
+					data: params,
+					method: 'GET',
+					success: async res => {
+						const data = res.data.data
+						const { content } = data  
+						this.dataList = content
+						this.setMarkers(content)
+						uni.hideLoading()
+					},
+					fail: err => {
+						console.log(err)
+					}
+				})
+			
 		})
 	},
 

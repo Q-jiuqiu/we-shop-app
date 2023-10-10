@@ -25,8 +25,6 @@ const _sfc_main = {
       // 类型
       sortList: [{ name: "智能排序" }, { name: "热度" }, { name: "距离" }],
       freeList: [{ name: "是否免费" }, { name: "付费" }, { name: "免费" }],
-      twoCur: 1,
-      // 二级数据类型的当前页 
       threeCur: 1,
       threeContent: [],
       threeContentCopy: [],
@@ -51,6 +49,16 @@ const _sfc_main = {
     const { content, last } = await this.getOneDatas();
     this.typeList.push(...content);
     await this.getThreeData({ city: this.city, type: "风景" });
+    common_vendor.wx$1.onShareAppMessage(() => {
+      return {
+        title: "全游记：带你吃喝玩乐"
+      };
+    });
+    common_vendor.wx$1.onShareTimeline(() => {
+      return {
+        title: "全游记：带你吃喝玩乐"
+      };
+    });
   },
   created() {
     common_vendor.index.$on("locationChange", this.handleCityChange);
@@ -180,9 +188,12 @@ const _sfc_main = {
       const { name } = this.typeList[index];
       this.isShowTwo = true;
       const params = { city: this.city, type: "风景" };
-      this.twoCur = 1;
+      this.threeCur = 1;
       if (index !== 0) {
         params.secondType = name;
+        this.secondType = name;
+      } else {
+        this.secondType = "";
       }
       this.threeContent = [];
       await this.getThreeData(params);
@@ -246,7 +257,7 @@ const _sfc_main = {
     },
     // 获取三级数据
     async getThreeData(params = {}) {
-      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.showLoading({ title: "获取数据中", mask: true });
       const res = await this.getSenseData(params);
       this.threeContent.push(...res.content);
       this.isThreeLastPage = res.last;
@@ -269,13 +280,13 @@ const _sfc_main = {
       common_vendor.index.navigateTo({
         url: "/pages/index/index",
         success: (res) => {
-          res.eventChannel.emit("foodMap", { data: this.threeContent });
+          res.eventChannel.emit("foodMap", { data: this.threeContent, city: this.city, index: 100, type: "风景", threeType: this.secondType });
         }
       });
     },
     // 获取风景二级分类数据
     getOneDatas() {
-      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.showLoading({ title: "获取数据中", mask: true });
       return new Promise((resolve) => {
         common_vendor.index.request({
           url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=风景&level=2",
@@ -439,4 +450,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/sense/sense.vue"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

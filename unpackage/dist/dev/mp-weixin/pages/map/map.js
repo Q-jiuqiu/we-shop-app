@@ -24,6 +24,7 @@ const _sfc_main = {
     const eventChannel = this.getOpenerEventChannel();
     this.eventChannel = eventChannel;
     eventChannel.on("postMap", ({ detail }) => {
+      console.log("监听上一级数据", detail);
       this.name = detail.name;
       this.address = detail.addr;
       this.detail = detail;

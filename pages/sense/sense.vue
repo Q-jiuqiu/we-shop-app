@@ -80,8 +80,7 @@
 				curPage: 1, // 当前的页数
 				typeList: [{ name: '全部景点' }], // 类型
 				sortList: [{ name: '智能排序' }, { name: '热度' }, { name: '距离' }],
-				freeList: [{ name: '是否免费' }, { name: '付费' }, { name: '免费' }],
-				twoCur: 1, // 二级数据类型的当前页 
+				freeList: [{ name: '是否免费' }, { name: '付费' }, { name: '免费' }], 
 				threeCur: 1,
 				threeContent: [],
 				threeContentCopy: [], // 用以排序
@@ -104,6 +103,16 @@
 			const { content, last } = await this.getOneDatas()
 			this.typeList.push(...content)
 			await this.getThreeData({ city: this.city, type: '风景' }) 
+			wx.onShareAppMessage(() => {
+				return {
+					title: '全游记：带你吃喝玩乐', 
+				}
+			})
+			wx.onShareTimeline(()=>{
+				return {
+					title: '全游记：带你吃喝玩乐', 
+				}
+			})
 		},
 
 		created() {
@@ -238,10 +247,13 @@
 			async handleTypeSelect(index) {
 				const { name } = this.typeList[index] 
 				this.isShowTwo = true
-				const params = { city: this.city, type: '风景' }
-				this.twoCur = 1
+				const params = { city: this.city, type: '风景' } 
+				this.threeCur = 1
 				if (index !== 0) {
 					params.secondType = name
+					this.secondType = name
+				}else{
+					this.secondType = ''
 				}
 				this.threeContent = []
 				await this.getThreeData(params)
@@ -311,7 +323,7 @@
 			}, 
 			// 获取三级数据
 			async getThreeData(params = {}) {
-				uni.showLoading({ title: '获取数据中' })
+				uni.showLoading({ title: '获取数据中',mask:true })
 				const res = await this.getSenseData(params) 
 				this.threeContent.push(...res.content) 
 				this.isThreeLastPage = res.last  
@@ -334,13 +346,13 @@
 				uni.navigateTo({
 					url: '/pages/index/index',
 					success: res => {
-						res.eventChannel.emit('foodMap', { data: this.threeContent })
+						res.eventChannel.emit('foodMap', { data: this.threeContent,city:this.city,index:100,type:"风景",threeType:this.secondType })
 					}
 				})
 			},
 			// 获取风景二级分类数据
 			getOneDatas() {
-				uni.showLoading({ title: '获取数据中' })
+				uni.showLoading({ title: '获取数据中',mask:true })
 				return new Promise(resolve => {
 					uni.request({
 						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=风景&level=2',

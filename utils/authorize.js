@@ -2,7 +2,7 @@
  * @Author: 何元鹏
  * @Date: 2023-08-21 18:14:53
  * @LastEditors: 何元鹏
- * @LastEditTime: 2023-09-23 16:19:09
+ * @LastEditTime: 2023-09-28 09:39:30
  */
 const QQMapWX = require('../static/qqmap-wx-jssdk.min.js')
 
@@ -75,7 +75,8 @@ function getLocationInfo(callBack) {
 		uni.getLocation({
 			type: 'gcj02',
 			success(res) { 
-				uni.showLoading({ title: '获取位置信息' })
+				uni.showLoading({ title: '获取位置信息',
+				mask: true })
 				location.longitude = res.longitude
 				location.latitude = res.latitude
 				// 腾讯地图Api

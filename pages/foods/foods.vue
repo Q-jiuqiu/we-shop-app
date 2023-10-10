@@ -1,5 +1,5 @@
 <template>
-	<div class="foods" :style="fixedStyle">
+	<div class="foods" :style="fixedStyle" >
 		<customNavBack :custom="true" v-if="showDetail || !isShowTwo" @customBack="handleDetailBack"></customNavBack>
 		<CustomNav ref="customNav" @search="handleSearch" :showInput="showInput" v-else></CustomNav>
 		<div class="detail" v-if="showDetail">
@@ -26,9 +26,9 @@
 				<div class="map-button" @click="handleShowMap" v-if="!isShowTwo">进入地图模式</div>
 			</div>
 			<!-- 小类数据 -->
-			<div class="content" v-if="isShowTwo">
+			<div class="content" ref="contentTwo" v-if="isShowTwo">
 				<div class="content-item" v-for="(item, index) in twoContent" :key="index"
-					@click="handleTwoDetails(item)">
+					@click="handleTwoDetails(item)" :id="index">
 					<img class="image" :src="item.image" />
 					<div class="text">
 						<div class="text-item name">
@@ -43,7 +43,7 @@
 				<div class="more" v-if="!isTwoLastPage">上拉获取更多数据</div>
 			</div>
 			<!-- 门店数据 -->
-			<div class="content" v-else>
+			<div class="content1" v-else>
 				<div class="content-item" v-for="(item, index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
 					<img class="image" :src="item.image1" />
@@ -86,7 +86,7 @@
 		name: 'FoodsIndex',
 		components: { CusSelect, CustomNav, customNavBack, Detail, NoData },
 		data() {
-			return {
+			return { 
 				imageList: [],
 				contentList: [],
 				showDetail: false, // 是否展示详情
@@ -110,7 +110,8 @@
 				showInput: true, // 是否展示搜索框
 				fixedStyle: {},
 				secondType: '', // 二级类型
-				threeType: '' // 三级级类型
+				threeType: '', // 三级级类型
+				smoothId:''
 			}
 		},
 
@@ -124,11 +125,19 @@
 				this.filterData.push(...content)
 			} else {
 				this.filterData = [{ name: '全部美食' }]
-			}
-
-			this.isShowTwo = true
+			} 
 
 			await authorize.getLocationInfo()
+			wx.onShareAppMessage(() => {
+				return {
+					title: '全游记：带你吃喝玩乐', 
+				}
+			})
+			wx.onShareTimeline(()=>{
+				return {
+					title: '全游记：带你吃喝玩乐', 
+				}
+			})
 		},
 
 		// 页面上拉触底事件
@@ -136,7 +145,6 @@
 			if (this.showDetail) {
 				return
 			}
-
 			if (this.isShowTwo) {
 				// 二级目录获取更多数据
 				if (this.isTwoLastPage) {
@@ -150,7 +158,7 @@
 					if (this.secondType) {
 						params = { parentName: this.secondType }
 					}
-					console.log('页面上拉触底事件',params);
+					console.log('页面上拉触底事件',params,	this.twoCur);
 					this.getTwoDatas(params)
 				}
 			} else {
@@ -196,8 +204,7 @@
 			 * @description  设置城市名称
 			 */
 			async setCity() {
-				this.city = uni.getStorageSync('location').city
-				console.log(this.city);
+				this.city = uni.getStorageSync('location').city 
 				this.getCityInfo()
 				this.twoContent = []
 				this.getTwoDatas()
@@ -206,8 +213,7 @@
 			/**
 			 * @description 城市改变
 			 */
-			handleCityChange({ city }) {
-				console.log("再次获取城市",city);
+			handleCityChange({ city }) { 
 				if (this.city === city) {
 					return
 				}
@@ -244,7 +250,7 @@
 									this.imageList.push(info[key])
 								}
 							}
-							console.log(this.imageList);
+							 
 							this.cityDes = info.remark
 						}
 					},
@@ -255,12 +261,11 @@
 			},
 
 			// 详情返回
-			handleDetailBack() {
-				this.twoCur = 1
-				this.twoContent = []
-				this.showInput = true
+			handleDetailBack() { 
+			 	//this.twoContent = [] 
+				this.showInput = true 
 				if (!this.isShowTwo && !this.showDetail) {
-					this.getTwoDatas()
+					this.isShowTwo = true 
 				} else if (!this.isShowTwo && this.showDetail) {
 					this.showDetail = false
 				}
@@ -335,11 +340,13 @@
 			 * @description 获取指定二级(小类)数据详情
 			 * @param {Object} item
 			 */
-			handleTwoDetails(item) {
+			handleTwoDetails(item,index) {
+				this.smoothId = index
 				if (this.city) {
 					this.isShowTwo = false
 					this.threeContent = []
 					this.threeType = item.name
+					this.threeCur=1
 					this.getThreeData({ threeType: item.name, city: this.city })
 				} else {
 					authorize.authorizeAgain()
@@ -350,7 +357,7 @@
 			 * @param {Object} params 请求条件
 			 */
 			getThreeData(params = {}) {
-				uni.showLoading({ title: '获取数据中' })
+				uni.showLoading({ title: '获取数据中',mask:true })
 				uni.request({
 					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
 					data: params,
@@ -380,10 +387,11 @@
 			},
 			// 进入地图
 			handleShowMap() {
+				console.log(this.threeType,this.city);
 				uni.navigateTo({
 					url: '/pages/index/index',
 					success: res => {
-						res.eventChannel.emit('foodMap', { data: this.threeContent })
+						res.eventChannel.emit('foodMap', { data: this.threeContent,threeType:this.threeType,city:this.city,index:30,type:"美食" })
 					}
 				})
 			},
@@ -391,7 +399,7 @@
 			 * @description 获取筛选(大类)数据
 			 */
 			getFilterDatas() {
-				uni.showLoading({ title: '获取数据中' })
+				uni.showLoading({ title: '获取数据中' ,mask:true})
 				return new Promise(resolve => {
 					uni.request({
 						url: 'https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=美食&level=2',
@@ -411,9 +419,13 @@
 			 * @description 获取二级(小类)数据
 			 * @param {Object} params 请求条件
 			 */
-			getTwoDatas(params = {}) {
-				console.log("城市数据",this.city);
-				uni.showLoading({ title: '获取数据中' })
+			getTwoDatas(params = {}) { 
+				uni.showLoading(
+					{ 
+						title: '获取数据中',
+						mask: true 
+					}
+				) 
 				uni.request({
 					url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
 					data: params,
@@ -423,7 +435,7 @@
 						const { content, last } = data
 						this.twoContent.push(...content)
 						this.isTwoLastPage = last
-						this.isShowTwo = true
+						this.isShowTwo = true  
 						uni.hideLoading()
 					},
 					fail: err => {}
@@ -432,6 +444,7 @@
 
 			// 获取美食数据
 			getFoodsData(params = {}) {
+				console.log(this.twoCur);
 				return new Promise(resolve => {
 					uni.request({
 						url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
@@ -449,8 +462,7 @@
 				})
 			},
 			// 获取距离
-			getDistance({ longitude, latitude }) {
-				console.log(this.threeContent.length,this.threeContent);
+			getDistance({ longitude, latitude }) { 
 				if (this.threeContent.length > 0) {
 					const toList = []
 					const start = (this.threeCur - 1) * 6
@@ -476,8 +488,7 @@
 								//成功后的回调
 								const distanceInfo = result.elements  
 								for (let i = 0; i < distanceInfo.length; i++) {
-									const distance = distanceInfo[i].distance
-									console.log(distance,this.threeContent[start + i].name);
+									const distance = distanceInfo[i].distance 
 									if (distance === -1) {
 										this.threeContent[start + i].distance = '--'
 									} else {
@@ -549,6 +560,103 @@
 		}
 
 		.content {
+			position: relative;
+		  overflow: hidden;
+			padding: 0 $uni-spacing-row-base;
+
+			&-item {
+				display: flex;
+				align-items: center;
+				border-radius: 30rpx;
+				@include defaultContainer();
+				margin: 20rpx;
+				padding: 20rpx;
+				height: 200rpx;
+				letter-spacing: $letter-spacing-base;
+
+				.image {
+					width: 220rpx;
+					height: 100%;
+					border-radius: 20rpx;
+				}
+
+				.text {
+					width: calc(100% - 220rpx);
+					padding-left: $uni-spacing-row-base;
+					height: 100%;
+
+					&-item {
+						display: flex;
+						justify-content: space-between;
+					}
+
+					.dis {
+						-webkit-line-clamp: 4;
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-box-orient: vertical;
+						height: calc(100% - 40rpx);
+
+						.line2 {
+							-webkit-line-clamp: 2;
+							font-size: 12px;
+							height: 100%;
+						}
+					}
+					.die {
+						-webkit-line-clamp: 4;
+						display: -webkit-box;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						word-wrap: break-word;
+						white-space: normal !important;
+						-webkit-box-orient: vertical; 
+
+						.line2 {
+							-webkit-line-clamp: 2;
+							font-size: 12px; 
+						}
+					}
+					.capitaConsumption {
+						height: 40rpx;
+						font-size: 25rpx;
+						color: #0072bd;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+
+						span {
+							color: #0072bd;
+						}
+					}
+
+					.name {
+						font-size: 40rpx;
+						color: #b50a0e;
+						font-weight: bold;
+						height: 40rpx;
+
+						.value {
+							@include ellipsis();
+						}
+
+						.location {
+							display: flex;
+							color: $uni-text-color-grey;
+							font-size: $uni-font-size-sm;
+							font-weight: normal;
+							align-items: center;
+						}
+					}
+				}
+			}
+		}
+		.content1 {
+			position: relative;
+		  overflow: hidden;
 			padding: 0 $uni-spacing-row-base;
 
 			&-item {

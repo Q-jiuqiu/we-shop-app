@@ -38,6 +38,7 @@ export default {
 		this.eventChannel = eventChannel
 		// 监听postMessage事件，获取上一页面通过eventChannel传送到当前页面的数据
 		eventChannel.on('postMap', ({ detail }) => {
+			console.log('监听上一级数据',detail);
 			this.name = detail.name
 			this.address = detail.addr
 			this.detail = detail

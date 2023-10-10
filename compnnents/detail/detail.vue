@@ -519,7 +519,7 @@
 
 			.tab-container {
 				background-color: white;
-				padding: 10rpx 25rpx;
+				padding: 30rpx 25rpx;
 				min-height: 33vh;
    			max-height: 100%;
 				.table {
@@ -617,12 +617,12 @@
 								height: 100rpx; 
 							}
 							&-name{
-								width: 100rpx;
+								width: 120rpx;
 								margin-top: 10rpx;
 								white-space: nowrap;
 								overflow: hidden;
 								text-overflow: ellipsis;
-								font-size: 25rpx;
+								font-size: 20rpx;
 							}
 						} 
 					}

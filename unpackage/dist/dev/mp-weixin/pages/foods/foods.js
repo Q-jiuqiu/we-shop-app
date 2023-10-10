@@ -47,8 +47,9 @@ const _sfc_main = {
       fixedStyle: {},
       secondType: "",
       // 二级类型
-      threeType: ""
+      threeType: "",
       // 三级级类型
+      smoothId: ""
     };
   },
   // 监听页面加载
@@ -61,8 +62,17 @@ const _sfc_main = {
     } else {
       this.filterData = [{ name: "全部美食" }];
     }
-    this.isShowTwo = true;
     await utils_authorize.authorize.getLocationInfo();
+    common_vendor.wx$1.onShareAppMessage(() => {
+      return {
+        title: "全游记：带你吃喝玩乐"
+      };
+    });
+    common_vendor.wx$1.onShareTimeline(() => {
+      return {
+        title: "全游记：带你吃喝玩乐"
+      };
+    });
   },
   // 页面上拉触底事件
   onReachBottom: async function() {
@@ -81,7 +91,7 @@ const _sfc_main = {
         if (this.secondType) {
           params = { parentName: this.secondType };
         }
-        console.log("页面上拉触底事件", params);
+        console.log("页面上拉触底事件", params, this.twoCur);
         this.getTwoDatas(params);
       }
     } else {
@@ -128,7 +138,6 @@ const _sfc_main = {
      */
     async setCity() {
       this.city = common_vendor.index.getStorageSync("location").city;
-      console.log(this.city);
       this.getCityInfo();
       this.twoContent = [];
       this.getTwoDatas();
@@ -138,7 +147,6 @@ const _sfc_main = {
      * @description 城市改变
      */
     handleCityChange({ city }) {
-      console.log("再次获取城市", city);
       if (this.city === city) {
         return;
       }
@@ -173,7 +181,6 @@ const _sfc_main = {
                 this.imageList.push(info[key]);
               }
             }
-            console.log(this.imageList);
             this.cityDes = info.remark;
           }
         },
@@ -184,11 +191,9 @@ const _sfc_main = {
     },
     // 详情返回
     handleDetailBack() {
-      this.twoCur = 1;
-      this.twoContent = [];
       this.showInput = true;
       if (!this.isShowTwo && !this.showDetail) {
-        this.getTwoDatas();
+        this.isShowTwo = true;
       } else if (!this.isShowTwo && this.showDetail) {
         this.showDetail = false;
       }
@@ -257,11 +262,13 @@ const _sfc_main = {
      * @description 获取指定二级(小类)数据详情
      * @param {Object} item
      */
-    handleTwoDetails(item) {
+    handleTwoDetails(item, index) {
+      this.smoothId = index;
       if (this.city) {
         this.isShowTwo = false;
         this.threeContent = [];
         this.threeType = item.name;
+        this.threeCur = 1;
         this.getThreeData({ threeType: item.name, city: this.city });
       } else {
         utils_authorize.authorize.authorizeAgain();
@@ -272,7 +279,7 @@ const _sfc_main = {
      * @param {Object} params 请求条件
      */
     getThreeData(params = {}) {
-      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.showLoading({ title: "获取数据中", mask: true });
       common_vendor.index.request({
         url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
         data: params,
@@ -302,10 +309,11 @@ const _sfc_main = {
     },
     // 进入地图
     handleShowMap() {
+      console.log(this.threeType, this.city);
       common_vendor.index.navigateTo({
         url: "/pages/index/index",
         success: (res) => {
-          res.eventChannel.emit("foodMap", { data: this.threeContent });
+          res.eventChannel.emit("foodMap", { data: this.threeContent, threeType: this.threeType, city: this.city, index: 30, type: "美食" });
         }
       });
     },
@@ -313,7 +321,7 @@ const _sfc_main = {
      * @description 获取筛选(大类)数据
      */
     getFilterDatas() {
-      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.showLoading({ title: "获取数据中", mask: true });
       return new Promise((resolve) => {
         common_vendor.index.request({
           url: "https://www.aomue.cn/dbs/pro/rest/dbs/find/dict/one/1/1000?type=美食&level=2",
@@ -334,8 +342,12 @@ const _sfc_main = {
      * @param {Object} params 请求条件
      */
     getTwoDatas(params = {}) {
-      console.log("城市数据", this.city);
-      common_vendor.index.showLoading({ title: "获取数据中" });
+      common_vendor.index.showLoading(
+        {
+          title: "获取数据中",
+          mask: true
+        }
+      );
       common_vendor.index.request({
         url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/levelDist/one/${this.twoCur}/6?type=美食&level=3&city=${this.city}`,
         data: params,
@@ -354,6 +366,7 @@ const _sfc_main = {
     },
     // 获取美食数据
     getFoodsData(params = {}) {
+      console.log(this.twoCur);
       return new Promise((resolve) => {
         common_vendor.index.request({
           url: `https://www.aomue.cn/dbs/pro/rest/dbs/find/${this.threeCur}/6`,
@@ -372,7 +385,6 @@ const _sfc_main = {
     },
     // 获取距离
     getDistance({ longitude, latitude }) {
-      console.log(this.threeContent.length, this.threeContent);
       if (this.threeContent.length > 0) {
         const toList = [];
         const start = (this.threeCur - 1) * 6;
@@ -399,7 +411,6 @@ const _sfc_main = {
               const distanceInfo = result.elements;
               for (let i = 0; i < distanceInfo.length; i++) {
                 const distance = distanceInfo[i].distance;
-                console.log(distance, this.threeContent[start + i].name);
                 if (distance === -1) {
                   this.threeContent[start + i].distance = "--";
                 } else {
@@ -481,7 +492,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.remark),
         d: index,
-        e: common_vendor.o(($event) => $options.handleTwoDetails(item), index)
+        e: common_vendor.o(($event) => $options.handleTwoDetails(item), index),
+        f: index
       };
     }),
     x: $data.twoContent.length === 0
@@ -513,4 +525,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/foods/foods.vue"]]);
+_sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

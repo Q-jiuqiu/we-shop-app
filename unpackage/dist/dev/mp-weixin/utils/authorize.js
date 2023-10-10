@@ -64,7 +64,10 @@ function getLocationInfo(callBack) {
     common_vendor.index.getLocation({
       type: "gcj02",
       success(res) {
-        common_vendor.index.showLoading({ title: "获取位置信息" });
+        common_vendor.index.showLoading({
+          title: "获取位置信息",
+          mask: true
+        });
         location.longitude = res.longitude;
         location.latitude = res.latitude;
         const qqmapsdk = new QQMapWX({ key: "NVCBZ-67BCV-7VAP3-56OOQ-P6OQS-A3BZ7" });
