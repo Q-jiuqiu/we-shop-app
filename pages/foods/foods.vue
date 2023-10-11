@@ -26,24 +26,27 @@
 				<div class="map-button" @click="handleShowMap" v-if="!isShowTwo">进入地图模式</div>
 			</div>
 			<!-- 小类数据 -->
-			<div class="content" ref="contentTwo" v-if="isShowTwo">
-				<div class="content-item" v-for="(item, index) in twoContent" :key="index"
-					@click="handleTwoDetails(item)" :id="index">
-					<img class="image" :src="item.image" />
-					<div class="text">
-						<div class="text-item name">
-							<div class="value">{{ item.name }}</div>
-						</div>
-						<div class="text-item dis">
-							<div class="value line2">{{ item.remark }}</div>
-						</div>
+			<div class="content" ref="contentTwo" v-show="isShowTwo">
+				<scroll-view class="container-chat-items" scroll-y >
+        	<div class="content-item" v-for="(item, index) in twoContent" :key="index"
+						@click="handleTwoDetails(item,index)" :id="index">
+						<img class="image" :src="item.image" />
+						<div class="text">
+							<div class="text-item name">
+								<div class="value">{{ item.name }}</div>
+							</div>
+							<div class="text-item dis">
+								<div class="value line2">{{ item.remark }}</div>
+							</div>
 					</div>
 				</div>
+        </scroll-view>
+				
 				<NoData v-if="twoContent.length === 0"></NoData>
 				<div class="more" v-if="!isTwoLastPage">上拉获取更多数据</div>
 			</div>
 			<!-- 门店数据 -->
-			<div class="content1" v-else>
+			<div class="content1" v-show="!isShowTwo">
 				<div class="content-item" v-for="(item, index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
 					<img class="image" :src="item.image1" />
@@ -111,10 +114,17 @@
 				fixedStyle: {},
 				secondType: '', // 二级类型
 				threeType: '', // 三级级类型
-				smoothId:''
+				smoothId:0
 			}
 		},
-
+		watch: {
+			smoothId: {
+				handler(newName, oldName) {
+					console.log(newName, oldName);
+				}
+			}
+		},
+		
 		// 监听页面加载
 		onLoad: async function() {
 			this.getCityInfo()
@@ -137,7 +147,7 @@
 				return {
 					title: '全游记：带你吃喝玩乐', 
 				}
-			})
+			}) 
 		},
 
 		// 页面上拉触底事件
@@ -158,7 +168,6 @@
 					if (this.secondType) {
 						params = { parentName: this.secondType }
 					}
-					console.log('页面上拉触底事件',params,	this.twoCur);
 					this.getTwoDatas(params)
 				}
 			} else {
@@ -262,10 +271,14 @@
 
 			// 详情返回
 			handleDetailBack() { 
-			 	//this.twoContent = [] 
 				this.showInput = true 
 				if (!this.isShowTwo && !this.showDetail) {
 					this.isShowTwo = true 
+					console.log(this.smoothId,120*this.smoothId);
+					uni.pageScrollTo({
+						scrollTop: 120*this.smoothId,
+						duration: 300
+					});
 				} else if (!this.isShowTwo && this.showDetail) {
 					this.showDetail = false
 				}

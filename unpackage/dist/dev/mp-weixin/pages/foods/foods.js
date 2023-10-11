@@ -49,8 +49,15 @@ const _sfc_main = {
       // 二级类型
       threeType: "",
       // 三级级类型
-      smoothId: ""
+      smoothId: 0
     };
+  },
+  watch: {
+    smoothId: {
+      handler(newName, oldName) {
+        console.log(newName, oldName);
+      }
+    }
   },
   // 监听页面加载
   onLoad: async function() {
@@ -91,7 +98,6 @@ const _sfc_main = {
         if (this.secondType) {
           params = { parentName: this.secondType };
         }
-        console.log("页面上拉触底事件", params, this.twoCur);
         this.getTwoDatas(params);
       }
     } else {
@@ -194,6 +200,11 @@ const _sfc_main = {
       this.showInput = true;
       if (!this.isShowTwo && !this.showDetail) {
         this.isShowTwo = true;
+        console.log(this.smoothId, 120 * this.smoothId);
+        common_vendor.index.pageScrollTo({
+          scrollTop: 120 * this.smoothId,
+          duration: 300
+        });
       } else if (!this.isShowTwo && this.showDetail) {
         this.showDetail = false;
       }
@@ -484,22 +495,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isShowTwo ? {
     t: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args))
   } : {}, {
-    v: $data.isShowTwo
-  }, $data.isShowTwo ? common_vendor.e({
-    w: common_vendor.f($data.twoContent, (item, index, i0) => {
+    v: common_vendor.f($data.twoContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.remark),
         d: index,
-        e: common_vendor.o(($event) => $options.handleTwoDetails(item), index),
+        e: common_vendor.o(($event) => $options.handleTwoDetails(item, index), index),
         f: index
       };
     }),
-    x: $data.twoContent.length === 0
+    w: $data.twoContent.length === 0
   }, $data.twoContent.length === 0 ? {} : {}, {
-    y: !$data.isTwoLastPage
-  }, !$data.isTwoLastPage ? {} : {}) : common_vendor.e({
+    x: !$data.isTwoLastPage
+  }, !$data.isTwoLastPage ? {} : {}, {
+    y: $data.isShowTwo,
     z: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
         a: item.image1,
@@ -520,8 +530,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   } : {}, {
     C: !$data.isThreeLastPage
-  }, !$data.isThreeLastPage ? {} : {})), {
-    D: common_vendor.s($data.fixedStyle)
+  }, !$data.isThreeLastPage ? {} : {}, {
+    D: !$data.isShowTwo
+  }), {
+    E: common_vendor.s($data.fixedStyle)
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/foods/foods.vue"]]);

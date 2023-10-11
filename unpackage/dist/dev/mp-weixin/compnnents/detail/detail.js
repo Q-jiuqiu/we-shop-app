@@ -66,24 +66,37 @@ const _sfc_main = {
     close() {
       this.show = false;
     },
+    parseTime(timeStr) {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      return hours * 100 + minutes;
+    },
+    isTimeInRange(startTimeStr, endTimeStr) {
+      const now = /* @__PURE__ */ new Date();
+      const currentTime = now.getHours() * 100 + now.getMinutes();
+      const startTime = this.parseTime(startTimeStr);
+      const endTime = this.parseTime(endTimeStr);
+      return currentTime >= startTime && currentTime <= endTime;
+    },
     // 判断是否在营业中 统一换算成24小时制
     judgeOpen(openingHours) {
-      try {
-        const date = /* @__PURE__ */ new Date();
-        const startTime = openingHours.split("-")[0];
-        const endTime = openingHours.split("-")[1];
-        const now = date.toLocaleTimeString("chinese", { hour12: false });
-        const nowTimes = now.split(":");
-        const startTimes = startTime.split(":");
-        const endTimes = endTime.split(":");
-        const dqdq = date.setHours(nowTimes[0], nowTimes[1]);
-        const start = date.setHours(startTimes[0], startTimes[1]);
-        const end = date.setHours(endTimes[0], endTimes[1]);
-        if (startTimes[0] * 1 > endTimes[0] * 1) {
-          return !this.judgeOpen(endTime + "-" + startTime);
-        }
-        return start < dqdq && dqdq < end;
-      } catch (e) {
+      const date1 = openingHours.split("与")[0];
+      const date2 = openingHours.split("与")[1];
+      let jude1 = false;
+      let jude2 = false;
+      if (date1) {
+        const startTime = date1.split("-")[0];
+        const endTime = date1.split("-")[1];
+        jude1 = this.isTimeInRange(startTime, endTime);
+      }
+      if (date2) {
+        const startTime = date2.split("-")[0];
+        const endTime = date2.split("-")[1];
+        jude2 = this.isTimeInRange(startTime, endTime);
+      }
+      console.log(date1, date2, jude1, jude2);
+      if (jude1 || jude2) {
+        return true;
+      } else {
         return false;
       }
     },

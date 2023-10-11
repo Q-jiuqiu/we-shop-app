@@ -87,6 +87,7 @@
   color: #333;
 }
 .detail .header .info-item .close.data-v-a6d5e4bb {
+  color: #f21014;
   margin-right: 10rpx;
 }
 .detail .header .info .adds.data-v-a6d5e4bb {
