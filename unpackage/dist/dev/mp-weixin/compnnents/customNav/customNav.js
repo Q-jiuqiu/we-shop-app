@@ -221,5 +221,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     o: $data.statusBarHeight
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-d0fa9484"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/compnnents/customNav/customNav.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-d0fa9484"], ["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/compnnents/customNav/customNav.vue"]]);
 wx.createComponent(Component);

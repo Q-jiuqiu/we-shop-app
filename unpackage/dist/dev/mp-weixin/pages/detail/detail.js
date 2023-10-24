@@ -22,7 +22,8 @@ const _sfc_main = {
       detailInfo: {},
       exploreShopData: [],
       isSense: false,
-      faresData: []
+      faresData: [],
+      popupShow: false
     };
   },
   computed: {
@@ -69,28 +70,47 @@ const _sfc_main = {
     }
   },
   methods: {
+    open() {
+      this.popupShow = true;
+    },
+    popupClose() {
+      this.popupShow = false;
+    },
     // 关闭新增评论弹框
     close() {
       this.show = false;
     },
+    parseTime(timeStr) {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      return hours * 100 + minutes;
+    },
+    isTimeInRange(startTimeStr, endTimeStr) {
+      const now = /* @__PURE__ */ new Date();
+      const currentTime = now.getHours() * 100 + now.getMinutes();
+      const startTime = this.parseTime(startTimeStr);
+      const endTime = this.parseTime(endTimeStr);
+      return currentTime >= startTime && currentTime <= endTime;
+    },
     // 判断是否在营业中 统一换算成24小时制
     judgeOpen(openingHours) {
-      try {
-        const date = /* @__PURE__ */ new Date();
-        const startTime = openingHours.split("-")[0];
-        const endTime = openingHours.split("-")[1];
-        const now = date.toLocaleTimeString("chinese", { hour12: false });
-        const nowTimes = now.split(":");
-        const startTimes = startTime.split(":");
-        const endTimes = endTime.split(":");
-        const dqdq = date.setHours(nowTimes[0], nowTimes[1]);
-        const start = date.setHours(startTimes[0], startTimes[1]);
-        const end = date.setHours(endTimes[0], endTimes[1]);
-        if (startTimes[0] * 1 > endTimes[0] * 1) {
-          return !this.judgeOpen(endTime + "-" + startTime);
-        }
-        return start < dqdq && dqdq < end;
-      } catch (e) {
+      const date1 = openingHours.split("与")[0];
+      const date2 = openingHours.split("与")[1];
+      let jude1 = false;
+      let jude2 = false;
+      if (date1) {
+        const startTime = date1.split("-")[0];
+        const endTime = date1.split("-")[1];
+        jude1 = this.isTimeInRange(startTime, endTime);
+      }
+      if (date2) {
+        const startTime = date2.split("-")[0];
+        const endTime = date2.split("-")[1];
+        jude2 = this.isTimeInRange(startTime, endTime);
+      }
+      console.log(date1, date2, jude1, jude2);
+      if (jude1 || jude2) {
+        return true;
+      } else {
         return false;
       }
     },
@@ -240,18 +260,18 @@ const _sfc_main = {
 if (!Array) {
   const _component_CustomNavBack = common_vendor.resolveComponent("CustomNavBack");
   const _easycom_u_sticky2 = common_vendor.resolveComponent("u-sticky");
-  const _component_NoData = common_vendor.resolveComponent("NoData");
-  const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
   const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
   const _easycom_u_popup2 = common_vendor.resolveComponent("u-popup");
-  (_component_CustomNavBack + _easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
+  const _component_NoData = common_vendor.resolveComponent("NoData");
+  const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
+  (_component_CustomNavBack + _easycom_u_sticky2 + _easycom_u_button2 + _easycom_u_popup2 + _component_NoData + _easycom_u_textarea2)();
 }
 const _easycom_u_sticky = () => "../../uni_modules/uview-plus/components/u-sticky/u-sticky.js";
-const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
 const _easycom_u_button = () => "../../uni_modules/uview-plus/components/u-button/u-button.js";
 const _easycom_u_popup = () => "../../uni_modules/uview-plus/components/u-popup/u-popup.js";
+const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
 if (!Math) {
-  (_easycom_u_sticky + _easycom_u_textarea + _easycom_u_button + _easycom_u_popup)();
+  (_easycom_u_sticky + _easycom_u_button + _easycom_u_popup + _easycom_u_textarea)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
@@ -325,7 +345,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     C: $data.activeTab === 1,
     D: $data.isSense && $data.faresData.length
   }, $data.isSense && $data.faresData.length ? {
-    E: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_vendor.o($options.open),
+    F: common_vendor.p({
+      type: "primary"
+    }),
+    G: $data.detailInfo.paymentCode,
+    H: common_vendor.o($options.popupClose),
+    I: common_vendor.p({
+      show: $data.popupShow,
+      closeable: true
+    }),
+    J: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -334,7 +364,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    F: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    K: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.pictrue,
         b: common_vendor.t(item.entName),
@@ -342,40 +372,40 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   }, {
-    G: $data.activeTab === 2,
-    H: common_vendor.f($data.commentData, (item, index, i0) => {
+    L: $data.activeTab === 2,
+    M: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.comment),
         b: index
       };
     }),
-    I: $data.commentData.length === 0
+    N: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    J: !$data.commentLast
+    O: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    K: $data.activeTab === 3,
-    L: common_vendor.o(($event) => $data.comment = $event),
-    M: common_vendor.p({
+    P: $data.activeTab === 3,
+    Q: common_vendor.o(($event) => $data.comment = $event),
+    R: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    N: common_vendor.o($options.close),
-    O: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    P: common_vendor.o($options.handleConfirm),
-    Q: common_vendor.p({
+    U: common_vendor.o($options.handleConfirm),
+    V: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    R: common_vendor.o($options.close),
-    S: common_vendor.p({
+    W: common_vendor.o($options.close),
+    X: common_vendor.p({
       show: $data.show
     })
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/detail/detail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eca06f3c"], ["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/pages/detail/detail.vue"]]);
 wx.createPage(MiniProgramPage);

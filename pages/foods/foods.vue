@@ -26,10 +26,10 @@
 				<div class="map-button" @click="handleShowMap" v-if="!isShowTwo">进入地图模式</div>
 			</div>
 			<!-- 小类数据 -->
-			<div class="content" ref="contentTwo" v-show="isShowTwo">
+			<div class="content" ref="contentTwo" v-if="isShowTwo">
 				<scroll-view class="container-chat-items" scroll-y >
-        	<div class="content-item" v-for="(item, index) in twoContent" :key="index"
-						@click="handleTwoDetails(item,index)" :id="index">
+        	<div class="content-item" v-for="(item, index) in twoContent" :key="index" :id="`index${index}`"
+						@click="handleTwoDetails(item,index)">
 						<img class="image" :src="item.image" />
 						<div class="text">
 							<div class="text-item name">
@@ -46,7 +46,7 @@
 				<div class="more" v-if="!isTwoLastPage">上拉获取更多数据</div>
 			</div>
 			<!-- 门店数据 -->
-			<div class="content1" v-show="!isShowTwo">
+			<div class="content1" v-else>
 				<div class="content-item" v-for="(item, index) in threeContent" :key="index"
 					@click="handleDetailShow(item)">
 					<img class="image" :src="item.image1" />
@@ -247,7 +247,7 @@
 			 */
 		async	getCityInfo() {
 				uni.request({
-					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/yd/${this.city}`,
 					method: 'GET',
 					success: ({ data }) => {
 						const info = data.data
@@ -274,11 +274,19 @@
 				this.showInput = true 
 				if (!this.isShowTwo && !this.showDetail) {
 					this.isShowTwo = true 
-					console.log(this.smoothId,120*this.smoothId);
-					uni.pageScrollTo({
-						scrollTop: 120*this.smoothId,
-						duration: 300
-					});
+					console.log(this.smoothId );
+					this.$nextTick(()=>{
+						this.timer = setTimeout(() => {
+							const query = uni.createSelectorQuery().in(this);
+							query.select(`#index${this.smoothId}`).boundingClientRect(data => {
+								console.log(data)
+								uni.pageScrollTo({
+									scrollTop:data.top-250,
+									duration: 300
+								});
+							}).exec(); 
+						}, 500);
+					}) 
 				} else if (!this.isShowTwo && this.showDetail) {
 					this.showDetail = false
 				}

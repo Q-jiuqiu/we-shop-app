@@ -25,7 +25,8 @@ const _sfc_main = {
       commentCur: 1,
       commentLast: true,
       exploreShopData: [],
-      faresData: []
+      faresData: [],
+      popupShow: false
     };
   },
   computed: {
@@ -62,6 +63,20 @@ const _sfc_main = {
     }
   },
   methods: {
+    handelBindLongTap() {
+      common_vendor.wx$1.previewImage({
+        current: "",
+        // 当前显示图片的http链接
+        urls: []
+        // 需要预览的图片http链接列表
+      });
+    },
+    open() {
+      this.popupShow = true;
+    },
+    popupClose() {
+      this.popupShow = false;
+    },
     // 关闭新增评论弹框
     close() {
       this.show = false;
@@ -246,18 +261,18 @@ const _sfc_main = {
 };
 if (!Array) {
   const _easycom_u_sticky2 = common_vendor.resolveComponent("u-sticky");
-  const _component_NoData = common_vendor.resolveComponent("NoData");
-  const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
   const _easycom_u_button2 = common_vendor.resolveComponent("u-button");
   const _easycom_u_popup2 = common_vendor.resolveComponent("u-popup");
-  (_easycom_u_sticky2 + _component_NoData + _easycom_u_textarea2 + _easycom_u_button2 + _easycom_u_popup2)();
+  const _component_NoData = common_vendor.resolveComponent("NoData");
+  const _easycom_u_textarea2 = common_vendor.resolveComponent("u-textarea");
+  (_easycom_u_sticky2 + _easycom_u_button2 + _easycom_u_popup2 + _component_NoData + _easycom_u_textarea2)();
 }
 const _easycom_u_sticky = () => "../../uni_modules/uview-plus/components/u-sticky/u-sticky.js";
-const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
 const _easycom_u_button = () => "../../uni_modules/uview-plus/components/u-button/u-button.js";
 const _easycom_u_popup = () => "../../uni_modules/uview-plus/components/u-popup/u-popup.js";
+const _easycom_u_textarea = () => "../../uni_modules/uview-plus/components/u-textarea/u-textarea.js";
 if (!Math) {
-  (_easycom_u_sticky + _easycom_u_textarea + _easycom_u_button + _easycom_u_popup)();
+  (_easycom_u_sticky + _easycom_u_button + _easycom_u_popup + _easycom_u_textarea)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
@@ -331,8 +346,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     C: $data.activeTab === 1,
     D: $options.isSense && $data.faresData.length
   }, $options.isSense && $data.faresData.length ? {
-    E: $props.detailInfo.region,
-    F: common_vendor.f($data.faresData, (item, index, i0) => {
+    E: common_vendor.o($options.open),
+    F: common_vendor.p({
+      type: "primary"
+    }),
+    G: $props.detailInfo.paymentCode,
+    H: common_vendor.o($options.popupClose),
+    I: common_vendor.p({
+      show: $data.popupShow,
+      closeable: true
+    }),
+    J: common_vendor.f($data.faresData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.adult),
         b: common_vendor.t(item.elder),
@@ -341,7 +365,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   } : {
-    G: common_vendor.f($data.exploreShopData, (item, index, i0) => {
+    K: common_vendor.f($data.exploreShopData, (item, index, i0) => {
       return {
         a: item.pictrue,
         b: common_vendor.t(item.entName),
@@ -349,40 +373,40 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   }, {
-    H: $data.activeTab === 2,
-    I: common_vendor.f($data.commentData, (item, index, i0) => {
+    L: $data.activeTab === 2,
+    M: common_vendor.f($data.commentData, (item, index, i0) => {
       return {
         a: common_vendor.t(item.comment),
         b: index
       };
     }),
-    J: $data.commentData.length === 0
+    N: $data.commentData.length === 0
   }, $data.commentData.length === 0 ? {} : {}, {
-    K: !$data.commentLast
+    O: !$data.commentLast
   }, !$data.commentLast ? {} : {}, {
-    L: $data.activeTab === 3,
-    M: common_vendor.o(($event) => $data.comment = $event),
-    N: common_vendor.p({
+    P: $data.activeTab === 3,
+    Q: common_vendor.o(($event) => $data.comment = $event),
+    R: common_vendor.p({
       placeholder: "请输入评论内容",
       maxlength: -1,
       modelValue: $data.comment
     }),
-    O: common_vendor.o($options.close),
-    P: common_vendor.p({
+    S: common_vendor.o($options.close),
+    T: common_vendor.p({
       type: "warning",
       plain: true,
       text: "取消"
     }),
-    Q: common_vendor.o($options.handleConfirm),
-    R: common_vendor.p({
+    U: common_vendor.o($options.handleConfirm),
+    V: common_vendor.p({
       type: "warning",
       text: "确认"
     }),
-    S: common_vendor.o($options.close),
-    T: common_vendor.p({
+    W: common_vendor.o($options.close),
+    X: common_vendor.p({
       show: $data.show
     })
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/compnnents/detail/detail.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-a6d5e4bb"], ["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/compnnents/detail/detail.vue"]]);
 wx.createComponent(Component);

@@ -40,7 +40,8 @@ const _sfc_main = {
       fixedStyle: {},
       secondType: "",
       // 二级类型
-      threeContentKb: []
+      threeContentKb: [],
+      freeSorting: ""
     };
   },
   // 监听页面加载
@@ -48,7 +49,7 @@ const _sfc_main = {
     this.getCityInfo();
     const { content, last } = await this.getOneDatas();
     this.typeList.push(...content);
-    await this.getThreeData({ city: this.city, type: "风景" });
+    await this.getThreeData({ isFree: this.freeSorting, city: this.city, type: "风景" });
     common_vendor.wx$1.onShareAppMessage(() => {
       return {
         title: "全游记：带你吃喝玩乐"
@@ -75,7 +76,7 @@ const _sfc_main = {
     } else {
       if (!this.isThreeLastPage) {
         this.threeCur++;
-        await this.getThreeData({ secondType: this.secondType, city: this.city, type: "风景" });
+        await this.getThreeData({ isFree: this.freeSorting, secondType: this.secondType, city: this.city, type: "风景" });
       } else {
         common_vendor.index.showToast({
           icon: "none",
@@ -146,7 +147,7 @@ const _sfc_main = {
      */
     getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/yd/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -236,10 +237,17 @@ const _sfc_main = {
      * @param {number} index 
      */
     handleFreeSelect(index) {
+      console.log(index);
+      this.threeContent = [];
+      this.threeCur = 1;
       if (index === 2) {
-        this.threeContent = this.threeContentKb.filter((item) => item.capitaConsumption === "0");
+        this.freeSorting = "是";
+        this.getThreeData({ isFree: "是", city: this.city, type: "风景" });
       } else if (index === 1) {
-        this.threeContent = this.threeContentKb.filter((item) => item.capitaConsumption !== "0");
+        this.freeSorting = "否";
+        this.getThreeData({ isFree: "否", city: this.city, type: "风景" });
+      } else {
+        this.getThreeData({ city: this.city, type: "风景" });
       }
     },
     /**
@@ -261,6 +269,7 @@ const _sfc_main = {
       const res = await this.getSenseData(params);
       this.threeContent.push(...res.content);
       this.isThreeLastPage = res.last;
+      console.log(this.threeContent);
       this.threeContentKb = JSON.parse(JSON.stringify(this.threeContent));
       this.isShowTwo = false;
       await this.getDistance({
@@ -449,6 +458,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     A: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/sense/sense.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-052ffb32"], ["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/pages/sense/sense.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

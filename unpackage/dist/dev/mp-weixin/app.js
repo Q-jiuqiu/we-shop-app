@@ -175,7 +175,7 @@ const _sfc_main = {
     });
   }
 };
-const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/heyuanpeng/个人项目/we-shop-app/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(uni_modules_uviewPlus_index.uviewPlus);

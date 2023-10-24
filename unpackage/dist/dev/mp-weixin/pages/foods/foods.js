@@ -175,7 +175,7 @@ const _sfc_main = {
      */
     async getCityInfo() {
       common_vendor.index.request({
-        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
+        url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/yd/${this.city}`,
         method: "GET",
         success: ({ data }) => {
           const info = data.data;
@@ -200,10 +200,18 @@ const _sfc_main = {
       this.showInput = true;
       if (!this.isShowTwo && !this.showDetail) {
         this.isShowTwo = true;
-        console.log(this.smoothId, 120 * this.smoothId);
-        common_vendor.index.pageScrollTo({
-          scrollTop: 120 * this.smoothId,
-          duration: 300
+        console.log(this.smoothId);
+        this.$nextTick(() => {
+          this.timer = setTimeout(() => {
+            const query = common_vendor.index.createSelectorQuery().in(this);
+            query.select(`#index${this.smoothId}`).boundingClientRect((data) => {
+              console.log(data);
+              common_vendor.index.pageScrollTo({
+                scrollTop: data.top - 250,
+                duration: 300
+              });
+            }).exec();
+          }, 500);
         });
       } else if (!this.isShowTwo && this.showDetail) {
         this.showDetail = false;
@@ -495,21 +503,22 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isShowTwo ? {
     t: common_vendor.o((...args) => $options.handleShowMap && $options.handleShowMap(...args))
   } : {}, {
-    v: common_vendor.f($data.twoContent, (item, index, i0) => {
+    v: $data.isShowTwo
+  }, $data.isShowTwo ? common_vendor.e({
+    w: common_vendor.f($data.twoContent, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
         c: common_vendor.t(item.remark),
         d: index,
-        e: common_vendor.o(($event) => $options.handleTwoDetails(item, index), index),
-        f: index
+        e: `index${index}`,
+        f: common_vendor.o(($event) => $options.handleTwoDetails(item, index), index)
       };
     }),
-    w: $data.twoContent.length === 0
+    x: $data.twoContent.length === 0
   }, $data.twoContent.length === 0 ? {} : {}, {
-    x: !$data.isTwoLastPage
-  }, !$data.isTwoLastPage ? {} : {}, {
-    y: $data.isShowTwo,
+    y: !$data.isTwoLastPage
+  }, !$data.isTwoLastPage ? {} : {}) : common_vendor.e({
     z: common_vendor.f($data.threeContent, (item, index, i0) => {
       return {
         a: item.image1,
@@ -530,12 +539,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   } : {}, {
     C: !$data.isThreeLastPage
-  }, !$data.isThreeLastPage ? {} : {}, {
-    D: !$data.isShowTwo
-  }), {
-    E: common_vendor.s($data.fixedStyle)
+  }, !$data.isThreeLastPage ? {} : {})), {
+    D: common_vendor.s($data.fixedStyle)
   });
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/we-shop-app/pages/foods/foods.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-31f9c6b2"], ["__file", "/Users/heyuanpeng/个人项目/小项目/we-shop-app/pages/foods/foods.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

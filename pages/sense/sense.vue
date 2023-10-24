@@ -92,7 +92,8 @@
 				showInput: true, // 是否展示搜索框
 				fixedStyle: {},
 				secondType: '', // 二级类型
-				threeContentKb:[]
+				threeContentKb:[], 
+				freeSorting:""
 			}
 		},
 
@@ -102,7 +103,7 @@
 			// 获取二级数据
 			const { content, last } = await this.getOneDatas()
 			this.typeList.push(...content)
-			await this.getThreeData({ city: this.city, type: '风景' }) 
+			await this.getThreeData({isFree:this.freeSorting, city: this.city, type: '风景' }) 
 			wx.onShareAppMessage(() => {
 				return {
 					title: '全游记：带你吃喝玩乐', 
@@ -133,7 +134,7 @@
 			} else {
 				if (!this.isThreeLastPage) {
 					this.threeCur++
-					await this.getThreeData({ secondType: this.secondType, city: this.city,type: '风景' })
+					await this.getThreeData({ isFree:this.freeSorting,secondType: this.secondType, city: this.city,type: '风景' })
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -206,7 +207,7 @@
 			 */
 			getCityInfo() { 
 				uni.request({
-					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/${this.city}`,
+					url: `https://www.aomue.cn/dbs/pro/rest/dbs/city/dict/find/yd/${this.city}`,
 					method: 'GET',
 					success: ({ data }) => {
 						const info = data.data
@@ -300,13 +301,20 @@
 			 * @description 选中是否免费
 			 * @param {number} index 
 			 */
-			handleFreeSelect(index) { 
+			handleFreeSelect(index) {  
+				console.log(index);
+				this.threeContent = []
+				this.threeCur = 1
 				if(index === 2){
-					this.threeContent= 	this.threeContentKb.filter(item => item.capitaConsumption === "0"); 
+					this.freeSorting="是"
+					this.getThreeData({ isFree:"是",city: this.city ,type:'风景'})
 				}else if(index === 1){
-					this.threeContent= 	this.threeContentKb.filter(item => item.capitaConsumption !== "0"); 
+					this.freeSorting="否"
+					this.getThreeData({ isFree:"否",city: this.city ,type:'风景'})
+				}else {
+					
+					this.getThreeData({city: this.city ,type:'风景'})
 				}
-			
 			},
 			/**
 			 * @description 获取指定分类数据
@@ -327,6 +335,7 @@
 				const res = await this.getSenseData(params) 
 				this.threeContent.push(...res.content) 
 				this.isThreeLastPage = res.last  
+				console.log(this.threeContent);  
 				this.threeContentKb = JSON.parse( JSON.stringify(this.threeContent));
 				this.isShowTwo = false 
 				await this.getDistance({

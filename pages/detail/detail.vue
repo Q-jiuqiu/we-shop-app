@@ -67,7 +67,7 @@
 			<!-- 简介 -->
 			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
-			<!-- 推荐/购票 -->
+			<!-- 探店 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
 					<div class="explore-shop" >
 						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
@@ -82,9 +82,20 @@
 					</div> 
 			 
 			</div>
-			<!-- 探店 -->
+			
+			<!-- 推荐/购票 -->
 			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
+					<div class="table-title">
+						  <view> 
+								<u-button  @click="open" type="primary">点击购票</u-button>
+								<u-popup :show="popupShow" :closeable='true' @close="popupClose">
+									<div class="anchor-popup">
+										<img class="anchor-popup-image" :src="detailInfo.paymentCode">
+									</div> 
+								</u-popup>
+							</view>
+					</div>
 					<div class="table-header">
 						<div class="tr">
 							<div class="th">人群类型</div>
@@ -163,7 +174,8 @@ export default {
 			detailInfo: {}, 
 			exploreShopData:[],
 			isSense:false,
-			faresData:[]
+			faresData:[],
+			popupShow:false,
 		}
 	},
 	computed: {
@@ -218,37 +230,54 @@ export default {
 	},
 
 	methods: {
+		open(){ 
+      this.popupShow = true
+    },
+		popupClose(){
+			this.popupShow = false
+		},
 		// 关闭新增评论弹框
 		close() {
 			this.show = false
 		},
-		// 判断是否在营业中 统一换算成24小时制
-		judgeOpen(openingHours) {
-			try {
-				const date = new Date()
-				const startTime = openingHours.split('-')[0]
-				const endTime = openingHours.split('-')[1]
-				// 二十四小时制
-				const now = date.toLocaleTimeString('chinese', { hour12: false })
+			parseTime(timeStr) {
+				const [hours, minutes] = timeStr.split(':').map(Number);
+				return hours * 100 + minutes; // Convert time to HHMM format
+			},
+			isTimeInRange(startTimeStr, endTimeStr) {
+				const now = new Date();
+				const currentTime = now.getHours() * 100 + now.getMinutes(); // Convert current time to HHMM format
 
-				const nowTimes = now.split(':')
-				const startTimes = startTime.split(':')
-				const endTimes = endTime.split(':')
+				// Parse start and end times
+				const startTime = this.parseTime(startTimeStr);
+				const endTime = this.parseTime(endTimeStr);
 
-				const dqdq = date.setHours(nowTimes[0], nowTimes[1])
-				const start = date.setHours(startTimes[0], startTimes[1])
-				const end = date.setHours(endTimes[0], endTimes[1])
-
-				if (startTimes[0] * 1 > endTimes[0] * 1) {
-					// 说明是到第二天
-					return !this.judgeOpen(endTime + '-' + startTime)
-				}
-
-				return start < dqdq && dqdq < end
-			} catch (e) {
-				return false
-			}
-		},
+				// Check if current time is within the range
+				return currentTime >= startTime && currentTime <= endTime;
+			},
+			// 判断是否在营业中 统一换算成24小时制
+			judgeOpen(openingHours) {  
+					const date1 = openingHours.split('与')[0]
+					const date2 = openingHours.split('与')[1]
+					let jude1 = false
+					let jude2 = false
+					if(date1){
+						const startTime = date1.split('-')[0]
+						const endTime = date1.split('-')[1]
+					  jude1 =	this.isTimeInRange(startTime,endTime)
+					}
+					if(date2){
+						const startTime = date2.split('-')[0]
+						const endTime = date2.split('-')[1]
+						jude2 =	this.isTimeInRange(startTime,endTime)
+					}
+					console.log(date1,date2,jude1, jude2);
+					if(jude1 || jude2){
+						return true
+					}else{
+						return false
+					} 	 
+			},
 		// 点击tab
 		handleTabClick(index) {
 			this.activeTab = index 
@@ -531,7 +560,11 @@ export default {
 				.table {
 					font-size: 15rpx;
 					width: 98%;
-					margin: 20rpx 1%;
+					margin: 0rpx 1% 20rpx;
+					&-title{ 
+						margin: 0 auto 30rpx;
+						text-align: center; 
+					}
 
 					.tr {
 						display: grid;
@@ -703,6 +736,26 @@ export default {
 
 			.confirm {
 				width: 200rpx;
+			}
+		}
+		
+		.anchor-popup{
+			width: 100%;
+			height: 100%;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			&-title{
+				height: 2rem;
+				line-height: 2rem;
+				font-size: 34rpx;
+			}
+			&-image{
+				width: 500rpx;
+				height: 500rpx;
+
 			}
 		}
 	}

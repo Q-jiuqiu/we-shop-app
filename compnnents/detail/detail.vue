@@ -66,7 +66,7 @@
 			<!-- 简介 -->
 			<div class="des tab-container" v-show="activeTab === 0" v-html="detailInfo.remark">
 			</div>
-			<!-- 推荐/购票 -->
+			<!-- 探店 -->
 			<div class="recommend tab-container" v-show="activeTab === 1">
 				<div class="explore-shop" >
 						<div class="explore-shop-item" v-for="(item, index) in recommendData" :key="index">
@@ -80,11 +80,19 @@
 						</div>	
 					</div>  
 			</div>
-			<!-- 探店 -->
+			<!-- 推荐/购票 -->
 			<div class="anchor tab-container" v-show="activeTab === 2">
 				<div class="table" v-if="isSense && faresData.length">
 					<div class="table-title">
-						 <navigator target="miniProgram" open-type="navigate" :app-id="detailInfo.region" path="" extra-data="" version="release">点击跳转购票</navigator>
+						  <view> 
+								<u-button  @click="open" type="primary">点击购票</u-button>
+								<u-popup :show="popupShow" :closeable='true' @close="popupClose">
+									<div class="anchor-popup">
+										<div class="anchor-popup-title">长按二维码进入官方公众号</div>
+										<img class="anchor-popup-image" :src="detailInfo.paymentCode" :show-menu-by-longpress="true" >
+									</div> 
+								</u-popup>
+							</view>
 					</div>
 					<div class="table-header">
 						<div class="tr">
@@ -168,6 +176,7 @@
 				commentLast: true,
 				exploreShopData: [],
 				faresData: [], 
+				popupShow:false, 
 			}
 		},
 		computed: {
@@ -209,6 +218,18 @@
 			}
 		},
 		methods: { 
+			handelBindLongTap(){
+				wx.previewImage({
+					current: '', // 当前显示图片的http链接
+					urls: [] // 需要预览的图片http链接列表
+				})
+			},
+			open(){ 
+        this.popupShow = true
+      },
+			popupClose(){
+				this.popupShow = false
+			},
 			// 关闭新增评论弹框
 			close() {
 				this.show = false
@@ -539,13 +560,10 @@
 				.table {
 					font-size: 15rpx;
 					width: 98%;
-					margin: 20rpx 1%;
-					&-title{
-						padding: 10rpx 20rpx;
-						width: 50%;
-						margin: 0 auto 20rpx;
-						text-align: center;
-						background-color: #fdc307;
+					margin: 0rpx 1% 20rpx;
+					&-title{ 
+						margin: 0 auto 30rpx;
+						text-align: center; 
 					}
 
 					.tr {
@@ -719,6 +737,25 @@
 
 			.confirm {
 				width: 200rpx;
+			}
+		}
+		.anchor-popup{
+			width: 100%;
+			height: 100%;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			&-title{
+				height: 2rem;
+				line-height: 2rem;
+				font-size: 34rpx;
+			}
+			&-image{
+				width: 500rpx;
+				height: 500rpx;
+
 			}
 		}
 	}
