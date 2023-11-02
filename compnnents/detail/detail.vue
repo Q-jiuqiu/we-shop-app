@@ -240,14 +240,16 @@
 			},
 			isTimeInRange(startTimeStr, endTimeStr) {
 				const now = new Date();
-				const currentTime = now.getHours() * 100 + now.getMinutes(); // Convert current time to HHMM format
-
-				// Parse start and end times
+				const currentTime = now.getHours() * 100 + now.getMinutes();
 				const startTime = this.parseTime(startTimeStr);
-				const endTime = this.parseTime(endTimeStr);
-
-				// Check if current time is within the range
-				return currentTime >= startTime && currentTime <= endTime;
+				const endTime = this.parseTime(endTimeStr); 
+				console.log(startTime , endTime,currentTime);
+				// 达到第二天时间段判断
+				if (startTime > endTime && ((currentTime >= startTime && currentTime <= 2300) || (currentTime >= 0 && currentTime <= endTime))) {
+					return true
+				}else{
+					return currentTime >= startTime && currentTime <= endTime; 
+				}
 			},
 			// 判断是否在营业中 统一换算成24小时制
 			judgeOpen(openingHours) {  

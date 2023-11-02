@@ -89,7 +89,12 @@ const _sfc_main = {
       const currentTime = now.getHours() * 100 + now.getMinutes();
       const startTime = this.parseTime(startTimeStr);
       const endTime = this.parseTime(endTimeStr);
-      return currentTime >= startTime && currentTime <= endTime;
+      console.log(startTime, endTime, currentTime);
+      if (startTime > endTime && (currentTime >= startTime && currentTime <= 23) || currentTime >= 0 && currentTime <= endTime) {
+        return true;
+      } else {
+        return currentTime >= startTime && currentTime <= endTime;
+      }
     },
     // 判断是否在营业中 统一换算成24小时制
     judgeOpen(openingHours) {
