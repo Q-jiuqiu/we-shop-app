@@ -229,7 +229,7 @@
   height: 100rpx;
 }
 .detail .container .recommend .explore-shop-item-center-name.data-v-eca06f3c {
-  width: 120rpx;
+  width: 130rpx;
   margin-top: 10rpx;
   white-space: nowrap;
   overflow: hidden;
@@ -271,7 +271,7 @@
   border-radius: 50%;
 }
 .detail .container .anchor .explore-shop-item-center-name.data-v-eca06f3c {
-  width: 100rpx;
+  width: 130rpx;
   margin-top: 10rpx;
   white-space: nowrap;
   overflow: hidden;

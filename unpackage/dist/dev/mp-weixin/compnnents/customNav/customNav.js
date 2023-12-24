@@ -67,7 +67,6 @@ const _sfc_main = {
         values,
         picker = this.$refs.uPicker
       } = e;
-      this.pickerTitle = value[columnIndex];
       if (columnIndex === 0) {
         const cityData = common_vendor.index.getStorageSync("cityData");
         cityData.forEach((item) => {
@@ -82,6 +81,12 @@ const _sfc_main = {
                   colums.push(elements.city);
                 });
                 common_vendor.index.setStorageSync("cityData1", res.data.data);
+                const specialRegion = ["重庆市", "北京市", "上海市", "天津市"];
+                if (specialRegion.includes(value[columnIndex])) {
+                  this.pickerTitle = value[columnIndex];
+                } else {
+                  this.pickerTitle = colums[0];
+                }
                 picker.setColumnValues(1, colums);
                 picker.setColumnValues(2, []);
                 this.pickerLoading = false;
@@ -108,6 +113,7 @@ const _sfc_main = {
                 });
                 if (colums.length) {
                   picker.setColumnValues(2, colums);
+                  this.pickerTitle = colums[0];
                 }
                 this.pickerLoading = false;
               },

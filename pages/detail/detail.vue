@@ -651,7 +651,7 @@ export default {
 								height: 100rpx; 
 							}
 							&-name{
-								width: 120rpx;
+								width: 130rpx;
 								margin-top: 10rpx;
 								white-space: nowrap;
 								overflow: hidden;
@@ -689,7 +689,7 @@ export default {
 								border-radius: 50%;
 							}
 							&-name{
-								width: 100rpx;
+								width: 130rpx;
 								margin-top: 10rpx;
 								white-space: nowrap;
 								overflow: hidden;
